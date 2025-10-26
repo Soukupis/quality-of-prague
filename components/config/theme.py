@@ -1,0 +1,39 @@
+PRIMARY_COLOR = "#4A90E2"
+SECONDARY_COLOR = "#357ABD"
+TEXT_COLOR = "#2c3e50"
+MUTED_COLOR = "#495057"
+BACKGROUND_COLOR = "#fafbfc"
+WHITE = "#ffffff"
+LIGHT_GRAY = "#f8f9fa"
+
+ICON_SIZE_SMALL = "1rem"
+ICON_SIZE_MEDIUM = "1.2rem"
+ICON_SIZE_LARGE = "1.5rem"
+
+FONT_SIZE_NORMAL = "1rem"
+FONT_SIZE_LARGE = "1.3rem"
+FONT_SIZE_BRAND = "1.5rem"
+
+FONT_WEIGHT_NORMAL = "400"
+FONT_WEIGHT_MEDIUM = "500"
+FONT_WEIGHT_BOLD = "600"
+
+SPACING_SMALL = "0.5rem"
+SPACING_MEDIUM = "1rem"
+SPACING_LARGE = "1.5rem"
+SPACING_XL = "2rem"
+
+BORDER_RADIUS_SMALL = "8px"
+BORDER_RADIUS_MEDIUM = "12px"
+BORDER_RADIUS_LARGE = "1rem"
+
+SHADOW_LIGHT = "0 4px 12px rgba(74, 144, 226, 0.15)"
+SHADOW_MEDIUM = "0 8px 25px rgba(0,0,0,0.08)"
+SHADOW_HEAVY = "4px 0 20px rgba(0,0,0,0.05)"
+
+GRADIENT_PRIMARY = "linear-gradient(135deg, #4A90E2 0%, #357ABD 100%)"
+GRADIENT_LIGHT = "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)"
+GRADIENT_VERTICAL = "linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%)"
+
+TRANSITION_FAST = "all 0.2s ease"
+TRANSITION_NORMAL = "all 0.3s ease"
