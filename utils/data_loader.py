@@ -1,29 +1,31 @@
 import pandas as pd
 from flask_caching import Cache
 from functools import wraps
+from config import Config
 
 cache = None
 
 def init_cache(app):
     global cache
-    cache = Cache(app.server, config={'CACHE_TYPE': 'SimpleCache'})
+    cache = Cache(app.server, config=Config.get_cache_config())
 
-def cached(timeout=300):
+def cached(timeout=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if cache is not None:
-                return cache.memoize(timeout)(func)(*args, **kwargs)
+                cache_timeout = timeout if timeout is not None else Config.CACHE_TIMEOUT
+                return cache.memoize(cache_timeout)(func)(*args, **kwargs)
             return func(*args, **kwargs)
         return wrapper
     return decorator
 
-@cached(timeout=300)
+@cached()
 def get_data1():
     # load dataset 1
     return []
 
-@cached(timeout=300)
+@cached()
 def get_data2():
     # load dataset 2
     return []

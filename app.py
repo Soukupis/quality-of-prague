@@ -1,7 +1,6 @@
 #TODO: creates Dash instance
 
 from dash import Dash, html
-import dash_bootstrap_components as dbc
 import dash
 from callbacks import register_all_callbacks
 from components import navbar, sidebar, CONTENT_STYLE
@@ -11,22 +10,22 @@ from utils.data_loader import init_cache
 app = Dash(
     __name__,
     use_pages=True,
-    suppress_callback_exceptions=True,
+    suppress_callback_exceptions=Config.SUPPRESS_CALLBACK_EXCEPTIONS,
     external_stylesheets=[
-        dbc.themes.BOOTSTRAP,
+        Config.get_bootstrap_theme_url(),
         "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css",
-        "/assets/global.css"
+        Config.ASSETS_URL_PATH + "global.css"
     ],
-    assets_folder="assets",
-    assets_url_path="/assets/"
+    assets_folder=Config.ASSETS_FOLDER,
+    assets_url_path=Config.ASSETS_URL_PATH
 )
 
-app._favicon = "/assets/favicon.ico"
+app._favicon = Config.ASSETS_URL_PATH + "favicon.ico"
 
 #register_all_callbacks(app)
 init_cache(app)
 
-app.title = "Quality of Prague"
+app.title = Config.APP_TITLE
 
 app.layout = html.Div([
     navbar,
@@ -38,4 +37,4 @@ app.layout = html.Div([
 ])
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=Config.DEBUG, host=Config.HOST, port=Config.PORT)
