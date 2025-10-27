@@ -2,7 +2,6 @@
 
 from dash import Dash, html
 import dash
-from callbacks import register_all_callbacks
 from components import navbar, sidebar, CONTENT_STYLE
 from config import Config
 from utils.data_loader import init_cache
@@ -19,10 +18,11 @@ app = Dash(
     assets_folder=Config.ASSETS_FOLDER,
     assets_url_path=Config.ASSETS_URL_PATH
 )
+from callbacks import district_map_callbacks
+
 
 app._favicon = Config.ASSETS_URL_PATH + "favicon.ico"
 
-#register_all_callbacks(app)
 init_cache(app)
 
 app.title = Config.APP_TITLE

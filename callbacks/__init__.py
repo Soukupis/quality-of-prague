@@ -1,6 +1,3 @@
-#TODO: Register callbacks here
-from . import dashboard_callbacks
+from . import district_map_callbacks
 
-def register_all_callbacks(app):
-    return;
-    #dashboard_callbacks.register_callbacks(app)
+__all__ = ['district_map_callbacks']

@@ -34,4 +34,4 @@ layout = dbc.Container([
             )
         ], width=12)
     ], className="justify-content-center text-center")
-], fluid=True, className="py-5")
+], fluid=True, className="py-1")

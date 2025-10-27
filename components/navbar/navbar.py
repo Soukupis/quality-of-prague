@@ -13,7 +13,7 @@ navbar = dbc.Navbar(
                 href=item["href"],
                 icon_name=item["icon"],
                 variant="navbar"
-            ) for item in NAV_ITEMS if item["label"] in ["Dashboard", "About"]
+            ) for item in NAV_ITEMS if item["label"] in ["Dashboard", "Districts", "About"]
         ], className="ms-auto", navbar=True),
     ], fluid=True, className="px-4"),
     color="light",

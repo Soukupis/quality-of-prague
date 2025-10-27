@@ -4,7 +4,7 @@ from typing import Dict, Any
 class Config:
     # === ENVIRONMENT & DEBUG SETTINGS ===
     # Controls debug mode - enables auto-reload and detailed error messages
-    DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+    DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
     # Flask/Dash server host and port settings
     HOST = os.getenv("HOST", "127.0.0.1")

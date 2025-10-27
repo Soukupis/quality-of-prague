@@ -15,4 +15,4 @@ layout = dbc.Container([
             html.Hr(className="mb-4")
         ], width=12)
     ], className="text-center mb-5"),
-], fluid=True, className="py-5")
+], fluid=True, className="py-1")

@@ -39,6 +39,11 @@ NAV_ITEMS = [
         "icon": "house-door"
     },
     {
+        "label": "Districts",
+        "href": "/districts",
+        "icon": "geo"
+    },
+    {
         "label": "Dashboard",
         "href": "/dashboard",
         "icon": "graph-up"
