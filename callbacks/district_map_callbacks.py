@@ -24,7 +24,7 @@ def redirect_to_selected_district(click_data):
         district_row = lookup_df[lookup_df["id"] == location_id]
         if not district_row.empty:
             district_name = district_row["name"].iloc[0]
-            return "/district-detail" + f"?district={district_name}"
+            return "/districts/district-detail" + f"?district={district_name}"
         else:
             raise dash.exceptions.PreventUpdate
     raise dash.exceptions.PreventUpdate

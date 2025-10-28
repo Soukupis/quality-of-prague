@@ -11,7 +11,6 @@ This folder contains all datasets used in the project.
 - Every subfolder includes a `README.md` file describing:
   - The dataset's contents
   - The data source
-  - Any relevant notes or preprocessing steps
 
 ## Usage
 
