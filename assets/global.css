@@ -171,3 +171,80 @@
     flex-shrink: 0;
     opacity: 0.85;
 }
+
+.about-markdown {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    color: #222;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    margin-bottom: 0;
+    overflow-x: auto;
+}
+
+.about-card-body {
+    padding: 0;
+}
+
+.about-markdown h1, .about-markdown h2, .about-markdown h3 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+.about-markdown table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+
+.about-markdown th, .about-markdown td {
+    border: 1px solid #e0e0e0;
+    padding: 0.5em 0.75em;
+    text-align: left;
+}
+
+.about-markdown tr:nth-child(even) {
+    background: #f3f6fa;
+}
+
+.about-markdown code {
+    background: #f3f3f3;
+    color: #c7254e;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.98em;
+}
+
+.about-markdown pre {
+    background: #f3f3f3;
+    padding: 1em;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.compact-markdown table {
+    font-size: 0.93rem;
+    margin: 0.7em 0;
+}
+.compact-markdown th, .compact-markdown td {
+    padding: 0.25em 0.5em;
+}
+.compact-markdown th {
+    background: #f0f2f5;
+    font-weight: 500;
+}
+.compact-markdown tr:nth-child(even) {
+    background: #f7fafd;
+}
+.compact-markdown h1, .compact-markdown h2, .compact-markdown h3 {
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+    font-size: 1.08em;
+}
+.compact-markdown p {
+    margin-bottom: 0.5em;
+}

@@ -49,10 +49,15 @@ NAV_ITEMS = [
         "icon": "graph-up"
     },
     {
+        "label": "Datasets",
+        "href": "/datasets",
+        "icon": "database"
+    },
+    {
         "label": "About",
         "href": "/about",
         "icon": "info-circle"
-    }
+    },
 ]
 
 BRAND_CONFIG = {
