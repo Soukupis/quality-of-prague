@@ -37,3 +37,10 @@ GRADIENT_VERTICAL = "linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%)"
 
 TRANSITION_FAST = "all 0.2s ease"
 TRANSITION_NORMAL = "all 0.3s ease"
+
+SAFETY_ACCENT_COLOR = "#b3d6ee"
+SAFETY_BG_COLOR = "#f6fbff"
+SAFETY_TEXT_COLOR = TEXT_COLOR
+TRAVEL_ACCENT_COLOR = "#b3e6e0"
+TRAVEL_BG_COLOR = "#f6fffd"
+TRAVEL_TEXT_COLOR = "#225c5c"
