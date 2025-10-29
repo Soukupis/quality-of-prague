@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
-from dash import html, register_page
-from dash import dcc
+from dash import html, register_page, dcc
 from components.graphs import create_prague_map
+from components.ui.page_heading import page_title, page_subtitle, page_divider
 
 register_page(__name__, path="/districts", name="Districts")
 
@@ -33,8 +33,10 @@ def create_main_grid():
 layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.H1("Districts of Prague", className="display-4 mb-5 text-center"),
+            page_title("Districts", icon_name="geo-alt"),
+            page_subtitle("Explore various quality of life metrics across different districts in Prague."),
+            page_divider(),
             create_main_grid()
         ], width=12)
     ])
-], fluid=True, className="py-1")
+], fluid=True, className="py-2")

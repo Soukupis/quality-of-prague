@@ -1,18 +1,15 @@
-#TODO: Dashboard Layout
 import dash_bootstrap_components as dbc
 from dash import html, register_page
+from components.ui.page_heading import page_title, page_subtitle, page_divider
 
 register_page(__name__, path="/dashboard", name="Dashboard")
 
 layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.H1("Prague Quality Dashboard", className="display-4 mb-2"),
-            html.P(
-                "Real-time insights and metrics about Prague's quality of life indicators.",
-                className="lead mb-4"
-            ),
-            html.Hr(className="mb-4")
+            page_title("Dashboard", icon_name="bar-chart"),
+            page_subtitle("Insights and metrics about Prague's quality of life indicators."),
+            page_divider()
         ], width=12)
     ]),
-], fluid=True, className="py-4")
+], fluid=True, className="py-2")

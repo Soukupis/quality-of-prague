@@ -3,6 +3,7 @@ from dash import html, register_page, dcc
 
 from components.ui.info_card import info_card
 from components.ui.info_card_row import info_card_row, section_header
+from components.ui.page_heading import page_title, page_divider
 from data_config import DATA_PATHS
 from utils.data_loader import read_file
 from utils.geospatial_utils import extract_polygons, polygon_points_count, point_count_for_polygon
@@ -57,7 +58,12 @@ def layout(district=None, **kwargs):
     parking_meters_count = point_count_for_polygon(polygons[district], parking_meters, "geometry")
 
     return dbc.Container([
-        heading(district),
-        safety_section(police_station_count),
-        travel_section(parking_meters_count),
-    ], fluid=True, className="py-1")
+        dbc.Row([
+            dbc.Col([
+                page_title(district, icon_name="geo-alt"),
+                page_divider(),
+                safety_section(police_station_count),
+                travel_section(parking_meters_count),
+            ], width=12)
+        ]),
+    ], fluid=True, className="py-2")

@@ -1,5 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc, register_page
+from components.ui.page_heading import page_title, page_subtitle, page_divider
 from utils.readme_utils import get_data_readmes
 
 register_page(__name__, path="/datasets", name="Datasets")
@@ -48,25 +49,18 @@ for i, readme in enumerate(readmes):
                 )
             ],
             start_collapsed=True,
-            always_open=False,
-            id="accordion-{}".format(i),
-            className="mb-3"
+            flush=True,
+            className="mb-2"
         )
     )
 
 layout = dbc.Container([
     dbc.Row([
-        dbc.Col(
-            [
-                html.H1("Datasets Documentation", className="display-5 mb-4", style={"fontWeight": 700, "fontSize": "2.2rem"}),
-                html.P(
-                    "Below you will find documentation for all datasets used in this project. "
-                    "Each section provides details, structure, and source information.",
-                    className="lead mb-4", style={"fontSize": "1.08rem"}
-                ),
-                html.Hr(className="mb-4"),
-            ] + readme_dropdowns,
-            width=10, className="mx-auto"
-        )
-    ], className="justify-content-center mb-5"),
+        dbc.Col([
+            page_title("Datasets", icon_name="database"),
+            page_subtitle("Browse the datasets powering the analysis and visualizations."),
+            page_divider(),
+            *readme_dropdowns
+        ], width=12)
+    ])
 ], fluid=True, className="py-2")
