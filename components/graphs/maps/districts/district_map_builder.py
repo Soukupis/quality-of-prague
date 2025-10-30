@@ -18,19 +18,20 @@ def load_and_prepare_data(file_path: str, name_column: str = "nazev_1") -> tuple
 
 
 class DistrictMapBuilder:
-    def __init__(self, style = None, layout = None, click_mode: str = None, drag_mode: str = None, selection_revision: bool = False):
+    def __init__(self, style = None, layout = None, click_mode: str = None, drag_mode: str = None, selection_revision: bool = False, choropleth_hover_info: str = None):
         self.style = style
         self.layout = layout
         self.layer_builder = MapLayerBuilder(self.style)
         self.click_mode = click_mode
         self.drag_mode = drag_mode
         self.selection_revision=selection_revision,
+        self.choropleth_hover_info = choropleth_hover_info
 
 
     def create_map(self, df: pd.DataFrame, centroids, geojson: dict) -> go.Figure:
         fig = go.Figure()
 
-        fig.add_trace(self.layer_builder.create_choropleth_layer(geojson, df))
+        fig.add_trace(self.layer_builder.create_choropleth_layer(geojson, df, self.choropleth_hover_info))
         fig.add_trace(self.layer_builder.create_text_layer(centroids, df["name"]))
         fig.add_trace(self.layer_builder.create_highlight_layer())
 

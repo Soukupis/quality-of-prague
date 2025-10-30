@@ -7,11 +7,12 @@ class MapLayerBuilder:
     def __init__(self, style: DistrictMapStyle = None):
         self.style = style or DistrictMapStyle()
 
-    def create_choropleth_layer(self, geojson: Dict, df: pd.DataFrame) -> go.Choroplethmap:
+    def create_choropleth_layer(self, geojson: Dict, df: pd.DataFrame, hover_info: str) -> go.Choroplethmap:
         return go.Choroplethmap(
             geojson=geojson,
             locations=df["id"],
             z=df.index,
+            hoverinfo=hover_info,
             showscale=False,
             marker=dict(line=dict(width=self.style.border_width, color=self.style.border_color)),
             colorscale=[[0, self.style.background_color], [1, self.style.background_color]],

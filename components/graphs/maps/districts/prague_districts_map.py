@@ -5,12 +5,12 @@ from .district_map_config import SingleDistrictMapLayout, DistrictMapStyle,Distr
 
 
 def create_prague_map() -> go.Figure:
-    builder = DistrictMapBuilder(DistrictMapStyle(), DistrictMapLayout(), "event+select", "select", True)
+    builder = DistrictMapBuilder(DistrictMapStyle(), DistrictMapLayout(), "event+select", "select", True, "text")
     df, centroids, geojson = load_and_prepare_data(DATA_PATHS.get_path("prague_districts"))
     return builder.create_map(df, centroids, geojson)
 
 def create_single_district_map(district: str) -> go.Figure:
-    builder = DistrictMapBuilder(DistrictMapStyle(), SingleDistrictMapLayout(), None, None, False)
+    builder = DistrictMapBuilder(DistrictMapStyle(), SingleDistrictMapLayout(), None, None, False, "skip")
     df, centroids, geojson = load_and_prepare_data(DATA_PATHS.get_path("prague_districts"))
     selected_district = df[df["nazev_1"] == district]
     selected_centroids = centroids.loc[selected_district.index]
