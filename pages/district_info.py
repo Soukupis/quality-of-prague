@@ -1,6 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import html, register_page, dcc
 
+from components.graphs.maps.districts import create_single_district_map
 from components.ui.info_card import info_card
 from components.ui.info_card_row import info_card_row, section_header
 from components.ui.page_heading import page_title, page_divider
@@ -17,6 +18,18 @@ def heading(title):
             html.H2(title, className="text-center mb-4", style={"fontWeight": "bold", "fontSize": "2.2rem"})
         ], width=12)
     ])
+
+def create_map_section(nazev_01: str = None):
+    return html.Div([
+        dcc.Graph(
+            id="single-district-map",
+            figure=create_single_district_map(nazev_01),
+            config={
+                'displayModeBar': False,
+            },
+            style={"marginBottom": "60px", "width": "100%"}
+        )
+    ], style={"width": "100%"})
 
 def safety_section(police_station_count):
     return dbc.Row([
@@ -61,6 +74,8 @@ def layout(district=None, **kwargs):
         dbc.Row([
             dbc.Col([
                 page_title(district, icon_name="geo-alt"),
+                page_divider(),
+                create_map_section(district),
                 page_divider(),
                 safety_section(police_station_count),
                 travel_section(parking_meters_count),

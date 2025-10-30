@@ -16,7 +16,18 @@ class DistrictMapLayout:
     style = "white-bg"
     zoom = 10.5
     height = 900
-    width = 1000
+    margin = None
+
+    def __post_init__(self):
+        if self.margin is None:
+            self.margin = dict(l=0, r=0, t=0, b=0)
+
+
+@dataclass
+class SingleDistrictMapLayout:
+    style = "basic"
+    zoom = 12
+    height = 600
     margin = None
 
     def __post_init__(self):

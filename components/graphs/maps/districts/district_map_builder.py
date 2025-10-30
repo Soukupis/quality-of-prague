@@ -2,7 +2,6 @@ import plotly.graph_objects as go
 import pandas as pd
 from utils.data_loader import read_file
 from utils.geospatial_utils import compute_centroids, geodata_to_geojson_dict, calculate_center
-from .district_map_config import DistrictMapStyle, DistrictMapLayout
 from .district_map_layers import MapLayerBuilder
 
 
@@ -19,10 +18,14 @@ def load_and_prepare_data(file_path: str, name_column: str = "nazev_1") -> tuple
 
 
 class DistrictMapBuilder:
-    def __init__(self, style: DistrictMapStyle = None, layout: DistrictMapLayout = None):
-        self.style = style or DistrictMapStyle()
-        self.layout = layout or DistrictMapLayout()
+    def __init__(self, style = None, layout = None, click_mode: str = None, drag_mode: str = None, selection_revision: bool = False):
+        self.style = style
+        self.layout = layout
         self.layer_builder = MapLayerBuilder(self.style)
+        self.click_mode = click_mode
+        self.drag_mode = drag_mode
+        self.selection_revision=selection_revision,
+
 
     def create_map(self, df: pd.DataFrame, centroids, geojson: dict) -> go.Figure:
         fig = go.Figure()
@@ -35,11 +38,10 @@ class DistrictMapBuilder:
         fig.update_layout(
             map=dict(style=self.layout.style, center=center, zoom=self.layout.zoom),
             height=self.layout.height,
-            width=self.layout.width,
             margin=self.layout.margin,
-            clickmode="event+select",
-            selectionrevision=True,
-            dragmode="select"
+            clickmode=self.click_mode,
+            dragmode=self.drag_mode,
+            selectionrevision=self.selection_revision,
         )
 
         return fig

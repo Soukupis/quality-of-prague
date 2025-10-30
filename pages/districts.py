@@ -16,8 +16,9 @@ def create_map_section():
                 'doubleClick': 'reset',
                 'responsive': True
             },
+            style={"width": "100%"}
         )
-    ])
+    ], style={"width": "100%"})
 
 def create_main_grid():
     return html.Div([
