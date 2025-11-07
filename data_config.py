@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict
 
-@dataclass
+@dataclass(frozen=True)
 class DataPaths:
     base_data_dir = Path("data")
 
