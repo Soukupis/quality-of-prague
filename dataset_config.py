@@ -1,6 +1,7 @@
 """
 Central configuration for all datasets used in the district info page.
 """
+from utils.loaders.districts_loader import get_parking_meters_data, get_police_stations_data
 
 DATASET_CONFIGS = {
     "police_stations": {
@@ -9,7 +10,7 @@ DATASET_CONFIGS = {
         "title": "Police stations",
         "section": "safety",
         "layer_key": "police_stations",
-        "loader_function": "get_police_stations_data",
+        "loader_function": get_police_stations_data,
     },
     "parking_meters": {
         "id": "parking-meters",
@@ -17,7 +18,7 @@ DATASET_CONFIGS = {
         "title": "Parking meters",
         "section": "travel",
         "layer_key": "parking_meters",
-        "loader_function": "get_parking_meters_data",
+        "loader_function": get_parking_meters_data,
     },
 }
 

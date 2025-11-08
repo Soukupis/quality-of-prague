@@ -6,6 +6,12 @@ from utils.scatter.scatter_utils import build_scatter_config
 from dataset_config import DATASET_CONFIGS
 
 def get_prague_districts_lookup():
+    """
+    Load Prague districts data and create a lookup table mapping district IDs to names.
+
+    Returns:
+        pd.DataFrame: DataFrame with columns 'id' (district index) and 'name' (district name)
+    """
     df = read_file(str(DATA_PATHS.prague_districts))
     df = df.to_crs(4326)
     df["id"] = df.index
@@ -18,10 +24,19 @@ def get_prague_districts_lookup():
     Input("prague-map", "clickData"),
 )
 def redirect_to_selected_district(click_data):
+    """
+    Redirects user the district info page after clicking on given district on map
+
+    Args:
+        click_data: point on the map the user has clicked on
+
+    Returns:
+        redirect: redirecting user to the given page if district exists, if not update is prevented
+    """
     if click_data and click_data.get("points"):
         location_id = click_data["points"][0]["location"]
-        lookup_df = get_prague_districts_lookup()
-        district_row = lookup_df[lookup_df["id"] == location_id]
+        district_lookup = get_prague_districts_lookup()
+        district_row = district_lookup[district_lookup["id"] == location_id]
         if not district_row.empty:
             district_name = district_row["name"].iloc[0]
             return "/districts/district-detail" + f"?district={district_name}"

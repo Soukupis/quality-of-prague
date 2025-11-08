@@ -9,6 +9,15 @@ def init_cache(app):
     cache = Cache(app.server, config=Config.get_cache_config())
 
 def cached(timeout=None):
+    """
+    Decorator to cache function results using Flask-Caching.
+
+    Args:
+        timeout: Cache timeout in seconds. If None, uses Config.CACHE_TIMEOUT
+
+    Returns:
+        Decorator function that wraps the target function with caching
+    """
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):

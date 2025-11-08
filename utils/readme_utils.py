@@ -6,7 +6,12 @@ from dash import html
 def get_data_readmes(data_dir=None):
     """
     Discover all README.md files in the data directory and subfolders.
-    Returns a list of dicts with 'title' and 'markdown'.
+
+    Args:
+        data_dir: Optional path to data directory. If None, uses default data directory
+
+    Returns:
+        list: List of dicts with 'title' and 'markdown' keys
     """
     if data_dir is None:
         data_dir = Path(__file__).parent.parent / "data"
@@ -31,7 +36,13 @@ def get_data_readmes(data_dir=None):
 def build_readme_cards(readmes, compact=True):
     """
     Build a list of Dash cards from a list of readme dicts.
-    If compact=True, use compact-markdown class for smaller cards.
+
+    Args:
+        readmes: List of readme dicts with 'title' and 'markdown' keys
+        compact: If True, use compact-markdown class for smaller cards. Default is True
+
+    Returns:
+        list: List of Dash Bootstrap Card components
     """
     cards = []
     for readme in readmes:

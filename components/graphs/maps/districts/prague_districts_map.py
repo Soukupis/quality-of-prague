@@ -4,6 +4,15 @@ from data_config import DATA_PATHS
 from .district_map_config import SingleDistrictMapLayout, DistrictMapStyle,DistrictMapLayout
 
 def get_single_district_map_builder(district: str) -> DistrictMapBuilder:
+    """
+    Create and configure a DistrictMapBuilder for a single district.
+
+    Args:
+        district: Name of the district to create map builder for
+
+    Returns:
+        DistrictMapBuilder: Configured map builder instance with district data
+    """
     builder = DistrictMapBuilder(DistrictMapStyle(), SingleDistrictMapLayout(), None, None, False, "skip")
     df, centroids, geojson = load_and_prepare_data(DATA_PATHS.get_path("prague_districts"))
     selected_district = df[df["nazev_1"] == district]
@@ -20,11 +29,27 @@ def get_single_district_map_builder(district: str) -> DistrictMapBuilder:
     return builder
 
 def create_prague_map() -> go.Figure:
+    """
+    Create an interactive map of all Prague districts.
+
+    Returns:
+        go.Figure: Plotly figure object containing the Prague districts map
+    """
     builder = DistrictMapBuilder(DistrictMapStyle(), DistrictMapLayout(), "event+select", "select", True, "text")
     df, centroids, geojson = load_and_prepare_data(DATA_PATHS.get_path("prague_districts"))
     return builder.create_map(df, centroids, geojson)
 
 def create_single_district_map(district: str, scatters = None) -> go.Figure:
+    """
+    Create a map focused on a single district with optional scatter point layers.
+
+    Args:
+        district: Name of the district to display
+        scatters: Optional dictionary of scatter point configurations to overlay on the map.
+
+    Returns:
+        go.Figure: Plotly figure object containing the single district map with scatter points
+    """
     map_builder = get_single_district_map_builder(district)
 
     if scatters is not None:
@@ -39,3 +64,5 @@ def create_single_district_map(district: str, scatters = None) -> go.Figure:
                 name=scatters[scatter_key]["name"],
             )
     return map_builder.create_map(map_builder.df, map_builder.centroids, map_builder.geojson)
+
+
