@@ -1,3 +1,3 @@
-from .sidebar import sidebar
+from .sidebar import *
 
 __all__ = ["sidebar"]

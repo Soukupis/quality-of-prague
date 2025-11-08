@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc, register_page
-from components.ui.page_heading import page_title, page_subtitle, page_divider
+from components.ui import page_title, page_subtitle, page_divider
 from utils.readme_utils import get_data_readmes
 
 register_page(__name__, path="/datasets", name="Datasets")

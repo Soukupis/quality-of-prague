@@ -1,6 +1,8 @@
 from dash import Dash, html
 import dash
-from components import navbar, sidebar, CONTENT_STYLE
+from components.config import CONTENT_STYLE
+from components.navbar import navbar
+from components.sidebar import sidebar
 from config import Config
 from utils.cache import init_cache
 
@@ -27,8 +29,8 @@ init_cache(app)
 app.title = Config.APP_TITLE
 
 app.layout = html.Div([
-    navbar,
-    sidebar,
+    navbar(),
+    sidebar(),
     html.Div(
         dash.page_container,
         style=CONTENT_STYLE

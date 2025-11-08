@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import html, register_page, dcc
 from components.graphs import create_prague_map
-from components.ui.page_heading import page_title, page_subtitle, page_divider
+from components.ui import page_title, page_subtitle, page_divider
 
 register_page(__name__, path="/districts", name="Districts")
 

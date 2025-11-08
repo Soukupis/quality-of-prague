@@ -16,7 +16,8 @@ def sidebar_header():
         }),
     ], style={"padding": f"0 {SPACING_XL}", "marginBottom": SPACING_XL})
 
-sidebar = html.Div([
+def sidebar():
+    return html.Div([
     sidebar_header(),
     dbc.Nav([
         nav_item(
@@ -30,5 +31,3 @@ sidebar = html.Div([
     className="flex-column",
     style={"padding": "0 1rem"}),
 ], style=SIDEBAR_STYLE)
-
-__all__ = ["sidebar"]

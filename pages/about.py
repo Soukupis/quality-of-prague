@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import register_page
-from components.ui.page_heading import page_title, page_subtitle, page_divider
+from components.ui import page_title, page_subtitle, page_divider
 
 register_page(__name__, path="/about", name="About")
 

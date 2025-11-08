@@ -3,7 +3,6 @@ from .icon import icon
 from .image import image
 from ..config import PRIMARY_COLOR, TEXT_COLOR, FONT_SIZE_BRAND, FONT_WEIGHT_BOLD
 
-
 def brand(
     text: str,
     icon_name: str = None,

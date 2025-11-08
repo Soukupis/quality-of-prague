@@ -1,3 +1,3 @@
-from .navbar import navbar
+from .navbar import *
 
 __all__ = ["navbar"]

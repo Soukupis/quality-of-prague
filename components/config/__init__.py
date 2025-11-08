@@ -1,12 +1,4 @@
-from .layout import (
-    NAVBAR_HEIGHT,
-    NAVBAR_STYLE,
-    SIDEBAR_WIDTH,
-    SIDEBAR_STYLE,
-    CONTENT_STYLE,
-    NAV_ITEMS,
-    BRAND_CONFIG
-)
+from .layout import *
 from .theme import *
 
 __all__ = [
