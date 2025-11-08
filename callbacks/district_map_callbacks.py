@@ -1,9 +1,8 @@
-from dash import Input, Output, callback, html
-from components.graphs import create_prague_map
+from dash import Input, Output, callback, State,ctx, exceptions
+from components.graphs.maps.districts import create_single_district_map
 from data_config import DATA_PATHS
-from utils.data_loader import read_file
-from dash import dcc
-import dash
+from utils.loaders.data_loader import read_file
+from utils.scatter.scatter_utils import build_scatter_config
 
 def get_prague_districts_lookup():
     df = read_file(str(DATA_PATHS.prague_districts))
@@ -26,5 +25,83 @@ def redirect_to_selected_district(click_data):
             district_name = district_row["name"].iloc[0]
             return "/districts/district-detail" + f"?district={district_name}"
         else:
-            raise dash.exceptions.PreventUpdate
-    raise dash.exceptions.PreventUpdate
+            raise exceptions.PreventUpdate
+    raise exceptions.PreventUpdate
+
+@callback(
+    Output('single-district-map', 'figure', allow_duplicate=True),
+    Input('visible-layers-store', 'data'),
+    State('district-store', 'data'),
+    prevent_initial_call='initial_duplicate'
+)
+def restore_map_state(visible_layers, district):
+    """
+    Restore map with previously selected layers when page loads.
+
+    This callback runs when the page first loads and reads the visible_layers
+    from session storage. If there are any layers saved, it recreates the map
+    with those layers visible.
+
+    Args:
+        visible_layers: List of layer keys from session storage
+        district: Current district name
+
+    Returns:
+        Figure with restored layer visibility
+    """
+    if not visible_layers or not district:
+        return create_single_district_map(district, None)
+
+    scatters = build_scatter_config(district, visible_layers)
+    return create_single_district_map(district, scatters if scatters else None)
+
+@callback(
+    [Output('single-district-map', 'figure'),
+     Output('visible-layers-store', 'data')],
+    [Input('police-stations', 'n_clicks'),
+     Input('parking-meters', 'n_clicks')],
+    [State('visible-layers-store', 'data'),
+     State('district-store', 'data')],
+    prevent_initial_call=True
+)
+def toggle_map_layer(police_clicks, parking_clicks, visible_layers, district):
+    """
+    Toggle visibility of map layers when info cards are clicked.
+
+    This callback responds to clicks on the info cards (police stations, parking meters, ...)
+    and updates the map to show/hide the corresponding loaders points.
+
+    Args:
+        police_clicks: Number of clicks on police stations card
+        parking_clicks: Number of clicks on parking meters card
+        visible_layers: List of currently visible layer keys
+        district: Name of the current district
+
+    Returns:
+        tuple: (updated map figure, updated visible layers list)
+    """
+
+    layer_map = {
+        'police-stations': 'police_stations',
+        'parking-meters': 'parking_meters'
+    }
+
+    # Get which card was clicked using ctx.triggered_id
+    clicked_card = ctx.triggered_id
+
+    if clicked_card and clicked_card in layer_map:
+        layer_key = layer_map[clicked_card]
+
+        # Toggle the layer: remove if visible, add if hidden
+        if layer_key in visible_layers:
+            visible_layers.remove(layer_key)
+        else:
+            visible_layers.append(layer_key)
+
+    scatters = build_scatter_config(district, visible_layers)
+
+    # Create the updated map with only visible layers
+    updated_figure = create_single_district_map(district, scatters if scatters else None)
+
+    return updated_figure, visible_layers
+

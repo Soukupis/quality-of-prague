@@ -25,7 +25,7 @@ class DistrictMapLayout:
 
 @dataclass
 class SingleDistrictMapLayout:
-    style = "basic"
+    style = "carto-positron"
     zoom = 12
     height = 600
     margin = None

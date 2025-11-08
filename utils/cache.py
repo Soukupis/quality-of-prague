@@ -1,8 +1,6 @@
-import pandas as pd
 from flask_caching import Cache
 from functools import wraps
 from config import Config
-import geopandas as gpd
 
 cache = None
 
@@ -20,7 +18,3 @@ def cached(timeout=None):
             return func(*args, **kwargs)
         return wrapper
     return decorator
-
-@cached()
-def read_file(location):
-    return gpd.read_file(location)

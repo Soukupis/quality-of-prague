@@ -1,10 +1,8 @@
-#TODO: creates Dash instance
-
 from dash import Dash, html
 import dash
 from components import navbar, sidebar, CONTENT_STYLE
 from config import Config
-from utils.data_loader import init_cache
+from utils.cache import init_cache
 
 app = Dash(
     __name__,

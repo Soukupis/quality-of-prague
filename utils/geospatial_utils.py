@@ -88,6 +88,25 @@ def is_point_within_polygon(point, polygon):
     return polygon.contains(point)
 
 
+def points_within_polygon(polygon, data, geometry_key=None):
+    """
+    Returns all points (rows) from the DataFrame that are within the given polygon.
+
+    Parameters:
+        polygon: shapely Polygon or MultiPolygon object to check points against
+        data: DataFrame containing point geometries
+        geometry_key: column name in loaders that contains the point geometries (shapely Point objects)
+
+    Returns:
+        DataFrame: Subset of the input loaders containing only rows where the point geometry
+                   is within the polygon. Returns empty DataFrame if no points are found.
+    """
+    # Create a boolean mask indicating which points are within the polygon
+    mask = data[geometry_key].apply(polygon.contains)
+    
+    # Filter and return only the rows where the point is within the polygon
+    return data[mask]
+
 def point_count_for_polygon(polygon, data, geometry_key=None):
     """
     Counts the number of points within a given polygon.

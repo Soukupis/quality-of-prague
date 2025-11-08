@@ -1,9 +1,8 @@
 import plotly.graph_objects as go
 import pandas as pd
-from utils.data_loader import read_file
+from utils.loaders.data_loader import read_file
 from utils.geospatial_utils import compute_centroids, geodata_to_geojson_dict, calculate_center
 from .district_map_layers import MapLayerBuilder
-
 
 def load_and_prepare_data(file_path: str, name_column: str = "nazev_1") -> tuple:
     df = read_file(file_path)
@@ -26,7 +25,11 @@ class DistrictMapBuilder:
         self.drag_mode = drag_mode
         self.selection_revision=selection_revision,
         self.choropleth_hover_info = choropleth_hover_info
+        self.custom_traces = []
 
+        self.df = None
+        self.centroids = None
+        self.geojson = None
 
     def create_map(self, df: pd.DataFrame, centroids, geojson: dict) -> go.Figure:
         fig = go.Figure()
@@ -34,6 +37,9 @@ class DistrictMapBuilder:
         fig.add_trace(self.layer_builder.create_choropleth_layer(geojson, df, self.choropleth_hover_info))
         fig.add_trace(self.layer_builder.create_text_layer(centroids, df["name"]))
         fig.add_trace(self.layer_builder.create_highlight_layer())
+
+        for trace in self.custom_traces:
+            fig.add_trace(trace)
 
         center = calculate_center(df)
         fig.update_layout(
@@ -46,3 +52,27 @@ class DistrictMapBuilder:
         )
 
         return fig
+
+    def add_scatter_points(
+            self,
+            data,
+            lon_column: str = "geometry",
+            lat_column: str = "geometry",
+            hover_text_column: str = "hover_text",
+            marker_size: int = 9,
+            marker_color: str = "blue",
+            marker_opacity: float = 0.8,
+            name: str = None,
+    ):
+        trace = self.layer_builder.create_scatter_layer(
+            data=data,
+            lon_column=lon_column,
+            lat_column=lat_column,
+            hover_text_column=hover_text_column,
+            marker_size=marker_size,
+            marker_color=marker_color,
+            marker_opacity=marker_opacity,
+            name=name,
+        )
+        self.custom_traces.append(trace)
+        return self
