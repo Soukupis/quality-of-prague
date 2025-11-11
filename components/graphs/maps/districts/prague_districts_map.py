@@ -50,19 +50,32 @@ def create_single_district_map(district: str, scatters = None) -> go.Figure:
     Returns:
         go.Figure: Plotly figure object containing the single district map with scatter points
     """
+    from utils.scatter.scatter_utils import build_subway_entrance_traces
+
     map_builder = get_single_district_map_builder(district)
 
     if scatters is not None:
-        for scatter_key in scatters:
-            map_builder.add_scatter_points(
-                data=scatters[scatter_key]["loaders"],
-                lon_column=scatters[scatter_key]["lon_column"],
-                lat_column=scatters[scatter_key]["lat_column"],
-                marker_size=scatters[scatter_key]["marker_size"],
-                marker_color=scatters[scatter_key]["marker_color"],
-                marker_opacity=scatters[scatter_key]["marker_opacity"],
-                name=scatters[scatter_key]["name"],
-            )
+        for scatter_key, scatter_config in scatters.items():
+            if scatter_config.get("type") == "subway_entrances":
+                # Handle subway entrances with special visualization
+                subway_traces = build_subway_entrance_traces(scatter_config["data"])
+                for trace in subway_traces:
+                    map_builder.custom_traces.append(trace)
+            else:
+                # Handle regular scatter points
+                map_builder.add_scatter_points(
+                    data=scatter_config["data"],
+                    lon_column=scatter_config["lon_column"],
+                    lat_column=scatter_config["lat_column"],
+                    marker_size=scatter_config["marker_size"],
+                    marker_color=scatter_config["marker_color"],
+                    marker_opacity=scatter_config["marker_opacity"],
+                    show_legend=True,
+                    legend_group=scatter_config["legend_group"],
+                    name=scatter_config["name"],
+                )
     return map_builder.create_map(map_builder.df, map_builder.centroids, map_builder.geojson)
+
+
 
 

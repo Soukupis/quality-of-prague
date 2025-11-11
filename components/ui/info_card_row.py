@@ -2,8 +2,8 @@ import dash_bootstrap_components as dbc
 
 def info_card_row(cards, col_width=2):
     return dbc.Row([
-        dbc.Col(card, width=col_width) for card in cards
-    ], className="g-2 justify-content-start mb-3")
+        html.Div([card for card in cards], className="gap-4 justify-content-start mb-3 d-flex")
+    ], className="g-2 justify-content-start mb-3 flex")
 from dash import html
 
 def section_header(title, accent_color, bg_color, text_color):

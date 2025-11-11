@@ -62,6 +62,8 @@ class DistrictMapBuilder:
             marker_size: int = 9,
             marker_color: str = "blue",
             marker_opacity: float = 0.8,
+            show_legend: bool = False,
+            legend_group: str = None,
             name: str = None,
     ):
         trace = self.layer_builder.create_scatter_layer(
@@ -72,6 +74,8 @@ class DistrictMapBuilder:
             marker_size=marker_size,
             marker_color=marker_color,
             marker_opacity=marker_opacity,
+            show_legend=show_legend,
+            legend_group=legend_group,
             name=name,
         )
         self.custom_traces.append(trace)

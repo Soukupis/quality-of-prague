@@ -1,7 +1,7 @@
 """
 Central configuration for all datasets used in the district info page.
 """
-from utils.loaders.districts_loader import get_parking_meters_data, get_police_stations_data
+from utils.loaders.districts_loader import get_parking_meters_data, get_police_stations_data, get_subway_entrances_data
 
 DATASET_CONFIGS = {
     "police_stations": {
@@ -20,20 +20,12 @@ DATASET_CONFIGS = {
         "layer_key": "parking_meters",
         "loader_function": get_parking_meters_data,
     },
-}
-
-SECTIONS = {
-    "safety": {
-        "title": "Safety",
-        "accent_color": None,
-        "bg_color": None,
-        "text_color": None,
-    },
-    "travel": {
-        "title": "Travel",
-        "accent_color": None,
-        "bg_color": None,
-        "text_color": None,
+    "subway_entrances": {
+        "id": "subway_entrances",
+        "icon": "fa-subway",
+        "title": "Subway entrances",
+        "section": "travel",
+        "layer_key": "subway_entrances",
+        "loader_function": get_subway_entrances_data,
     },
 }
-

@@ -9,6 +9,7 @@ class DataPaths:
     prague_districts = base_data_dir / "mestske_casti" / "mestske_casti.geojson"
     police_stations = base_data_dir / "objekty_mestske_policie_praha" / "objekty_mestske_policie_praha.geojson"
     parking_meters = base_data_dir / "parkovaci_automaty" / "parkovaci_automaty.geojson"
+    subway_entrances = base_data_dir / "vstupy_do_metra" / "vstupy_do_metra.geojson"
 
 
     def get_path(self, path_key: str) -> str:

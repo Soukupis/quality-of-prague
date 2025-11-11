@@ -9,3 +9,6 @@ def get_police_stations_data():
 
 def get_parking_meters_data():
     return read_file(DATA_PATHS.parking_meters)
+
+def get_subway_entrances_data():
+    return read_file(DATA_PATHS.subway_entrances)

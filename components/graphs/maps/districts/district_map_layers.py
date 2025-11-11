@@ -54,6 +54,7 @@ class MapLayerBuilder:
         mode: str = "markers",
         hover_info: str = "text",
         show_legend: bool = False,
+        legend_group: str = None,
         name: str = None,
     ) -> go.Scattermap:
 
@@ -76,6 +77,8 @@ class MapLayerBuilder:
             ),
             hoverinfo=hover_info,
             showlegend=show_legend,
+            legendgroup=legend_group,
+            legendgrouptitle=dict(text=legend_group)
         )
 
         if hover_text_column and hover_text_column in data.columns:
