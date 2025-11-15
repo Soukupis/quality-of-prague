@@ -1,17 +1,20 @@
 from dataclasses import dataclass
-from pathlib import Path
 
 @dataclass(frozen=True)
 class DataPaths:
-    base_data_dir = Path("data")
+    """Data paths configuration for accessing geospatial data files.
 
-    prague_districts = base_data_dir / "mestske_casti" / "mestske_casti.geojson"
-    police_stations = base_data_dir / "objekty_mestske_policie_praha" / "objekty_mestske_policie_praha.geojson"
-    parking_meters = base_data_dir / "parkovaci_automaty" / "parkovaci_automaty.geojson"
-    subway_entrances = base_data_dir / "vstupy_do_metra" / "vstupy_do_metra.geojson"
+    These paths are relative to the 'data' package and are used with
+    importlib.resources for robust package resource access.
+    """
 
+    prague_districts: str = "mestske_casti/mestske_casti.geojson"
+    police_stations: str = "objekty_mestske_policie_praha/objekty_mestske_policie_praha.geojson"
+    parking_meters: str = "parkovaci_automaty/parkovaci_automaty.geojson"
+    subway_entrances: str = "vstupy_do_metra/vstupy_do_metra.geojson"
 
     def get_path(self, path_key: str) -> str:
-        return str(getattr(self, path_key))
+        """Get a path as a string by key name."""
+        return getattr(self, path_key)
 
 DATA_PATHS = DataPaths()

@@ -12,7 +12,7 @@ def get_prague_districts_lookup():
     Returns:
         pd.DataFrame: DataFrame with columns 'id' (district index) and 'name' (district name)
     """
-    df = read_file(str(DATA_PATHS.prague_districts))
+    df = read_file(DATA_PATHS.prague_districts)
     df = df.to_crs(4326)
     df["id"] = df.index
     df["name"] = df["nazev_1"].fillna("Unknown")

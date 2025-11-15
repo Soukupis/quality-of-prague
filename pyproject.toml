@@ -30,9 +30,11 @@ dev = [
     "ipykernel>=6.0.0",
 ]
 
-[tool.setuptools]
-packages = ["components", "pages", "utils", "callbacks"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "data*"]
 
-[project.scripts]
-quality-of-prague = "app:app.run"
+[tool.setuptools.package-data]
+"data" = ["**/*.geojson", "**/*.md"]
+"*" = ["*.geojson"]
 
