@@ -28,6 +28,7 @@ dev = [
     "jupyterlab>=4.0.0",
     "notebook>=7.0.0",
     "ipykernel>=6.0.0",
+    "pdoc",
 ]
 
 [tool.setuptools.packages.find]
