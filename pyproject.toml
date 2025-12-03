@@ -36,6 +36,6 @@ where = ["."]
 include = ["src*", "data*"]
 
 [tool.setuptools.package-data]
-"data" = ["**/*.geojson", "**/*.md"]
-"*" = ["*.geojson"]
+data = ["**/*"]
+src = ["assets/**/*"]
 
