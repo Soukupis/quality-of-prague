@@ -8,7 +8,7 @@ layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             page_title("Dashboard", icon_name="bar-chart"),
-            page_subtitle("Insights and metrics about Prague's quality of life indicators."),
+            page_subtitle("Poznatky a metriky týkající se ukazatelů kvality života v Praze."),
             page_divider()
         ], width=12)
     ]),

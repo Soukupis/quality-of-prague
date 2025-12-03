@@ -8,7 +8,7 @@ def sidebar_header():
     return html.Div([
         html.H3([
             icon(name="list", class_name="me-2"),
-            "Navigation"
+            "Navigace"
         ], className="mb-0", style={
             "color": TEXT_COLOR,
             "fontWeight": FONT_WEIGHT_BOLD,

@@ -1,10 +1,10 @@
 import dash_bootstrap_components as dbc
-from dash import register_page, dcc
+from dash import register_page, dcc, clientside_callback, Input, Output
 from src.components.ui.page_heading import page_title, page_divider
 from src.components.pages.district_info import map_section, safety_section, travel_section
 from src.utils.districts.district_utils import get_district_polygons
 
-register_page(__name__, path="/districts/district-detail", name="Districts Detail")
+register_page(__name__, path="/districts/district-detail", name="Detail městské části")
 
 def layout(district=None):
     polygons = get_district_polygons()
@@ -28,3 +28,18 @@ def layout(district=None):
             ], width=12)
         ]),
     ], fluid=True, className="py-2")
+
+clientside_callback(
+    """
+    function(district) {
+        if (district) {
+            document.title = district;
+        } else {
+            document.title = "Detail městské části - Kvalita Prahy";
+        }
+        return window.dash_clientside.no_update;
+    }
+    """,
+    Output('district-store', 'id'),
+    Input('district-store', 'data')
+)

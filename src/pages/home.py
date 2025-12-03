@@ -2,42 +2,42 @@ import dash_bootstrap_components as dbc
 from dash import html, register_page
 from src.components.ui import page_title, page_subtitle, page_divider, feature_card
 
-register_page(__name__, path="/", name="Home")
+register_page(__name__, path="/", name="Domů")
 
 feature_cards = dbc.Row([
     dbc.Col([
         feature_card(
             icon_name="bar-chart",
             title="Dashboard",
-            description="Interactive insights and metrics about Prague's quality of life.",
-            button_text="Go to Dashboard",
+            description="Interaktivní poznatky a metriky o kvalitě života v Praze.",
+            button_text="Dashboard",
             button_href="/dashboard"
         )
     ], md=3, xs=12, className="mb-4"),
     dbc.Col([
         feature_card(
             icon_name="geo-alt",
-            title="Districts",
-            description="Explore quality of life metrics across Prague's districts.",
-            button_text="View Districts",
+            title="Městské části",
+            description="Prozkoumejte ukazatele kvality života napříč pražskými městskými částmi.",
+            button_text="Městské části",
             button_href="/districts"
         )
     ], md=3, xs=12, className="mb-4"),
     dbc.Col([
         feature_card(
             icon_name="database",
-            title="Datasets",
-            description="Browse the datasets powering the analysis and visualizations.",
-            button_text="View Datasets",
+            title="Datové sady",
+            description="Procházejte datasety, které stojí za analytikou a vizualizacemi.",
+            button_text="Datové sady",
             button_href="/datasets"
         )
     ], md=3, xs=12, className="mb-4"),
     dbc.Col([
         feature_card(
             icon_name="info-circle",
-            title="About",
-            description="Learn more about the purpose and background of this platform.",
-            button_text="About",
+            title="O Aplikaci",
+            description="Zjistěte více o účelu a pozadí této platformy.",
+            button_text="O Aplikaci",
             button_href="/about"
         )
     ], md=3, xs=12, className="mb-4"),
@@ -47,10 +47,10 @@ layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             page_title("Quality of Prague"),
-            page_subtitle("A platform for analyzing and presenting quality of life metrics for Prague."),
+            page_subtitle("Platforma pro analýzu a prezentaci ukazatelů kvality života v Praze."),
             page_divider(),
             html.P(
-                "Explore the dashboard for insights, learn more about the project, view districts, or browse the datasets.",
+                "Prozkoumejte dashboard pro získání poznatků, zjistěte více o projektu, zobrazte městské části nebo procházejte dostupné datasety.",
                 className="mb-4",
                 style={"fontSize": "1.05rem"}
             ),

@@ -34,7 +34,7 @@ CONTENT_STYLE = {
 
 NAV_ITEMS = [
     {
-        "label": "Home",
+        "label": "Domů",
         "href": "/",
         "icon": "house-door"
     },
@@ -44,17 +44,17 @@ NAV_ITEMS = [
         "icon": "bar-chart"
     },
     {
-        "label": "Districts",
+        "label": "Městské části",
         "href": "/districts",
         "icon": "geo-alt"
     },
     {
-        "label": "Datasets",
+        "label": "Datové sady",
         "href": "/datasets",
         "icon": "database"
     },
     {
-        "label": "About",
+        "label": "O Aplikaci",
         "href": "/about",
         "icon": "info-circle"
     },

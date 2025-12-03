@@ -3,7 +3,7 @@ from dash import html, register_page, dcc
 from src.components.graphs import create_prague_map
 from src.components.ui import page_title, page_subtitle, page_divider
 
-register_page(__name__, path="/districts", name="Districts")
+register_page(__name__, path="/districts", name="Městské části")
 
 def create_map_section():
     return html.Div([
@@ -34,8 +34,8 @@ def create_main_grid():
 layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            page_title("Districts", icon_name="geo-alt"),
-            page_subtitle("Explore various quality of life metrics across different districts in Prague."),
+            page_title("Městské části", icon_name="geo-alt"),
+            page_subtitle("Prozkoumejte různé ukazatele kvality života v jednotlivých pražských městských částech."),
             page_divider(),
             create_main_grid()
         ], width=12)

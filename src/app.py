@@ -17,7 +17,8 @@ app = Dash(
         Config.ASSETS_URL_PATH + "global.css"
     ],
     assets_folder=Config.ASSETS_FOLDER,
-    assets_url_path=Config.ASSETS_URL_PATH
+    assets_url_path=Config.ASSETS_URL_PATH,
+    update_title=None
 )
 from src.callbacks import district_map_callbacks
 
