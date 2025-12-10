@@ -1,7 +1,7 @@
 """
 Central configuration for all datasets used in the district info page.
 """
-from src.utils.loaders.districts_loader import get_parking_meters_data, get_police_stations_data, get_subway_entrances_data
+from src.utils.loaders.districts_loader import get_parking_p_r_data, get_parking_meters_data, get_police_stations_data, get_subway_entrances_data, get_no_standing_data
 
 DATASET_CONFIGS = {
     "police_stations": {
@@ -15,15 +15,23 @@ DATASET_CONFIGS = {
     "parking_meters": {
         "id": "parking-meters",
         "icon": "fa-parking",
-        "title": "Parking meters",
+        "title": "Parkovací automaty",
         "section": "travel",
         "layer_key": "parking_meters",
         "loader_function": get_parking_meters_data,
     },
+    "parking_p_r": {
+        "id": "parking_p_r",
+        "icon": "fa-parking",
+        "title": "Záchytná parkoviště P+R",
+        "section": "travel",
+        "layer_key": "parking_p_r",
+        "loader_function": get_parking_p_r_data,
+    },
     "subway_entrances": {
         "id": "subway_entrances",
         "icon": "fa-subway",
-        "title": "Subway entrances",
+        "title": "Vstupy do metra",
         "section": "travel",
         "layer_key": "subway_entrances",
         "loader_function": get_subway_entrances_data,

@@ -63,7 +63,7 @@ def build_single_line_station_trace(subway_data, line):
         lon=df_line["geometry"].x,
         lat=df_line["geometry"].y,
         mode="markers",
-        name=f"Subway Station {line}",
+        name=f"Stanice metra {line}",
         marker=dict(
             size=10,
             color=SUBWAY_ENTRANCES_LINE_COLORS.get(line, "gray"),

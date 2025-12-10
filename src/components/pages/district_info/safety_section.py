@@ -32,7 +32,7 @@ def safety_section(district, polygons):
     return dbc.Row([
         dbc.Col([
             section_header(
-                title="Safety",
+                title="Bezpečnost",
                 accent_color=theme.SAFETY_ACCENT_COLOR,
                 bg_color=theme.SAFETY_BG_COLOR,
                 text_color=theme.SAFETY_TEXT_COLOR
