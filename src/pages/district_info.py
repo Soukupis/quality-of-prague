@@ -21,7 +21,7 @@ def layout(district=None):
             dbc.Col([
                 page_title(district, icon_name="geo-alt"),
                 page_divider(),
-                map_section(district, None),
+                map_section(district, None, None),
                 page_divider(),
                 safety_section(district, polygons),
                 travel_section(district, polygons),

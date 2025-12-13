@@ -2,6 +2,7 @@ from dash import Input, Output, callback, State, ctx, exceptions, ALL
 from src.components.graphs import create_single_district_map
 from src.configs.data_config import DATA_PATHS
 from src.utils.loaders.data_loader import read_file
+from src.utils.polygons.polygon_utils import build_polygon_config
 from src.utils.scatter.scatter_utils import build_scatter_config
 from src.configs.dataset_config import DATASET_CONFIGS
 
@@ -76,7 +77,8 @@ def restore_map_state(visible_layers, district):
         figure = create_single_district_map(district, None)
     else:
         scatters = build_scatter_config(district, visible_layers)
-        figure = create_single_district_map(district, scatters if scatters else None)
+        polygons = build_polygon_config(district, visible_layers)
+        figure = create_single_district_map(district, scatters if scatters else None, polygons if polygons else None)
 
     plus_styles, minus_styles, card_classes = handle_card_styles(visible_layers)
 
@@ -130,7 +132,8 @@ def toggle_map_layer(n_clicks_list, visible_layers, district):
 
     # Build scatter configuration and update map
     scatters = build_scatter_config(district, visible_layers)
-    updated_figure = create_single_district_map(district, scatters if scatters else None)
+    polygons = build_polygon_config(district, visible_layers)
+    updated_figure = create_single_district_map(district, scatters if scatters else None, polygons if polygons else None)
 
     plus_styles, minus_styles, card_classes = handle_card_styles(visible_layers)
 

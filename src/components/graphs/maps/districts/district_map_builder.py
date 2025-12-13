@@ -3,6 +3,7 @@ import pandas as pd
 from src.utils.loaders.data_loader import read_file
 from src.utils.geospatial_utils import compute_centroids, geodata_to_geojson_dict, calculate_center
 from .district_map_layers import MapLayerBuilder
+from typing import Dict
 
 def load_and_prepare_data(file_path: str, name_column: str = "nazev_1") -> tuple:
     df = read_file(file_path)
@@ -80,3 +81,23 @@ class DistrictMapBuilder:
         )
         self.custom_traces.append(trace)
         return self
+
+    def add_polygon_layer(
+            self,
+            geojson: Dict,
+            df: pd.DataFrame,
+            background_color: str = None,
+            legend_group: str = None,
+            name: str = None,
+    ):
+        trace = self.layer_builder.create_polygon_layer(
+            geojson,
+            df,
+            background_color=background_color,
+            legend_group=legend_group,
+            name=name,
+        )
+        self.custom_traces.append(trace)
+        return self
+
+

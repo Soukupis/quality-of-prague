@@ -19,6 +19,32 @@ class MapLayerBuilder:
             selectedpoints=[],
         )
 
+    @staticmethod
+    def create_polygon_layer(
+            geojson: Dict,
+            df: pd.DataFrame,
+            background_color: str = "red",
+            legend_group: str = None,
+            show_legend: bool = True,
+            name: str = None,
+    ) -> go.Choroplethmap:
+        trace_params = dict(
+            geojson=geojson,
+            locations=df["id"],
+            z=df.index,
+            showscale=False,
+            colorscale=[[0, background_color], [1, background_color]],
+            selectedpoints=[],
+            legendgroup=legend_group,
+            legendgrouptitle=dict(text=legend_group),
+            showlegend = show_legend
+        )
+
+        if name:
+            trace_params['name'] = name
+
+        return go.Choroplethmap(**trace_params)
+
     def create_text_layer(self, centroids, labels: List[str]) -> go.Scattermap:
         return go.Scattermap(
             lon=centroids.x,
@@ -42,8 +68,8 @@ class MapLayerBuilder:
             hovertemplate="",
         )
 
+    @staticmethod
     def create_scatter_layer(
-        self,
         data: pd.DataFrame,
         lon_column: str = "lon",
         lat_column: str = "lat",

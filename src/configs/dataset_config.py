@@ -28,6 +28,14 @@ DATASET_CONFIGS = {
         "layer_key": "parking_p_r",
         "loader_function": get_parking_p_r_data,
     },
+    "no_standing": {
+        "id": "no_standing",
+        "icon": "fa-parking",
+        "title": "Zákaz stání",
+        "section": "travel",
+        "layer_key": "no_standing",
+        "loader_function": get_no_standing_data,
+    },
     "subway_entrances": {
         "id": "subway_entrances",
         "icon": "fa-subway",

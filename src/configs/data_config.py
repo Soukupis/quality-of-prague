@@ -13,7 +13,7 @@ class DataPaths:
     parking_meters: str = "parkovaci_automaty/parkovaci_automaty.geojson"
     subway_entrances: str = "vstupy_do_metra/vstupy_do_metra.geojson"
     no_standing: str = "zakaz_stani/zakaz_stani.geojson"
-    parking_p_r: str = "parking_p_r/parking_p_r.geojson"
+    parking_p_r: str = "parkovani_p_r/parkovani_p_r.geojson"
 
     def get_path(self, path_key: str) -> str:
         """Get a path as a string by key name."""

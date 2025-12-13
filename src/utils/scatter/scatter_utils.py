@@ -22,27 +22,27 @@ def build_scatter_config(district: str, layer_keys: list) -> dict:
     # Build scatter config only for requested layers
     scatters = {}
     for layer_key in layer_keys:
-        if layer_key == "subway_entrances":
-            subway_entrances = get_points_in_district(district, layer_key)
-            if not subway_entrances.empty:
-                scatters[layer_key] = {
-                    "type": "subway_entrances",
-                    "data": subway_entrances
-                }
-        elif layer_key in SCATTER_LAYER_CONFIGS:
-            config = SCATTER_LAYER_CONFIGS[layer_key]
-            filtered_data = get_points_in_district(district, layer_key)
+            if layer_key == "subway_entrances":
+                subway_entrances = get_points_in_district(district, layer_key)
+                if not subway_entrances.empty:
+                    scatters[layer_key] = {
+                        "type": "subway_entrances",
+                        "data": subway_entrances
+                    }
+            elif layer_key in SCATTER_LAYER_CONFIGS:
+                config = SCATTER_LAYER_CONFIGS[layer_key]
+                filtered_data = get_points_in_district(district, layer_key)
 
-            scatters[layer_key] = {
-                "data": filtered_data,
-                "lon_column": "geometry",
-                "lat_column": "geometry",
-                "marker_size": config["marker_size"],
-                "marker_color": config["marker_color"],
-                "marker_opacity": config["marker_opacity"],
-                'legend_group': config['legend_group'],
-                "name": config["name"],
-            }
+                scatters[layer_key] = {
+                    "data": filtered_data,
+                    "lon_column": "geometry",
+                    "lat_column": "geometry",
+                    "marker_size": config["marker_size"],
+                    "marker_color": config["marker_color"],
+                    "marker_opacity": config["marker_opacity"],
+                    'legend_group': config['legend_group'],
+                    "name": config["name"],
+                }
     return scatters
 
 def build_single_line_station_trace(subway_data, line):
@@ -69,7 +69,7 @@ def build_single_line_station_trace(subway_data, line):
             color=SUBWAY_ENTRANCES_LINE_COLORS.get(line, "gray"),
             opacity=0.9
         ),
-        legendgroup="travel",
+        legendgroup="Cestování",
         text=df_line["vst_nazev"] + f" (Line {line})",
         hoverinfo="text"
     )
