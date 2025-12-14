@@ -4,5 +4,11 @@ POLYGON_LAYERS_CONFIGS = {
         "key": "no_standing",
         "name": "Zákaz stání",
         "legend_group": "Cestování",
+    },
+    "loading_zone": {
+        "background_color": "lightblue",
+        "key": "loading_zone",
+        "name": "Zásobování",
+        "legend_group": "Cestování",
     }
 }

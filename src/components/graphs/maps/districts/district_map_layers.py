@@ -34,10 +34,10 @@ class MapLayerBuilder:
             z=df.index,
             showscale=False,
             colorscale=[[0, background_color], [1, background_color]],
-            selectedpoints=[],
             legendgroup=legend_group,
             legendgrouptitle=dict(text=legend_group),
-            showlegend = show_legend
+            showlegend = show_legend,
+            hoverinfo="skip",
         )
 
         if name:

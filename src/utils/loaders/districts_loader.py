@@ -13,6 +13,9 @@ def get_parking_meters_data():
 def get_no_standing_data():
     return read_file(DATA_PATHS.no_standing)
 
+def get_loading_zone_data():
+    return read_file(DATA_PATHS.loading_zone)
+
 def get_parking_p_r_data():
     return read_file(DATA_PATHS.parking_p_r)
 

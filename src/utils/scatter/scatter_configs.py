@@ -10,7 +10,7 @@ SCATTER_LAYER_CONFIGS = {
         "marker_size": 8,
         "marker_color": "#787878",
         "marker_opacity": 1,
-        "name": "Záchytná parkoviště P+R",
+        "name": "Parkoviště P+R",
         "legend_group": "Cestování",
     },
     "police_stations": {
