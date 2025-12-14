@@ -2,7 +2,7 @@ import dash_bootstrap_components as dbc
 
 def info_card_row(cards, col_width=2):
     return dbc.Row([
-        html.Div([card for card in cards], className="gap-4 justify-content-start mb-3 d-flex")
+        html.Div([card for card in cards], className="gap-4 justify-content-start mb-3 d-flex flex-wrap")
     ], className="g-2 justify-content-start mb-3 flex")
 from dash import html
 

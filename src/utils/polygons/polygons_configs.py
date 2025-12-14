@@ -16,5 +16,11 @@ POLYGON_LAYERS_CONFIGS = {
         "key": "designated_parking",
         "name": "Stání speciální",
         "legend_group": "Cestování",
+    },
+    "paid_parking": {
+        "background_color": "blue",
+        "key": "paid_parking",
+        "name": "Placené stání",
+        "legend_group": "Cestování",
     }
 }

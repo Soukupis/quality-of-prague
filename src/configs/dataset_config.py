@@ -2,7 +2,8 @@
 Central configuration for all datasets used in the district info page.
 """
 from src.utils.loaders.districts_loader import get_parking_p_r_data, get_parking_meters_data, get_police_stations_data, \
-    get_subway_entrances_data, get_no_standing_data, get_loading_zone_data, get_designated_parking
+    get_subway_entrances_data, get_no_standing_data, get_loading_zone_data, get_designated_parking_data, \
+    get_paid_parking_data
 
 DATASET_CONFIGS = {
     "police_stations": {
@@ -51,7 +52,15 @@ DATASET_CONFIGS = {
         "title": "Stání speciální",
         "section": "travel",
         "layer_key": "designated_parking",
-        "loader_function": get_designated_parking,
+        "loader_function": get_designated_parking_data,
+    },
+    "paid_parking": {
+        "id": "paid_parking",
+        "icon": "fa-coins",
+        "title": "Placené stání",
+        "section": "travel",
+        "layer_key": "paid_parking",
+        "loader_function": get_paid_parking_data,
     },
     "subway_entrances": {
         "id": "subway_entrances",
