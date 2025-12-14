@@ -3,7 +3,7 @@ Central configuration for all datasets used in the district info page.
 """
 from src.utils.loaders.districts_loader import get_parking_p_r_data, get_parking_meters_data, get_police_stations_data, \
     get_subway_entrances_data, get_no_standing_data, get_loading_zone_data, get_designated_parking_data, \
-    get_paid_parking_data
+    get_paid_parking_data, get_ztp_parking_data
 
 DATASET_CONFIGS = {
     "police_stations": {
@@ -70,4 +70,12 @@ DATASET_CONFIGS = {
         "layer_key": "subway_entrances",
         "loader_function": get_subway_entrances_data,
     },
+    "ztp_parking": {
+        "id": "ztp_parking",
+        "icon": "fa-wheelchair",
+        "title": "Parkovací stání ZTP",
+        "section": "travel",
+        "layer_key": "ztp_parking",
+        "loader_function": get_ztp_parking_data,
+    }
 }

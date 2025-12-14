@@ -3,7 +3,7 @@ from src.configs.dataset_config import DATASET_CONFIGS
 from src.utils.geospatial_utils import point_count_for_polygon
 from src.utils.loaders.districts_loader import get_parking_meters_data, get_subway_entrances_data, \
     get_parking_p_r_data, get_no_standing_data, get_loading_zone_data, get_designated_parking_data, \
-    get_paid_parking_data
+    get_paid_parking_data, get_ztp_parking_data
 import dash_bootstrap_components as dbc
 from src.components.config import theme
 
@@ -16,7 +16,8 @@ def travel_section(district, polygons):
         "no_standing": get_no_standing_data(),
         "loading_zone": get_loading_zone_data(),
         "designated_parking": get_designated_parking_data(),
-        "paid_parking": get_paid_parking_data()
+        "paid_parking": get_paid_parking_data(),
+        "ztp_parking": get_ztp_parking_data(),
     }
 
     cards = []

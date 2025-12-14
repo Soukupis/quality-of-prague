@@ -22,6 +22,9 @@ def get_designated_parking_data():
 def get_paid_parking_data():
     return read_file(DATA_PATHS.paid_parking)
 
+def get_ztp_parking_data():
+    return read_file(DATA_PATHS.ztp_parking)
+
 def get_parking_p_r_data():
     return read_file(DATA_PATHS.parking_p_r)
 

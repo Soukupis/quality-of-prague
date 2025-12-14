@@ -20,4 +20,11 @@ SCATTER_LAYER_CONFIGS = {
         "name": "Policejní stanice",
         "legend_group": "Bezpečnost",
     },
+    "ztp_parking": {
+"marker_size": 10,
+        "marker_color": "#00008B",
+        "marker_opacity": 1,
+        "name": "Parkovací stání ZTP",
+        "legend_group": "Cestování",
+    }
 }
