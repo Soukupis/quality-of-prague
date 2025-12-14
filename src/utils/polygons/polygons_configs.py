@@ -10,5 +10,11 @@ POLYGON_LAYERS_CONFIGS = {
         "key": "loading_zone",
         "name": "Zásobování",
         "legend_group": "Cestování",
+    },
+    "designated_parking": {
+        "background_color": "lightgreen",
+        "key": "designated_parking",
+        "name": "Stání speciální",
+        "legend_group": "Cestování",
     }
 }

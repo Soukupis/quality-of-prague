@@ -16,6 +16,9 @@ def get_no_standing_data():
 def get_loading_zone_data():
     return read_file(DATA_PATHS.loading_zone)
 
+def get_designated_parking():
+    return read_file(DATA_PATHS.designated_parking)
+
 def get_parking_p_r_data():
     return read_file(DATA_PATHS.parking_p_r)
 

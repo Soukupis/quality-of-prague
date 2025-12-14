@@ -15,6 +15,7 @@ class DataPaths:
     no_standing: str = "zakaz_stani/zakaz_stani.geojson"
     parking_p_r: str = "parkovani_p_r/parkovani_p_r.geojson"
     loading_zone: str = "vyhrazene_stani_pro_zasobovani/vyhrazene_stani_pro_zasobovani.geojson"
+    designated_parking: str = "vyhrazene_stani_specialni/vyhrazene_stani_specialni.geojson"
 
     def get_path(self, path_key: str) -> str:
         """Get a path as a string by key name."""
