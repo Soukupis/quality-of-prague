@@ -3,6 +3,43 @@
     box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
 }
 
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.hover-shadow {
+    transition: all 0.3s ease !important;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-5px);
+}
+
+/* Storytelling section styles */
+.story-card {
+    transition: all 0.3s ease !important;
+}
+
+.story-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12) !important;
+}
+
+a:hover .story-card {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+.vertical-divider {
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.1) 80%, transparent);
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
 .navbar-brand {
     color: #2c3e50 !important;
     font-weight: 600 !important;

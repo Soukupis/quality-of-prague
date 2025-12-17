@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc, register_page
-from src.components.ui import page_title, page_subtitle, page_divider
+from src.components.ui import page_title
 from src.utils.readme_utils import get_data_readmes
 
 register_page(__name__, path="/datasets", name="Datové sady")
@@ -57,9 +57,12 @@ for i, readme in enumerate(readmes):
 layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            page_title("Datové sady", icon_name="database"),
-            page_subtitle("Procházejte datasety, které stojí za analýzami a vizualizacemi."),
-            page_divider(),
+            page_title(
+                "Datové sady",
+                align="center",
+                description="Procházejte datasety, které stojí za analýzami a vizualizacemi.",
+                use_gradient=True
+            ),
             *readme_dropdowns
         ], width=12)
     ])
