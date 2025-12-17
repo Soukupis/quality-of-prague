@@ -42,7 +42,7 @@ def travel_section(district, polygons):
     return dbc.Row([
         dbc.Col([
             section_header(
-                title="Cestování",
+                title="Doprava",
                 accent_color=theme.TRAVEL_ACCENT_COLOR,
                 bg_color=theme.TRAVEL_BG_COLOR,
                 text_color=theme.TRAVEL_TEXT_COLOR

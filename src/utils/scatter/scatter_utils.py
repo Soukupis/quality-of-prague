@@ -69,7 +69,7 @@ def build_single_line_station_trace(subway_data, line):
             color=SUBWAY_ENTRANCES_LINE_COLORS.get(line, "gray"),
             opacity=0.9
         ),
-        legendgroup="Cestování",
+        legendgroup="Doprava",
         text=df_line["vst_nazev"] + f" (Line {line})",
         hoverinfo="text"
     )
