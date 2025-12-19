@@ -20,7 +20,7 @@ app = Dash(
     assets_url_path=Config.ASSETS_URL_PATH,
     update_title=None
 )
-from src.callbacks import district_map_callbacks
+from src.callbacks import district_map_callbacks, dashboard_callbacks
 
 
 init_cache(app)

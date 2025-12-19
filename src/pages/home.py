@@ -33,7 +33,7 @@ storytelling_section = html.Div([
                     dbc.Card([
                         dbc.CardBody([
                             html.Img(
-                                src="/assets/analytics_image.png",
+                                src="/assets/bar_chart_image.png",
                                 className="img-fluid",
                                 alt="Dashboard Analytics",
                                 style={
@@ -81,7 +81,7 @@ storytelling_section = html.Div([
                     dbc.Card([
                         dbc.CardBody([
                             html.Img(
-                                src="/assets/bar_chart_image.png",
+                                src="/assets/analytics_image.png",
                                 className="img-fluid",
                                 alt="City Districts",
                                 style={

@@ -23,4 +23,28 @@ class DataPaths:
         """Get a path as a string by key name."""
         return getattr(self, path_key)
 
+    def get_dataset_value_options(self):
+        """Get a list of dataset options formatted for dropdown/select components.
+
+        Returns:
+            list: List of dictionaries with 'label' and 'value' keys for each dataset.
+        """
+        # Map of internal field names to human-readable labels
+        label_map = {
+            'police_stations': 'Policejní stanice',
+            'parking_meters': 'Parkovací automaty',
+            'subway_entrances': 'Vstupy do metra',
+            'no_standing': 'Zákaz stání',
+            'parking_p_r': 'Parkoviště P+R',
+            'loading_zone': 'Zásobování',
+            'designated_parking': 'Stání speciální',
+            'paid_parking': 'Placené stání',
+            'ztp_parking': 'Parkovací stání ZTP'
+        }
+
+        return [
+            {'label': label_map[field], 'value': field}
+            for field in label_map.keys()
+        ]
+
 DATA_PATHS = DataPaths()
