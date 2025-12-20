@@ -40,7 +40,7 @@ def create_prague_map() -> go.Figure:
     df, centroids, geojson = load_and_prepare_data(DATA_PATHS.get_path("prague_districts"))
     return builder.create_map(df, centroids, geojson)
 
-def create_single_district_map(district: str, scatters = None, polygons = None) -> go.Figure:
+def create_single_district_map(district: str, scatters = None, polygons = None, showlegend: bool = True) -> go.Figure:
     """
     Create a map focused on a single district with optional scatter point layers.
 
@@ -48,6 +48,7 @@ def create_single_district_map(district: str, scatters = None, polygons = None) 
         district: Name of the district to display
         scatters: Optional dictionary of scatter point configurations to overlay on the map.
         polygons: Optional dictionary of polygon configurations to overlay on the map.
+        showlegend: Optional showlegend configuration to overlay on the map.
 
     Returns:
         go.Figure: Plotly figure object containing the single district map with scatter points
@@ -85,7 +86,7 @@ def create_single_district_map(district: str, scatters = None, polygons = None) 
                 name=polygon_config["name"],
             )
 
-    return map_builder.create_map(map_builder.df, map_builder.centroids, map_builder.geojson)
+    return map_builder.create_map(map_builder.df, map_builder.centroids, map_builder.geojson, showlegend)
 
 
 

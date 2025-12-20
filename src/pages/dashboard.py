@@ -28,9 +28,9 @@ layout = dbc.Container([
         dbc.Col([
             dbc.Card(
                 dcc.Loading(
-                    id="loading-chart",
+                    id="loading_bar_chart",
                     type="circle",
-                    children=html.Div(id="chart_container"),
+                    children=html.Div(id="bar_chart_container"),
                     color="#3b82f6",
                     fullscreen=False,
                     style={"minHeight": "400px"},
@@ -39,6 +39,17 @@ layout = dbc.Container([
             )
         ]),
         dbc.Col([
-        ])
+            dbc.Card(
+                dcc.Loading(
+                    id="loading_district_map",
+                    type="circle",
+                    children=html.Div(id="district_map_container"),
+                    color="#3b82f6",
+                    fullscreen=False,
+                    style={"minHeight": "400px"},
+                    overlay_style={"visibility": "visible", "opacity": 0.5}
+                )
+            )
+        ]),
     ])
 ], fluid=True, className="py-2")

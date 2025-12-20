@@ -1,11 +1,16 @@
-from dash import callback, Output, Input
+from dash import callback, Output, Input, State, ALL
 import plotly.graph_objects as go
 
-from src.components.pages.dashboard import select_warning
+from src.components.graphs import create_single_district_map
+from src.components.pages.dashboard import select_warning, district_select_warning
 from src.configs.data_config import DATA_PATHS
 from src.utils.districts.district_utils import get_points_in_district, get_district_polygons
 
 from dash import dcc
+
+from src.utils.polygons.polygon_utils import load_and_prepare_polygon_data
+from src.utils.polygons.polygons_configs import POLYGON_LAYERS_CONFIGS
+from src.utils.scatter.scatter_configs import SCATTER_LAYER_CONFIGS
 
 ALL_DISTRICTS = sorted(list(get_district_polygons().keys()))
 
@@ -18,7 +23,7 @@ def get_czech_plural(count):
         return "objektů"
 
 @callback(
-    Output('chart_container', 'children'),
+    Output('bar_chart_container', 'children'),
     Input('districts-dropdown', 'value'),
     Input("data-dropdown", "value"))
 def update_output(districts, dataset):
@@ -108,6 +113,7 @@ def update_output(districts, dataset):
     )
 
     return dcc.Graph(
+        id={'type': 'district-bar-chart', 'index': 0},
         figure=fig,
         config={
             'displayModeBar': False,
@@ -115,6 +121,60 @@ def update_output(districts, dataset):
         },
         style={'height': '600px'}
     )
+
+@callback(
+    Output('district_map_container', 'children'),
+    Input({'type': 'district-bar-chart', 'index': ALL}, 'clickData'),
+    State('data-dropdown', 'value'),
+    prevent_initial_call=True
+)
+def create_district_map(click_data, dataset):
+    if click_data and click_data[0]:
+        clicked_district = click_data[0]['points'][0]['x']
+        print(f"Clicked district: {clicked_district}, Dataset: {dataset}")
+        if dataset in SCATTER_LAYER_CONFIGS:
+            config = SCATTER_LAYER_CONFIGS[dataset]
+            filtered_data = get_points_in_district(clicked_district, dataset)
+            scatters = {dataset: {
+                "data": filtered_data,
+                "lon_column": "geometry",
+                "lat_column": "geometry",
+                "marker_size": config["marker_size"],
+                "marker_color": config["marker_color"],
+                "marker_opacity": config["marker_opacity"],
+                'legend_group': config['legend_group'],
+                "name": config["name"],
+            }}
+            fig = create_single_district_map(district=clicked_district, scatters=scatters, polygons={}, showlegend=False)
+            return dcc.Graph(
+                id="single-district-map",
+                figure=fig,
+                config={
+                    'displayModeBar': False,
+                },
+                style={"marginBottom": "60px", "width": "100%"}
+            )
+            return fig
+        if dataset in POLYGON_LAYERS_CONFIGS:
+            config = POLYGON_LAYERS_CONFIGS[dataset]
+            df, geojson = load_and_prepare_polygon_data(clicked_district, dataset)
+            polygons = {dataset: {
+                "geojson": geojson,
+                "df": df,
+                "background_color": config["background_color"],
+                'legend_group': config['legend_group'],
+                'name': config['name'],
+            }}
+            fig = create_single_district_map(district=clicked_district, scatters={}, polygons=polygons, showlegend=False)
+            return dcc.Graph(
+                id="single-district-map",
+                figure=fig,
+                config={
+                    'displayModeBar': False,
+                },
+                style={"marginBottom": "60px", "width": "100%"}
+            )
+    return district_select_warning()
 
 @callback(
     Output('districts-dropdown', 'value'),

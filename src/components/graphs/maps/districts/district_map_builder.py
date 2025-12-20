@@ -32,7 +32,7 @@ class DistrictMapBuilder:
         self.centroids = None
         self.geojson = None
 
-    def create_map(self, df: pd.DataFrame, centroids, geojson: dict) -> go.Figure:
+    def create_map(self, df: pd.DataFrame, centroids, geojson: dict, showlegend = True) -> go.Figure:
         fig = go.Figure()
 
         fig.add_trace(self.layer_builder.create_choropleth_layer(geojson, df, self.choropleth_hover_info))
@@ -49,6 +49,7 @@ class DistrictMapBuilder:
             margin=self.layout.margin,
             clickmode=self.click_mode,
             dragmode=self.drag_mode,
+            showlegend=showlegend,
             selectionrevision=self.selection_revision,
         )
 
