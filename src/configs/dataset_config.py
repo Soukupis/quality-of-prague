@@ -1,5 +1,25 @@
-"""
-Central configuration for all datasets used in the district info page.
+"""Dataset configuration for Prague quality of life layers.
+
+This module provides centralized configuration for all datasets used throughout
+the application, particularly on district info pages. Each dataset configuration
+includes display properties, data loader functions, and categorization.
+
+Attributes:
+    DATASET_CONFIGS (dict): Master configuration dictionary mapping dataset keys
+        to their properties. Each entry contains:
+        - id (str): Unique HTML element ID
+        - icon (str): Font Awesome icon class
+        - title (str): Display title (Czech or English)
+        - section (str): Category ('safety' or 'travel')
+        - layer_key (str): Key for map layer identification
+        - loader_function (callable): Function to load the dataset
+
+Examples:
+    >>> from src.configs.dataset_config import DATASET_CONFIGS
+    >>> config = DATASET_CONFIGS['police_stations']
+    >>> print(config['title'])
+    'Police stations'
+    >>> data = config['loader_function']()
 """
 from src.utils.loaders.districts_loader import get_parking_p_r_data, get_parking_meters_data, get_police_stations_data, \
     get_subway_entrances_data, get_no_standing_data, get_loading_zone_data, get_designated_parking_data, \

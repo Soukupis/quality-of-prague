@@ -1,3 +1,9 @@
+"""Dashboard page for comparing quality of life metrics across districts.
+
+This page provides an interactive dashboard where users can select multiple
+Prague districts and a dataset to compare metrics in a bar chart visualization.
+Includes district and dataset selection dropdowns with a comparison chart.
+"""
 import dash_bootstrap_components as dbc
 from dash import register_page, dcc, html
 from src.components.pages.dashboard import district_select, data_select

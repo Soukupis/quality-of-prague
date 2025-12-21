@@ -2,6 +2,44 @@ from dash import html
 import dash_bootstrap_components as dbc
 
 def info_card(icon=None, title="", value="", variant=None, card_id=None, dataset_key=None):
+    """Create an interactive information card component.
+
+    Builds a Bootstrap card displaying an icon, title, and value. Can be made
+    clickable with toggle icons (plus/minus) for interactive layer control.
+    Supports pattern-matching IDs for dynamic callbacks.
+
+    Args:
+        icon: Font Awesome icon class (e.g., "fa-map-marker"). Optional.
+        title: Card title text to display.
+        value: Value or metric to display (can be string or number).
+        variant: Style variant for the card (adds `info-card-{variant}` class).
+            Optional.
+        card_id: ID for the card wrapper, makes card clickable. If provided,
+            adds toggle icons. Optional.
+        dataset_key: Key for pattern-matching callbacks. Creates dict-based IDs
+            instead of string IDs. Optional.
+
+    Returns:
+        Dash component: dbc.Card wrapped in html.Div if card_id provided,
+            otherwise just dbc.Card.
+
+    Examples:
+        >>> # Simple info card
+        >>> card = info_card(
+        ...     icon="fa-building",
+        ...     title="Districts",
+        ...     value="22"
+        ... )
+        >>>
+        >>> # Interactive card with pattern-matching ID
+        >>> card = info_card(
+        ...     icon="fa-parking",
+        ...     title="Parking Meters",
+        ...     value="1,234",
+        ...     card_id="parking-card",
+        ...     dataset_key="parking_meters"
+        ... )
+    """
     base_class = "info-card"
     variant_class = f"info-card-{variant}" if variant else ""
     card_class = f"{base_class} {variant_class}".strip()

@@ -1,3 +1,9 @@
+"""Travel and transportation metrics section for district detail pages.
+
+This module provides the transportation section showing mobility-related metrics
+for a district, including parking facilities, metro stations, parking zones, and
+other transportation infrastructure.
+"""
 from src.components.ui import info_card, section_header, info_card_row
 from src.configs.dataset_config import DATASET_CONFIGS
 from src.utils.geospatial_utils import point_count_for_polygon
@@ -9,6 +15,38 @@ from src.components.config import theme
 
 
 def travel_section(district, polygons):
+    """Create the transportation metrics section for a district detail page.
+
+    Builds a section displaying transportation-related statistics for a specific
+    Prague district. Shows counts of various facilities and zones within the
+    district boundaries:
+    - Parking meters
+    - Metro/subway entrances
+    - Park and Ride facilities
+    - No-standing zones
+    - Loading zones
+    - Designated parking areas
+    - Paid parking zones
+    - Disabled (ZTP) parking spaces
+
+    All info cards are interactive and can toggle corresponding map layers.
+
+    Args:
+        district: Name of the district (e.g., "Praha 1").
+        polygons: Dictionary mapping district names to their Shapely polygon
+            geometries. Used for spatial filtering of transportation features.
+
+    Returns:
+        dbc.Row: Bootstrap Row component containing the transportation section
+            with header and info cards. Returns None if no travel datasets are
+            configured.
+
+    Examples:
+        >>> from src.utils.districts.district_utils import get_district_polygons
+        >>> polygons = get_district_polygons()
+        >>> section = travel_section("Praha 1", polygons)
+        >>> # section contains cards for all transportation metrics
+    """
     df = {
         "parking_meters": get_parking_meters_data(),
         "subway_entrances": get_subway_entrances_data(),

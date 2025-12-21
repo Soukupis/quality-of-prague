@@ -1,3 +1,9 @@
+"""About page for the Quality of Prague application.
+
+This page provides information about the application's purpose and features,
+explaining the Quality of Prague platform for analyzing quality of life
+indicators in Prague.
+"""
 import dash_bootstrap_components as dbc
 from dash import register_page
 from src.components.ui import page_title

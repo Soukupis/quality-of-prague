@@ -1,3 +1,9 @@
+"""Prague district map creation functions.
+
+This module provides high-level functions for creating interactive Plotly maps
+of Prague districts. Supports both full city views and single-district focused
+maps with optional data layers (scatter points and polygons).
+"""
 import plotly.graph_objects as go
 from .district_map_builder import DistrictMapBuilder, load_and_prepare_data
 from src.configs.data_config import DATA_PATHS
@@ -5,14 +11,22 @@ from .district_map_config import SingleDistrictMapLayout, DistrictMapStyle,Distr
 from src.utils.scatter.scatter_utils import build_subway_entrance_traces
 
 def get_single_district_map_builder(district: str) -> DistrictMapBuilder:
-    """
-    Create and configure a DistrictMapBuilder for a single district.
+    """Create and configure a map builder for a single district.
+
+    Loads district data and filters it to just the specified district, creating
+    a configured DistrictMapBuilder ready for adding layers and generating
+    the final map figure.
 
     Args:
-        district: Name of the district to create map builder for
+        district: Name of the district (e.g., "Praha 1", "Praha 2").
 
     Returns:
-        DistrictMapBuilder: Configured map builder instance with district data
+        DistrictMapBuilder: Configured builder instance with filtered district
+            data, centroids, and GeoJSON ready for map creation.
+
+    Examples:
+        >>> builder = get_single_district_map_builder("Praha 1")
+        >>> fig = builder.create_map(builder.df, builder.centroids, builder.geojson)
     """
     builder = DistrictMapBuilder(DistrictMapStyle(), SingleDistrictMapLayout(), None, None, False, "skip")
     df, centroids, geojson = load_and_prepare_data(DATA_PATHS.get_path("prague_districts"))
@@ -30,28 +44,66 @@ def get_single_district_map_builder(district: str) -> DistrictMapBuilder:
     return builder
 
 def create_prague_map() -> go.Figure:
-    """
-    Create an interactive map of all Prague districts.
+    """Create an interactive map of all Prague districts.
+
+    Builds a complete choropleth map showing all Prague districts with
+    interactive selection capabilities. Used on the districts overview page.
 
     Returns:
-        go.Figure: Plotly figure object containing the Prague districts map
+        go.Figure: Plotly Figure object with all Prague districts displayed,
+            configured for click events and selection mode.
+
+    Examples:
+        >>> fig = create_prague_map()
+        >>> # fig is ready to display in dcc.Graph component
+        >>> # Clicking districts triggers navigation to district detail
     """
     builder = DistrictMapBuilder(DistrictMapStyle(), DistrictMapLayout(), "event+select", "select", True, "text")
     df, centroids, geojson = load_and_prepare_data(DATA_PATHS.get_path("prague_districts"))
     return builder.create_map(df, centroids, geojson)
 
 def create_single_district_map(district: str, scatters = None, polygons = None, showlegend: bool = True) -> go.Figure:
-    """
-    Create a map focused on a single district with optional scatter point layers.
+    """Create a focused map of a single district with optional data layers.
+
+    Builds an interactive map centered on one specific Prague district. Can
+    overlay scatter point layers (e.g., parking meters, metro stations) and
+    polygon layers (e.g., parking zones). Handles special visualization for
+    subway entrances with line-specific coloring.
 
     Args:
-        district: Name of the district to display
-        scatters: Optional dictionary of scatter point configurations to overlay on the map.
-        polygons: Optional dictionary of polygon configurations to overlay on the map.
-        showlegend: Optional showlegend configuration to overlay on the map.
+        district: Name of the district to display (e.g., "Praha 1").
+        scatters: Dictionary of scatter layer configurations. Keys are layer
+            identifiers, values are dicts with 'data', 'lon_column',
+            'lat_column', 'marker_size', 'marker_color', 'marker_opacity',
+            'legend_group', and 'name'. Special handling for type
+            "subway_entrances". Defaults to None.
+        polygons: Dictionary of polygon layer configurations. Keys are layer
+            identifiers, values are dicts with GeoJSON and styling properties.
+            Defaults to None.
+        showlegend: Whether to show the legend. Defaults to True.
 
     Returns:
-        go.Figure: Plotly figure object containing the single district map with scatter points
+        go.Figure: Plotly Figure object showing the district map with all
+            requested layers overlaid.
+
+    Examples:
+        >>> # Simple district map without layers
+        >>> fig = create_single_district_map("Praha 1")
+        >>>
+        >>> # Map with parking meters layer
+        >>> scatter_config = {
+        ...     'parking_meters': {
+        ...         'data': parking_df,
+        ...         'lon_column': 'geometry',
+        ...         'lat_column': 'geometry',
+        ...         'marker_size': 8,
+        ...         'marker_color': 'blue',
+        ...         'marker_opacity': 0.8,
+        ...         'legend_group': 'Doprava',
+        ...         'name': 'Parkovací automaty'
+        ...     }
+        ... }
+        >>> fig = create_single_district_map("Praha 1", scatters=scatter_config)
     """
 
     map_builder = get_single_district_map_builder(district)

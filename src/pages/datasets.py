@@ -1,3 +1,9 @@
+"""Datasets documentation page.
+
+This page displays documentation for all available datasets in the application.
+Shows README files from the data directory in expandable accordion format,
+providing descriptions and metadata for each dataset.
+"""
 import dash_bootstrap_components as dbc
 from dash import html, dcc, register_page
 from src.components.ui import page_title

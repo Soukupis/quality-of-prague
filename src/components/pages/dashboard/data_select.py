@@ -1,9 +1,29 @@
+"""Dataset selection component for dashboard page.
+
+This module provides a dropdown for selecting which dataset to visualize
+in the dashboard comparison chart (e.g., parking meters, police stations).
+"""
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from src.configs.data_config import DATA_PATHS
 
 
 def data_select():
+    """Create the dataset selection card component.
+
+    Builds a styled card containing a single-select dropdown for choosing
+    which dataset to compare across districts. Options are loaded from
+    DATA_PATHS configuration.
+
+    Returns:
+        dbc.Card: Bootstrap Card component containing the dataset selection
+            dropdown (id: "data-dropdown") populated with available datasets.
+
+    Examples:
+        >>> selector = data_select()
+        >>> # Contains dropdown with options like:
+        >>> # "Parking Meters", "Police Stations", etc.
+    """
     return dbc.Card([
         dbc.CardBody([
             html.Div([

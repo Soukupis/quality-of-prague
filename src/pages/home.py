@@ -1,3 +1,13 @@
+"""Homepage for the Quality of Prague application.
+
+This page serves as the landing page, featuring:
+- Welcome message and application overview
+- Visual storytelling sections showcasing key features
+- Navigation cards to main sections (Dashboard, Districts, Datasets)
+- Hero images and call-to-action buttons
+
+The page uses Czech language for all content.
+"""
 import dash_bootstrap_components as dbc
 from dash import html, register_page
 from src.components.ui import feature_card, page_title
@@ -118,3 +128,4 @@ layout = dbc.Container([
         ], width=12)
     ])
 ], fluid=True, className="py-2")
+

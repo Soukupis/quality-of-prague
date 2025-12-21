@@ -13,6 +13,47 @@ def brand(
     font_size: str = FONT_SIZE_BRAND,
     image_height: str = "32px"
 ) -> html.A:
+    """Create a clickable brand component with text and optional icon or logo.
+
+    Builds a navbar brand element combining text with either a Bootstrap icon
+    or a custom image/logo. Commonly used in navigation headers.
+
+    Args:
+        text: Brand name or application title to display.
+        icon_name: Bootstrap icon name (without 'bi-' prefix). Optional.
+        image_src: URL or path to brand logo image. Optional. Takes precedence
+            over icon_name if both provided.
+        href: Link destination when brand is clicked. Defaults to "/" (home).
+        icon_color: Color for the icon if icon_name is used. Defaults to
+            PRIMARY_COLOR from config.
+        text_color: Color for the brand text. Defaults to TEXT_COLOR from config.
+        font_size: Font size for the brand text. Defaults to FONT_SIZE_BRAND
+            from config.
+        image_height: Height of the logo image if image_src is used. Defaults
+            to "32px".
+
+    Returns:
+        html.A: Dash HTML.A component configured as a clickable navbar brand
+            with proper styling and alignment.
+
+    Examples:
+        >>> # Text-only brand
+        >>> brand_component = brand("Quality of Prague")
+        >>>
+        >>> # Brand with icon
+        >>> brand_with_icon = brand(
+        ...     text="Prague Analytics",
+        ...     icon_name="bar-chart",
+        ...     href="/dashboard"
+        ... )
+        >>>
+        >>> # Brand with custom logo
+        >>> brand_with_logo = brand(
+        ...     text="Quality of Prague",
+        ...     image_src="/assets/prague_icon.png",
+        ...     image_height="40px"
+        ... )
+    """
     if image_src:
         brand_icon = image(
             src=image_src,

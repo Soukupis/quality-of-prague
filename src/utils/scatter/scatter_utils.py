@@ -6,15 +6,35 @@ import plotly.graph_objects as go
 import numpy as np
 
 def build_scatter_config(district: str, layer_keys: list) -> dict:
-    """
-    Build scatter point configuration for specified layers using cached loaders.
+    """Build scatter point configuration for map layers.
+
+    Creates configuration dictionaries for scatter plot layers by filtering
+    point data to a specific district and applying layer-specific styling.
+    Handles special processing for subway entrances.
 
     Args:
-        district: Name of the district to filter loaders for
-        layer_keys: List of layer keys to include (e.g., ['parking_meters', 'police_stations', ...])
+        district: Name of the district to filter data for (e.g., "Praha 1").
+        layer_keys: List of layer identifiers to include. Valid keys are
+            defined in SCATTER_LAYER_CONFIGS (e.g., ['parking_meters',
+            'police_stations', 'subway_entrances']).
 
     Returns:
-        Dictionary of scatter configurations for the requested layers
+        dict: Dictionary mapping layer keys to their configuration objects.
+            Each configuration contains data, styling parameters (marker size,
+            color, opacity), and display settings (name, legend group). Returns
+            empty dict if layer_keys is empty.
+
+    Examples:
+        >>> # Single layer
+        >>> config = build_scatter_config("Praha 1", ["parking_meters"])
+        >>> print(config.keys())  # dict_keys(['parking_meters'])
+        >>>
+        >>> # Multiple layers
+        >>> config = build_scatter_config(
+        ...     "Praha 2",
+        ...     ["police_stations", "subway_entrances"]
+        ... )
+        >>> print(len(config))  # 2
     """
     if not layer_keys:
         return {}
@@ -46,14 +66,28 @@ def build_scatter_config(district: str, layer_keys: list) -> dict:
     return scatters
 
 def build_single_line_station_trace(subway_data, line):
-    """
-    Build a scatter trace for single-line subway stations.
+    """Build a Plotly scatter trace for single-line metro stations.
+
+    Creates a scatter map trace showing metro stations that serve only one
+    specific line, with line-specific color coding from the SUBWAY_ENTRANCES_LINE_COLORS
+    configuration.
 
     Args:
-        subway_data: DataFrame with subway entrance data
-        line: Metro line identifier (e.g., 'A', 'B', 'C')
+        subway_data: DataFrame containing subway entrance data with columns
+            'vst_linka' (line identifier), 'geometry' (point locations), and
+            'vst_nazev' (station names).
+        line: Metro line identifier (e.g., 'A', 'B', 'C' for Prague metro lines).
+
     Returns:
-        Plotly Scattermap trace for the specified line
+        go.Scattermap: Plotly Scattermap trace object for the specified line,
+            or None if no stations exist for that line.
+
+    Examples:
+        >>> from src.utils.loaders.subway_loader import get_subway_data
+        >>> data = get_subway_data()
+        >>> trace_a = build_single_line_station_trace(data, 'A')
+        >>> if trace_a:
+        ...     print(f"Line A: {len(trace_a.lon)} stations")
     """
     df_line = subway_data[subway_data["vst_linka"] == line]
     if df_line.empty:

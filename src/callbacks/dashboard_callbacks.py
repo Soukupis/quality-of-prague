@@ -15,6 +15,26 @@ from src.utils.scatter.scatter_configs import SCATTER_LAYER_CONFIGS
 ALL_DISTRICTS = sorted(list(get_district_polygons().keys()))
 
 def get_czech_plural(count):
+    """Get the correct Czech plural form for the word 'object'.
+
+    Returns the appropriate Czech noun form based on Czech grammar rules
+    for pluralization, where the form depends on the numeric value.
+
+    Args:
+        count: Number of objects (integer).
+
+    Returns:
+        str: Czech word form - "objekt" (singular), "objekty" (2-4), or
+            "objektů" (5+, 0).
+
+    Examples:
+        >>> get_czech_plural(1)
+        'objekt'
+        >>> get_czech_plural(3)
+        'objekty'
+        >>> get_czech_plural(10)
+        'objektů'
+    """
     if count == 1:
         return "objekt"
     elif 2 <= count <= 4:
@@ -27,6 +47,29 @@ def get_czech_plural(count):
     Input('districts-dropdown', 'value'),
     Input("data-dropdown", "value"))
 def update_output(districts, dataset):
+    """Update the bar chart visualization based on selected districts and dataset.
+
+    Dash callback that generates a comparative bar chart showing the count of
+    selected data points across multiple Prague districts. Handles validation
+    and creates a styled Plotly bar chart with Czech language labels.
+
+    Args:
+        districts: List of district names selected from the dropdown
+            (e.g., ["Praha 1", "Praha 2"]).
+        dataset: Dataset key selected from the dropdown (e.g., "parking_meters",
+            "police_stations").
+
+    Returns:
+        Dash component: dcc.Graph containing the bar chart, or a warning message
+            component if inputs are invalid (no districts or dataset selected).
+
+    Examples:
+        This function is triggered automatically by Dash when dropdown values change.
+        The callback structure is:
+        >>> # User selects districts and dataset in UI
+        >>> # Callback automatically executes
+        >>> # Returns updated bar chart showing comparison
+    """
     if not districts or len(districts) < 1 or not dataset:
         return select_warning()
 
