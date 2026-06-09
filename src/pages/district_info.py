@@ -61,7 +61,15 @@ def layout(district=None):
                 page_title(district, align="center", use_gradient=True),
                 map_section(district, None, None),
                 html.Hr(className="my-4"),
-                *[html.Div(s, className="mb-4") for s in _sections if s is not None],
+                *[
+                    item
+                    for i, s in enumerate(s for s in _sections if s is not None)
+                    for item in (
+                        [html.Hr(style={"borderColor": "#e2e8f0", "margin": "2rem 0"}), html.Div(s, className="mb-4")]
+                        if i > 0 else
+                        [html.Div(s, className="mb-4")]
+                    )
+                ],
             ], width=12)
         ]),
     ], fluid=True, className="py-3")

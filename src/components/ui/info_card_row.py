@@ -58,19 +58,19 @@ def section_header(title, accent_color, bg_color, text_color):
         ... )
     """
     return html.Div(
-        html.H5(title, style={
+        html.H4(title, style={
             "margin": 0,
             "fontWeight": 700,
-            "fontSize": "1rem",
+            "fontSize": "1.25rem",
             "color": text_color,
             "letterSpacing": "0.01em",
         }),
         style={
             "background": bg_color,
-            "borderLeft": f"4px solid {accent_color}",
+            "borderLeft": f"5px solid {accent_color}",
             "borderRadius": "0 0.5rem 0.5rem 0",
-            "padding": "0.5rem 0.85rem",
-            "marginBottom": "1rem",
+            "padding": "0.75rem 1.1rem",
+            "marginBottom": "1.25rem",
             "marginTop": "0",
         }
     )
