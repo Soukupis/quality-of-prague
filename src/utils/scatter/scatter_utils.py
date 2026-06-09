@@ -6,40 +6,9 @@ import plotly.graph_objects as go
 import numpy as np
 
 def build_scatter_config(district: str, layer_keys: list) -> dict:
-    """Build scatter point configuration for map layers.
-
-    Creates configuration dictionaries for scatter plot layers by filtering
-    point data to a specific district and applying layer-specific styling.
-    Handles special processing for subway entrances.
-
-    Args:
-        district: Name of the district to filter data for (e.g., "Praha 1").
-        layer_keys: List of layer identifiers to include. Valid keys are
-            defined in SCATTER_LAYER_CONFIGS (e.g., ['parking_meters',
-            'police_stations', 'subway_entrances']).
-
-    Returns:
-        dict: Dictionary mapping layer keys to their configuration objects.
-            Each configuration contains data, styling parameters (marker size,
-            color, opacity), and display settings (name, legend group). Returns
-            empty dict if layer_keys is empty.
-
-    Examples:
-        >>> # Single layer
-        >>> config = build_scatter_config("Praha 1", ["parking_meters"])
-        >>> print(config.keys())  # dict_keys(['parking_meters'])
-        >>>
-        >>> # Multiple layers
-        >>> config = build_scatter_config(
-        ...     "Praha 2",
-        ...     ["police_stations", "subway_entrances"]
-        ... )
-        >>> print(len(config))  # 2
-    """
     if not layer_keys:
         return {}
 
-    # Build scatter config only for requested layers
     scatters = {}
     for layer_key in layer_keys:
             if layer_key == "subway_entrances":
@@ -66,29 +35,6 @@ def build_scatter_config(district: str, layer_keys: list) -> dict:
     return scatters
 
 def build_single_line_station_trace(subway_data, line):
-    """Build a Plotly scatter trace for single-line metro stations.
-
-    Creates a scatter map trace showing metro stations that serve only one
-    specific line, with line-specific color coding from the SUBWAY_ENTRANCES_LINE_COLORS
-    configuration.
-
-    Args:
-        subway_data: DataFrame containing subway entrance data with columns
-            'vst_linka' (line identifier), 'geometry' (point locations), and
-            'vst_nazev' (station names).
-        line: Metro line identifier (e.g., 'A', 'B', 'C' for Prague metro lines).
-
-    Returns:
-        go.Scattermap: Plotly Scattermap trace object for the specified line,
-            or None if no stations exist for that line.
-
-    Examples:
-        >>> from src.utils.loaders.subway_loader import get_subway_data
-        >>> data = get_subway_data()
-        >>> trace_a = build_single_line_station_trace(data, 'A')
-        >>> if trace_a:
-        ...     print(f"Line A: {len(trace_a.lon)} stations")
-    """
     df_line = subway_data[subway_data["vst_linka"] == line]
     if df_line.empty:
         return None
@@ -109,14 +55,6 @@ def build_single_line_station_trace(subway_data, line):
     )
 
 def build_single_line_traces(subway_data):
-    """
-    Build scatter traces for all single-line subway stations.
-
-    Args:
-        subway_data: DataFrame with subway entrance data
-    Returns:
-        List of Plotly Scattermap traces for single-line stations
-    """
     traces = []
     for line in SUBWAY_ENTRANCES_LINE_COLORS.keys():
         trace = build_single_line_station_trace(subway_data, line)
@@ -125,18 +63,6 @@ def build_single_line_traces(subway_data):
     return traces
 
 def build_half_transfer_station_trace(theta_half1,station, is_first_transfer, line=None, point_radius=0.0001, ):
-    """
-    Build a scatter trace for half of a transfer subway station.
-    Args:
-        theta_half1: Array of angles defining the half-circle
-        station: Series representing the subway station
-
-        is_first_transfer: Boolean indicating if this is the first transfer station (for legend)
-        line: Metro line identifier for this half
-        point_radius: Radius of the half-circle
-    Returns:
-        Plotly Scattermap trace for the half transfer station
-    """
     color = SUBWAY_ENTRANCES_LINE_COLORS.get(line, "gray")
     fill_color = subway_entrances_color_to_rgba_points.get(color, "rgba(128, 128, 128, 0.9)")
 
@@ -163,27 +89,15 @@ def build_half_transfer_station_trace(theta_half1,station, is_first_transfer, li
             )
 
 def build_single_point_transfer_station_trace(idx, station, transfer_stations):
-    """
-    Build scatter traces for a: single transfer subway station (station with multiple lines).
-    Args:
-        idx: Index of the station in the DataFrame
-        station: Series representing the subway station
-        transfer_stations: DataFrame of all transfer stations
-    Returns:
-        List of Plotly Scattermap traces for the transfer station
-
-    """
     traces = []
     lines = station["vst_linka"].split(",")
     is_first_transfer = bool(idx == transfer_stations.index[0])
 
-    # First half
     line1 = lines[0].strip()
     theta_half1 = np.linspace(0, np.pi, 25)
     first_half_trace = build_half_transfer_station_trace(theta_half1, station, is_first_transfer, line1)
     traces.append(first_half_trace)
 
-    # Second half
     line2 = lines[1].strip() if len(lines) > 1 else lines[0].strip()
     theta_half2 = np.linspace(np.pi, 2 * np.pi, 25)
     first_half_trace = build_half_transfer_station_trace(theta_half2, station, is_first_transfer, line2)
@@ -192,14 +106,6 @@ def build_single_point_transfer_station_trace(idx, station, transfer_stations):
     return traces
 
 def build_transfer_station_traces(subway_data):
-    """
-    Build scatter traces for transfer subway stations (stations with multiple lines).
-
-    Args:
-        subway_data: DataFrame with subway entrance data
-    Returns:
-        List of Plotly Scattermap traces for transfer stations
-    """
     traces = []
     transfer_stations = subway_data[subway_data["vst_linka"].str.contains(",", na=False)]
     if not transfer_stations.empty:
@@ -209,22 +115,14 @@ def build_transfer_station_traces(subway_data):
     return traces
 
 def create_half_circle_traces(theta, center_lon, center_lat, radius, lat_scale, circle_color, fill_color, name):
-    """
-    Create traces for a half-circle (or full circle) with fill and arc outline.
-
-    Returns list of two traces: one for fill area, one for arc outline.
-    """
-    # Create the arc
     arc_lons = center_lon + (radius / lat_scale) * np.cos(theta)
     arc_lats = center_lat + radius * np.sin(theta)
 
-    # For fill: close the shape by going through center
     fill_lons = np.concatenate([arc_lons, [center_lon, arc_lons[0]]])
     fill_lats = np.concatenate([arc_lats, [center_lat, arc_lats[0]]])
 
     traces = []
 
-    # Fill area with no border
     traces.append(go.Scattermap(
         lon=fill_lons.tolist(),
         lat=fill_lats.tolist(),
@@ -238,7 +136,6 @@ def create_half_circle_traces(theta, center_lon, center_lat, radius, lat_scale, 
         hoverinfo="text"
     ))
 
-    # Arc outline
     traces.append(go.Scattermap(
         lon=arc_lons.tolist(),
         lat=arc_lats.tolist(),
@@ -261,14 +158,6 @@ def build_aggregated_station_trace(line, theta, center_lon, center_lat, radius, 
     return circle_traces
 
 def build_aggregated_station_traces(subway_data):
-    """
-    Build scatter traces for aggregated subway stations.
-
-    Args:
-        subway_data: DataFrame with subway entrance data
-    Returns:
-        List of Plotly Scattermap traces for aggregated stations
-    """
     aggregated = aggregate_metro_stations(subway_data)
     traces = []
     for _, row in aggregated.iterrows():
@@ -278,12 +167,10 @@ def build_aggregated_station_traces(subway_data):
         lines = [line.strip() for line in vst_linka_str.split(",")] if "," in vst_linka_str else [vst_linka_str]
 
         if len(lines) > 1:
-            # First half
             theta_half1 = np.linspace(0, np.pi, 100)
             first_aggregated_station_trace = build_aggregated_station_trace( lines[0],theta_half1, center_lon, center_lat, radius, lat_scale, row)
             traces.extend(first_aggregated_station_trace)
 
-            # Second half
             theta_half2 = np.linspace(np.pi, 2*np.pi, 50)
             second_aggregated_station_trace = build_aggregated_station_trace(lines[1], theta_half2, center_lon, center_lat, radius,lat_scale, row)
             traces.extend(second_aggregated_station_trace)
@@ -300,18 +187,6 @@ def build_aggregated_station_traces(subway_data):
     return traces
 
 def build_subway_entrance_traces(subway_data):
-    """
-    Build all traces for subway entrances visualization including:
-    - Single-line station markers
-    - Transfer station half-and-half markers
-    - Aggregated station circles
-
-    Args:
-        subway_data: DataFrame with subway entrance data
-
-    Returns:
-        List of Plotly traces for subway visualization
-    """
     traces = []
 
     single_line_traces = build_single_line_traces(subway_data)
@@ -324,8 +199,4 @@ def build_subway_entrance_traces(subway_data):
     traces.extend(aggregated_line_traces)
 
     return traces
-
-
-
-
 

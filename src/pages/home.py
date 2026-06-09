@@ -1,4 +1,3 @@
-"""Homepage — entry point for the Quality of Prague application."""
 import dash_bootstrap_components as dbc
 from dash import html, register_page
 from src.components.ui import page_title

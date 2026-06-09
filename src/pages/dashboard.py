@@ -1,4 +1,3 @@
-"""Dashboard — Prague Quality of Life overview and metric comparison."""
 import json
 
 import plotly.graph_objects as go
@@ -243,7 +242,6 @@ def layout(lang="cs"):
             ), width=12)
         ]),
 
-        # ── KPI strip ──
         dbc.Row([
             dbc.Col(_kpi_card(
                 "fa-ranking-star", t("kpi_best_district", lang),
@@ -273,7 +271,6 @@ def layout(lang="cs"):
             ), xs=6, md=3, className="mb-3"),
         ], className="mb-3"),
 
-        # ── QoL map + Rankings ──
         dbc.Row([
             dbc.Col(
                 dbc.Card([
@@ -315,7 +312,6 @@ def layout(lang="cs"):
             ),
         ]),
 
-        # ── Domain averages ──
         dbc.Row([
             dbc.Col(
                 html.Div([
@@ -344,7 +340,6 @@ def layout(lang="cs"):
             )
         ], className="mb-2"),
 
-        # ── Compare section ──
         html.Hr(style={"borderColor": "#e2e8f0", "margin": "1.5rem 0"}),
 
         dbc.Row([

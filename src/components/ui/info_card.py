@@ -2,58 +2,6 @@ from dash import html
 import dash_bootstrap_components as dbc
 
 def info_card(icon=None, title="", value="", variant=None, card_id=None, dataset_key=None, compact=False, color="#334155"):
-    """Create an interactive information card component.
-
-    Builds a Bootstrap card displaying an icon, title, and value. Can be made
-    clickable with toggle icons (plus/minus) for interactive layer control.
-    Supports pattern-matching IDs for dynamic callbacks.
-
-    Args:
-        icon: Font Awesome icon class (e.g., "fa-map-marker"). Optional.
-        title: Card title text to display.
-        value: Value or metric to display (can be string or number).
-        variant: Style variant for the card (adds `info-card-{variant}` class).
-            Optional.
-        card_id: ID for the card wrapper, makes card clickable. If provided,
-            adds toggle icons. Optional.
-        dataset_key: Key for pattern-matching callbacks. Creates dict-based IDs
-            instead of string IDs. Optional.
-        compact: When True, renders a compact card layout with icon on the left,
-            label above value in the centre, and a small toggle icon on the right.
-            The fixed min/max-width CSS constraints are removed so the card fills
-            its grid column. Defaults to False (original layout unchanged).
-
-    Returns:
-        Dash component: dbc.Card wrapped in html.Div if card_id provided,
-            otherwise just dbc.Card.
-
-    Examples:
-        >>> # Simple info card
-        >>> card = info_card(
-        ...     icon="fa-building",
-        ...     title="Districts",
-        ...     value="22"
-        ... )
-        >>>
-        >>> # Interactive card with pattern-matching ID
-        >>> card = info_card(
-        ...     icon="fa-parking",
-        ...     title="Parking Meters",
-        ...     value="1,234",
-        ...     card_id="parking-card",
-        ...     dataset_key="parking_meters"
-        ... )
-        >>>
-        >>> # Compact interactive card
-        >>> card = info_card(
-        ...     icon="fa-shield-halved",
-        ...     title="Police",
-        ...     value="3",
-        ...     card_id="police-card",
-        ...     dataset_key="police_stations",
-        ...     compact=True
-        ... )
-    """
     base_class = "info-card"
     variant_class = f"info-card-{variant}" if variant else ""
     card_class = f"{base_class} {variant_class}".strip()
@@ -61,7 +9,6 @@ def info_card(icon=None, title="", value="", variant=None, card_id=None, dataset
     if card_id:
         card_class += " info-card-clickable"
 
-    # Use pattern-matching IDs if dataset_key is provided, otherwise use simple string IDs
     if dataset_key:
         plus_icon_id = {'type': 'layer-plus-icon', 'index': dataset_key}
         minus_icon_id = {'type': 'layer-minus-icon', 'index': dataset_key}

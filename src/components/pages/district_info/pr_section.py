@@ -1,4 +1,3 @@
-"""Park and Ride (P+R) capacity and intermodality section."""
 from dash import html
 import dash_bootstrap_components as dbc
 from src.components.ui import section_header

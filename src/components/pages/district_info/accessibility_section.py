@@ -1,4 +1,3 @@
-"""Metro barrier-free and disabled parking accessibility section."""
 from dash import html
 import dash_bootstrap_components as dbc
 from src.components.ui import section_header, info_card_row, info_card

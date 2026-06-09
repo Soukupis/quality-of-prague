@@ -2,35 +2,16 @@ import os
 from typing import Dict, Any
 
 class Config:
-    # === ENVIRONMENT & DEBUG SETTINGS ===
-    # Controls debug mode - enables auto-reload and detailed error messages
     DEBUG = os.getenv("DEBUG", "True").lower() == "true"
-
-    # Flask/Dash server host and port settings
     HOST = os.getenv("HOST", "127.0.0.1")
     PORT = int(os.getenv("PORT", 8050))
-
-    # === DATA & CACHING CONFIGURATION ===
-    # Cache timeout in seconds for data loading operations
     CACHE_TIMEOUT = int(os.getenv("CACHE_TIMEOUT", 300))
-
-    # Cache type configuration for Flask-Caching
     CACHE_TYPE = os.getenv("CACHE_TYPE", "SimpleCache")
-
-    # Data directory path
     DATA_DIR = os.getenv("DATA_DIR", "../../data")
-
-    # === UI & THEME CONFIGURATION ===
-    # Bootstrap theme for dash-bootstrap-components
     # Available themes: BOOTSTRAP, CERULEAN, COSMO, CYBORG, DARKLY, FLATLY, etc.
     BOOTSTRAP_THEME = os.getenv("BOOTSTRAP_THEME", "BOOTSTRAP")
-
-    # App title and branding
     APP_TITLE = os.getenv("APP_TITLE", "Quality of Prague")
     APP_DESCRIPTION = os.getenv("APP_DESCRIPTION", "Prague Quality of Life Dashboard")
-
-    # === PERFORMANCE SETTINGS ===
-    # Suppress callback exceptions for better page routing
     SUPPRESS_CALLBACK_EXCEPTIONS = True
 
     ASSETS_FOLDER = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")

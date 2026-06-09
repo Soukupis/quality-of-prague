@@ -1,4 +1,3 @@
-"""Quality of Life theoretical framework page."""
 import dash_bootstrap_components as dbc
 from dash import register_page, html
 from src.components.ui import page_title

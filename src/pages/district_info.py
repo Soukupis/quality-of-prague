@@ -1,14 +1,3 @@
-"""District detail page with interactive map and metrics.
-
-This page displays detailed information about a single Prague district, including:
-- Interactive map focused on the district
-- Safety metrics (police stations)
-- Transportation metrics (parking, metro, parking zones)
-- Layer toggle controls for map visualization
-
-Users can click info cards to toggle visibility of corresponding map layers.
-Layer states are persisted in session storage.
-"""
 import dash_bootstrap_components as dbc
 from dash import register_page, dcc, clientside_callback, Input, Output, html
 from src.components.ui.page_heading import page_title
@@ -23,16 +12,6 @@ from src.utils.districts.district_utils import get_district_polygons
 register_page(__name__, path="/districts/district-detail", name="Detail městské části")
 
 def layout(district=None, lang="cs"):
-    """Generate the layout for the district detail page.
-
-    Args:
-        district: Name of the district to display (e.g., "Praha 1"). Passed
-            as URL query parameter. Defaults to None.
-        lang: Language code ("cs" or "en"). Passed as URL query parameter.
-
-    Returns:
-        dbc.Container: Complete page layout with stores, map, and metric sections.
-    """
     polygons = get_district_polygons()
 
     _sections = [

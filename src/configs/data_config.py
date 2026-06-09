@@ -2,12 +2,6 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class DataPaths:
-    """Data paths configuration for accessing geospatial data files.
-
-    These paths are relative to the 'data' package and are used with
-    importlib.resources for robust package resource access.
-    """
-
     prague_districts: str = "mestske_casti/mestske_casti.geojson"
     police_stations: str = "objekty_mestske_policie_praha/objekty_mestske_policie_praha.geojson"
     parking_meters: str = "parkovaci_automaty/parkovaci_automaty.geojson"
@@ -24,16 +18,9 @@ class DataPaths:
     chmi_stations: str = "stanice_kvality_ovzdusi/stanice_kvality_ovzdusi.geojson"
 
     def get_path(self, path_key: str) -> str:
-        """Get a path as a string by key name."""
         return getattr(self, path_key)
 
     def get_dataset_value_options(self):
-        """Get a list of dataset options formatted for dropdown/select components.
-
-        Returns:
-            list: List of dictionaries with 'label' and 'value' keys for each dataset.
-        """
-        # Map of internal field names to human-readable labels
         label_map = {
             'police_stations': 'Policejní stanice',
             'parking_meters': 'Parkovací automaty',

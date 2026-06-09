@@ -1,4 +1,3 @@
-"""QoL Composite Index page — radar chart and district ranking."""
 import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
 from dash import register_page, html, dcc, callback, Input, Output, State, exceptions

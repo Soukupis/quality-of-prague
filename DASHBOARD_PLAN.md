@@ -601,3 +601,27 @@ Constraints applied: no data, no charts, no long text — entry point only.
 **Static layout:** No callbacks, no data loading — the home page is fully static. This keeps it fast and prevents any data computation delay before the user sees the entry point.
 
 **Color assignment:** Each card uses the same accent color as its target section elsewhere in the app (Dashboard → `#667eea`, Districts → `#0ea5e9`, QoL Index → `#f59e0b`, Personas → `#be185d`, Theory → `#764ba2`, Datasets → `#0f766e`). This creates visual continuity — arriving on a page feels like an extension of the card that led there.
+
+---
+
+## Codebase Cleanup (2026-06-10)
+
+Removed all AI-generated narrating comments, redundant docstrings, section-divider comments, and inline comments that describe the obvious. No logic was changed.
+
+### Scope
+
+~40 files edited. Removed:
+- Module docstrings from all page, component, utility, and config files
+- Function/method docstrings for all trivial wrappers and self-evident functions
+- Section-divider comments (`# ── KPI strip ──`, `# === ... ===`, etc.)
+- Inline narrating comments (`# Find which card was clicked`, `# Create the arc`, etc.)
+
+### Preserved
+
+- `qol_scoring.py` module docstring (domain weights and OECD methodology)
+- `composite_score` and `get_all_scores` docstrings (weights, caching note)
+- `get_district_areas_km2` docstring (EPSG:5514 rationale)
+- `aggregate_metro_stations` and `calculate_station_circle_params` docstrings (non-obvious return/behavior)
+- `handle_card_styles` inline comment about ALL pattern-matching count constraint
+- `# Calculate max distance accounting for lat/lon scale` in subway_loader
+- `# Available themes: BOOTSTRAP, CERULEAN...` in config.py

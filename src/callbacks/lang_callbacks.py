@@ -1,9 +1,3 @@
-"""Language switching callbacks.
-
-Handles CZ/EN toggle: updates the lang store and navigates the current page
-to the same URL with the updated ?lang= query parameter so all layout()
-functions receive the new language on re-render.
-"""
 from dash import callback, Output, Input, State, ctx
 
 

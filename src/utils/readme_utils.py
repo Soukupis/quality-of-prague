@@ -4,32 +4,6 @@ import dash_bootstrap_components as dbc
 from dash import html
 
 def get_data_readmes(data_dir=None):
-    """Discover and load all README.md files from the data directory.
-
-    Recursively searches the data directory and its subdirectories for
-    README.md files, reads their content, and returns structured data with
-    titles derived from folder names.
-
-    Args:
-        data_dir: Path to the data directory. Can be string or Path object.
-            If None, uses the default '../../../data' relative to this file.
-
-    Returns:
-        list: List of dictionaries, each containing:
-            - 'title' (str): Folder name converted to title case, or
-              "Project Data Directory" for root README.
-            - 'markdown' (str): Full content of the README.md file.
-
-    Examples:
-        >>> # Use default data directory
-        >>> readmes = get_data_readmes()
-        >>> for readme in readmes:
-        ...     print(f"Title: {readme['title']}")
-        ...     print(f"Length: {len(readme['markdown'])} chars")
-        >>>
-        >>> # Use custom directory
-        >>> readmes = get_data_readmes("/path/to/custom/data")
-    """
     if data_dir is None:
         data_dir = Path(__file__).parent.parent.parent / "data"
     else:
@@ -39,7 +13,6 @@ def get_data_readmes(data_dir=None):
     for f in sorted(readme_files):
         with open(f, encoding="utf-8") as file:
             md_content = file.read()
-            # Use folder name as title if not root README
             if f.parent == data_dir:
                 title = "Project Data Directory"
             else:
@@ -51,30 +24,6 @@ def get_data_readmes(data_dir=None):
     return readmes
 
 def build_readme_cards(readmes, compact=True):
-    """Build Dash card components from README data.
-
-    Transforms a list of README dictionaries into styled Bootstrap card
-    components with Markdown content rendering. Supports both compact and
-    expanded layouts.
-
-    Args:
-        readmes: List of dictionaries, each containing 'title' (str) and
-            'markdown' (str) keys with README content.
-        compact: If True, uses compact styling with smaller fonts and padding.
-            If False, uses expanded styling. Defaults to True.
-
-    Returns:
-        list: List of dbc.Card components, each containing a header with the
-            title and a body with rendered Markdown content.
-
-    Examples:
-        >>> readmes = get_data_readmes()
-        >>> cards = build_readme_cards(readmes, compact=True)
-        >>> layout = html.Div(cards)
-        >>>
-        >>> # With expanded styling
-        >>> cards_expanded = build_readme_cards(readmes, compact=False)
-    """
     cards = []
     for readme in readmes:
         cards.append(

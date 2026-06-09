@@ -1,4 +1,3 @@
-"""Environmental health section for district detail pages."""
 from typing import Optional
 
 from dash import html

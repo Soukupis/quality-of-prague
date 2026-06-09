@@ -1,4 +1,3 @@
-"""Persona-based QoL dashboard page."""
 import dash_bootstrap_components as dbc
 from dash import register_page, html, dcc, callback, Input, Output, State, ctx
 
@@ -15,8 +14,6 @@ from src.components.pages.district_info.pr_section import _get_pr_stats
 from src.i18n import t
 
 register_page(__name__, path="/personas", name="Persony")
-
-# ── Persona definitions ───────────────────────────────────────────────────────
 
 PERSONAS = {
     "jan": {

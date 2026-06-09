@@ -1,4 +1,3 @@
-"""District selection component for dashboard page."""
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from src.utils.districts.district_utils import get_district_polygons

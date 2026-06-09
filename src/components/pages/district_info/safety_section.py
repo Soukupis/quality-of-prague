@@ -1,4 +1,3 @@
-"""Safety metrics section for district detail pages."""
 from dash import html
 import dash_bootstrap_components as dbc
 
@@ -134,7 +133,6 @@ def safety_section(district, polygons, lang="cs"):
 
     stats = _get_safety_stats(district, polygons[district])
 
-    # Annotate stations with translated category labels
     cat_labels = {
         "service": t("safety_cat_service", lang),
         "hq":      t("safety_cat_hq", lang),

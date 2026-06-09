@@ -34,11 +34,6 @@ DOMAIN_WEIGHTS = [0.30, 0.37, 0.23, 0.10]
 
 
 def compute_raw_scores():
-    """Compute raw indicator values for all districts.
-
-    Returns:
-        dict: {district_name: {indicator: value}}
-    """
     polygons = get_district_polygons()
     areas = get_district_areas_km2()
     parks_data = get_parks_data()
@@ -73,14 +68,6 @@ def _normalize_min_max(raw, key):
 
 
 def compute_domain_scores(raw):
-    """Compute normalized 0-100 domain scores for each district.
-
-    Args:
-        raw: Output of compute_raw_scores().
-
-    Returns:
-        dict: {district_name: [safety, mobility, accessibility, environment]}
-    """
     police_norm = _normalize_min_max(raw, "police_density")
     metro_norm = _normalize_min_max(raw, "metro_density")
     elevator_norm = _normalize_min_max(raw, "elevator_ratio")

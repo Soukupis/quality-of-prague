@@ -1,4 +1,3 @@
-"""Dataset selection component for dashboard page."""
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from src.configs.data_config import DATA_PATHS

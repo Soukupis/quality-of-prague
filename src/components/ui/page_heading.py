@@ -2,18 +2,6 @@ from dash import html
 from .icon import icon
 
 def page_title(title, icon_name=None, align: str=None, description: str=None, use_gradient: bool=False):
-    """
-    Create a page title with optional icon, description, and gradient styling.
-
-    Args:
-        title: The title text
-        icon_name: Optional icon to show before the title
-        align: Text alignment (e.g., "center")
-        description: Optional description text below the title
-        use_gradient: If True, applies gradient text effect (overrides icon)
-    """
-
-    # Gradient style for hero titles (like homepage)
     if use_gradient:
         title_element = html.H1(
             title,
@@ -31,7 +19,6 @@ def page_title(title, icon_name=None, align: str=None, description: str=None, us
                 "textAlign": align
             }
         )
-    # Icon style for regular pages - now centered and more prominent
     elif icon_name:
         title_element = html.Div([
             html.Div([
@@ -49,7 +36,6 @@ def page_title(title, icon_name=None, align: str=None, description: str=None, us
                 }
             )
         ], style={"marginBottom": "1.5rem", "marginTop": "2rem"})
-    # Simple title
     else:
         title_element = html.H1(
             title,
@@ -65,7 +51,6 @@ def page_title(title, icon_name=None, align: str=None, description: str=None, us
             }
         )
 
-    # If description provided, wrap title and description together
     if description:
         return html.Div([
             title_element,

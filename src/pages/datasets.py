@@ -1,4 +1,3 @@
-"""Datasets documentation page."""
 import dash_bootstrap_components as dbc
 from dash import html, dcc, register_page
 from src.components.ui import page_title

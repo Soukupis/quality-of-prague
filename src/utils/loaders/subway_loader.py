@@ -6,7 +6,6 @@ from src.configs.data_config import DATA_PATHS
 
 @cached()
 def load_subway_entrances():
-    """Load metro entrances GeoJSON data."""
     return gpd.read_file(DATA_PATHS.subway_entrances)
 
 
@@ -29,12 +28,10 @@ def aggregate_metro_stations(df):
 
 
 def get_transfer_stations(df):
-    """Get all transfer stations (stations with multiple lines)."""
     return df[df["vst_linka"].str.contains(",", na=False)]
 
 
 def get_single_line_stations(df, line):
-    """Get all stations for a single metro line (A, B, or C)."""
     return df[df["vst_linka"] == line]
 
 
