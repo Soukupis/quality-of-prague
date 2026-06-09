@@ -567,3 +567,37 @@ The original dashboard presented two dropdowns and a bar chart. Users had to int
 **Click navigation:** `dcc.Location(id="dashboard-url", refresh=True)` with callback `Input("dashboard-qol-map", "clickData")` → `Output("dashboard-url", "href")`. Uses `click_data["points"][0]["location"]` (the district name from `locations` list). Does not conflict with districts page `dcc.Location(id="url")`.
 
 **Existing callbacks fully preserved:** `dashboard_callbacks.py` unchanged. All component IDs it references (`bar_chart_container`, `district_map_container`, `districts-dropdown`, `data-dropdown`, `normalization-mode`, `select-all-districts-btn`) remain in the new layout.
+
+---
+
+## 12. Home Page Redesign (Phase 10 — Completed 2026-06-09)
+
+### Goal
+
+Replace the "two screenshot images + labels" landing page with a proper welcome screen that orients the user and provides direct entry points into every major section.
+
+### Design Rationale
+
+The previous home page showed static chart screenshots as clickable areas for only two destinations (Dashboard and Districts). It gave no sense of the app's scope and omitted five pages entirely. The redesign answers two questions a first-time visitor would ask: "What is this?" and "Where do I go?"
+
+Constraints applied: no data, no charts, no long text — entry point only.
+
+### Layout
+
+- **Hero:** gradient `page_title("Quality of Prague")` + one-sentence description
+- **6 navigation cards** in a responsive grid (3 columns on desktop, 2 on tablet, 1 on mobile), one per major section: Dashboard, Městské části, QoL Index, Persony, Teorie, Datové sady
+- Each card has: icon, title, one-line description, colored accent matching the section's domain color in the rest of the app, `hover-shadow` CSS class for lift-on-hover
+
+### Files Changed
+
+| File | Change |
+|---|---|
+| `src/pages/home.py` | Complete rewrite — removed image storytelling section; added `_nav_card()` helper and 6-card grid |
+
+### Notable Decisions
+
+**No images:** The existing `bar_chart_image.png` / `analytics_image.png` screenshots were placeholder visuals with no semantic value. Removing them reduces visual noise and eliminates the maintenance burden of keeping screenshots current.
+
+**Static layout:** No callbacks, no data loading — the home page is fully static. This keeps it fast and prevents any data computation delay before the user sees the entry point.
+
+**Color assignment:** Each card uses the same accent color as its target section elsewhere in the app (Dashboard → `#667eea`, Districts → `#0ea5e9`, QoL Index → `#f59e0b`, Personas → `#be185d`, Theory → `#764ba2`, Datasets → `#0f766e`). This creates visual continuity — arriving on a page feels like an extension of the card that led there.

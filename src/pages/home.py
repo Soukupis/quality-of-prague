@@ -1,131 +1,113 @@
-"""Homepage for the Quality of Prague application.
+"""Homepage — entry point for the Quality of Prague application.
 
-This page serves as the landing page, featuring:
-- Welcome message and application overview
-- Visual storytelling sections showcasing key features
-- Navigation cards to main sections (Dashboard, Districts, Datasets)
-- Hero images and call-to-action buttons
-
-The page uses Czech language for all content.
+A clean welcome screen that orients the user and provides direct navigation
+to each major section. No data, no charts — just context and entry points.
 """
 import dash_bootstrap_components as dbc
 from dash import html, register_page
-from src.components.ui import feature_card, page_title
+from src.components.ui import page_title
 
 register_page(__name__, path="/", name="Domů")
 
-storytelling_section = html.Div([
-    dbc.Row([
-        dbc.Col([
-            html.Div([
-                html.H2(
-                    "Porovnejte data",
-                    className="text-center mb-3",
+_NAV_CARDS = [
+    (
+        "fa-chart-simple", "Dashboard",
+        "Přehled QoL skóre přes celou Prahu — choroplethová mapa, žebříček obvodů a porovnání metrik.",
+        "/dashboard", "#667eea",
+    ),
+    (
+        "fa-location-dot", "Městské části",
+        "Interaktivní mapa Prahy. Kliknutím na obvod zobrazíte detail s daty ze sedmi domén.",
+        "/districts", "#0ea5e9",
+    ),
+    (
+        "fa-ranking-star", "QoL Index",
+        "Kompozitní skóre čtyř QOUL domén: bezpečnost, mobilita, přístupnost a prostředí.",
+        "/qol-index", "#f59e0b",
+    ),
+    (
+        "fa-people-roof", "Persony",
+        "Stejná data, jiné potřeby. Pohled na Prahu očima Jana, Eleny a Rodiny Novákových.",
+        "/personas", "#be185d",
+    ),
+    (
+        "fa-book-open", "Teorie",
+        "Teoretický rámec: WHOQOL, QOUL 4 domény, 15minutové město a Stiglitz-Sen-Fitoussi.",
+        "/theory", "#764ba2",
+    ),
+    (
+        "fa-database", "Datové sady",
+        "Dokumentace všech datových zdrojů — původ, formát a popis každého datasetu.",
+        "/datasets", "#0f766e",
+    ),
+]
+
+
+def _nav_card(icon_class, title, description, href, color):
+    return html.A(
+        dbc.Card(
+            dbc.CardBody([
+                html.I(
+                    className=f"fa-solid {icon_class}",
+                    style={
+                        "fontSize": "2rem",
+                        "color": color,
+                        "marginBottom": "0.65rem",
+                        "display": "block",
+                    }
+                ),
+                html.H5(
+                    title,
                     style={
                         "fontWeight": "700",
-                        "fontSize": "2rem",
-                        "color": "#667eea",
-                        "letterSpacing": "-0.5px",
-                        "lineHeight": "1.2"
+                        "fontSize": "1rem",
+                        "color": "#1e293b",
+                        "marginBottom": "0.4rem",
                     }
                 ),
                 html.P(
-                    "Analyzujte a porovnávejte data napříč městskými částmi",
-                    className="text-center mb-4",
+                    description,
                     style={
-                        "fontSize": "1rem",
-                        "color": "#6c757d",
-                        "lineHeight": "1.5",
-                        "fontWeight": "400"
+                        "fontSize": "0.84rem",
+                        "color": "#64748b",
+                        "lineHeight": "1.45",
+                        "marginBottom": 0,
                     }
                 ),
-                html.A([
-                    dbc.Card([
-                        dbc.CardBody([
-                            html.Img(
-                                src="/assets/bar_chart_image.png",
-                                className="img-fluid",
-                                alt="Dashboard Analytics",
-                                style={
-                                    "width": "100%",
-                                    "height": "450px",
-                                    "objectFit": "contain",
-                                    "padding": "2rem"
-                                }
-                            )
-                        ], className="p-0")
-                    ], className="story-card shadow-sm", style={
-                        "border": "none",
-                        "borderRadius": "1rem",
-                        "overflow": "hidden",
-                        "transition": "all 0.3s ease",
-                        "background": "linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%)"
-                    })
-                ], href="/dashboard", style={"textDecoration": "none"}),
-            ], style={"padding": "1.5rem"})
-        ], md=6, xs=12, className="mb-4"),
-        dbc.Col([
-            html.Div([
-                html.H2(
-                    "Prozkoumejte městské části",
-                    className="text-center mb-3",
-                    style={
-                        "fontWeight": "700",
-                        "fontSize": "2rem",
-                        "color": "#764ba2",
-                        "letterSpacing": "-0.5px",
-                        "lineHeight": "1.2"
-                    }
-                ),
-                html.P(
-                    "Detailní přehled každé městské části a jejích charakteristik",
-                    className="text-center mb-4",
-                    style={
-                        "fontSize": "1rem",
-                        "color": "#6c757d",
-                        "lineHeight": "1.5",
-                        "fontWeight": "400"
-                    }
-                ),
-                html.A([
-                    dbc.Card([
-                        dbc.CardBody([
-                            html.Img(
-                                src="/assets/analytics_image.png",
-                                className="img-fluid",
-                                alt="City Districts",
-                                style={
-                                    "width": "100%",
-                                    "height": "450px",
-                                    "objectFit": "contain",
-                                    "padding": "2rem"
-                                }
-                            )
-                        ], className="p-0")
-                    ], className="story-card shadow-sm", style={
-                        "border": "none",
-                        "borderRadius": "1rem",
-                        "overflow": "hidden",
-                        "transition": "all 0.3s ease",
-                        "background": "#ffffff"
-                    })
-                ], href="/districts", style={"textDecoration": "none"}),
-            ], style={"padding": "1.5rem"})
-        ], md=6, xs=12, className="mb-4"),
-    ], className="g-4")
-], style={"marginBottom": "4rem", "marginTop": "2rem"})
+            ], className="text-center"),
+            className="h-100 hover-shadow",
+            style={
+                "border": f"1px solid {color}28",
+                "borderRadius": "1rem",
+                "background": f"linear-gradient(135deg, {color}0f 0%, white 100%)",
+                "transition": "all 0.2s ease",
+                "cursor": "pointer",
+            }
+        ),
+        href=href,
+        style={"textDecoration": "none"},
+    )
+
 
 layout = dbc.Container([
     dbc.Row([
         dbc.Col([
+
             page_title(
                 "Quality of Prague",
                 align="center",
-                description="Objevte kvalitu života v Praze skrz data a interaktivní vizualizace",
-                use_gradient=True
+                description=(
+                    "Otevřená data o kvalitě života ve 57 pražských obvodech — "
+                    "bezpečnost, mobilita, přístupnost a prostředí."
+                ),
+                use_gradient=True,
             ),
-            storytelling_section,
-        ], width=12)
-    ])
-], fluid=True, className="py-2")
 
+            dbc.Row([
+                dbc.Col(_nav_card(*card), xs=12, sm=6, md=4, className="mb-4")
+                for card in _NAV_CARDS
+            ], className="g-3"),
+
+        ], width=12, lg=10, className="mx-auto"),
+    ]),
+], fluid=True, className="py-4")
