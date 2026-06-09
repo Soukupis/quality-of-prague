@@ -389,3 +389,32 @@ _All 5 Phase 3 datasets integrated into application code. No existing functional
 - Per-capita normalization (police/1000 residents, metro density per 1000 residents): requires ČSÚ population denominator now available in `xlsx_loader.py`
 - PID stops + Nextbike in Dashboard bar chart dropdown: data is loaded and available; just needs entries in `label_map` and `DATASET_CONFIGS`
 - NRPZS healthcare facilities: server was unresponsive at download time; high-priority for Accessibility domain
+
+---
+
+## 7. UI/UX Polish Pass (Phase 5 — Completed 2026-06-09)
+
+### Items Implemented
+
+| Item | Status | Files Changed | Key Decision |
+|---|---|---|---|
+| 1 — Sidebar reorganization | **Done** | `layout.py`, `sidebar.py` | Added `type:"divider"` entries to NAV_ITEMS; sidebar renders them as uppercase category labels |
+| 2 — District page consistency | **Done** | `info_card.py`, `safety_section.py`, `travel_section.py` | Added `compact=True` mode to `info_card`; safety/travel now use same grid layout as newer sections |
+| 3 — Datasets page redesign | **Done** | `datasets.py` | Replaced triple-nested accordion structure with single clean accordion; keyword-matched icons per dataset |
+| 4 — Clickable QoL ranking bars | **Done** | `qol_index.py` | New `select_district_from_ranking` callback maps bar `clickData.points[0].y` → dropdown value |
+| 5 — Rankings chart readability | **Done** | `qol_index.py` | Bar height 16→26px, label font 10→12, left margin 120→150, `bargap=0.3`, hover hint added |
+| 6 — "O Aplikaci" page | **Done** | `about.py` | Full rewrite: 4 sections (intro, theory, datasets, navigation guide) using `_section_card` pattern |
+
+### Notable Decisions
+
+**Sidebar (Item 1):** Group labels use `type:"divider"` in NAV_ITEMS (same list consumed by navbar). `sidebar.py` added `_render_nav_item()` helper that checks `type` before deciding whether to render a label or a NavLink. The navbar is unaffected — it already filters NAV_ITEMS by iterating over `href` presence.
+
+**District page (Item 2):** Rather than rewriting the CSS class system, `info_card(compact=True)` overrides the fixed `min-width`/`max-width` CSS with inline `style={"minWidth": "unset", "maxWidth": "unset"}` (inline styles have higher CSS specificity). The `layer-card`/`layer-plus-icon`/`layer-minus-icon` pattern-matching IDs are preserved so the map toggle callback continues to work unchanged. The `.info-card-selected` selected state still applies via the existing CSS.
+
+**Datasets page (Item 3):** `_icon_for_title()` uses lowercase keyword matching to assign Font Awesome icons and accent colors. The previous design nested `dbc.Accordion → dbc.Card → dbc.CardBody → dbc.Card → dcc.Markdown` (5 levels deep), which caused visual issues. New design: `dbc.Accordion → dcc.Markdown` (2 levels). `readme_utils.py` was not modified.
+
+**QoL clickable bars (Item 4):** The horizontal bar chart has districts on the y-axis, so `clickData["points"][0]["y"]` returns the district name directly. The callback writes to `qol-district-dropdown.value` which triggers the existing `update_radar` callback automatically.
+
+**Rankings readability (Item 5):** With 57 districts, the old 16px/bar height rendered labels at 10px — barely readable. At 26px/bar the chart is ~1560px tall (scrollable) but fully legible. `bargap=0.3` adds visible spacing between bars. `uniformtext` prevents score labels from overlapping on short bars.
+
+**About page (Item 6):** Uses the same `_section_card` helper pattern as `theory.py` (reproduced locally, not imported, to keep files independent). Four sections: app purpose + thesis citation, four framework mini-cards (WHOQOL/QOUL/15-min city/SSF), dataset chips, and a navigation guide with icon+description rows for every page.

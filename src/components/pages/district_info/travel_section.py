@@ -4,7 +4,7 @@ This module provides the transportation section showing mobility-related metrics
 for a district, including parking facilities, metro stations, parking zones, and
 other transportation infrastructure.
 """
-from src.components.ui import info_card, section_header, info_card_row
+from src.components.ui import info_card, section_header
 from src.configs.dataset_config import DATASET_CONFIGS
 from src.utils.geospatial_utils import point_count_for_polygon
 from src.utils.loaders.districts_loader import get_parking_meters_data, get_subway_entrances_data, \
@@ -70,7 +70,8 @@ def travel_section(district, polygons):
                     count,
                     "info",
                     card_id=config["id"],
-                    dataset_key=dataset_key
+                    dataset_key=dataset_key,
+                    compact=True
                 )
             )
 
@@ -85,6 +86,6 @@ def travel_section(district, polygons):
                 bg_color=theme.TRAVEL_BG_COLOR,
                 text_color=theme.TRAVEL_TEXT_COLOR
             ),
-            info_card_row(cards, col_width=4)
+            dbc.Row([dbc.Col(card, xs=6, sm=4, md=3, className="mb-3") for card in cards], className="g-2 mb-2")
         ], width=12)
     ])

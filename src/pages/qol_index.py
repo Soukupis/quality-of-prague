@@ -15,7 +15,7 @@ Marans (2012) dual-methodological QOUL framework.
 """
 import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
-from dash import register_page, html, dcc, callback, Input, Output
+from dash import register_page, html, dcc, callback, Input, Output, exceptions
 
 from src.components.ui import page_title
 from src.utils.districts.district_utils import (
@@ -153,20 +153,23 @@ def _create_ranking_chart(all_scores):
         x=scores,
         y=districts,
         orientation='h',
-        marker=dict(color=colors, line=dict(color='white', width=1)),
+        marker=dict(color=colors, line=dict(color='white', width=0), marker_line_width=0),
         text=[f"{s:.1f}" for s in scores],
         textposition='outside',
-        textfont=dict(size=10, color='#1e293b'),
-        hovertemplate='<b>%{y}</b><br>Composite QoL: <b>%{x:.1f}</b>/100<extra></extra>'
+        textfont=dict(size=11, color='#1e293b'),
+        hovertemplate='<b>%{y}</b><br>QoL skóre: <b>%{x:.1f}/100</b><br><i>Kliknutím vyberte obvod</i><extra></extra>',
+        bargap=0.3,
     ))
     fig.update_layout(
         xaxis=dict(range=[0, 115], showgrid=True, gridcolor='#f1f5f9',
                    title_text="Composite QoL skóre (0–100)"),
-        yaxis=dict(autorange='reversed', tickfont=dict(size=10)),
+        yaxis=dict(autorange='reversed', tickfont=dict(size=12)),
         paper_bgcolor='white',
         plot_bgcolor='#fafafa',
-        margin=dict(l=120, r=60, t=20, b=40),
-        height=max(400, len(districts) * 16),
+        margin=dict(l=150, r=60, t=20, b=40),
+        height=max(500, len(districts) * 26 + 80),
+        title_text=None,
+        uniformtext=dict(mode='hide', minsize=8),
     )
     return fig
 
@@ -261,7 +264,8 @@ def layout():
                             id="qol-ranking-chart",
                             figure=_create_ranking_chart(all_scores),
                             config={"displayModeBar": False},
-                            style={"height": f"{max(400, len(all_scores) * 16 + 80)}px"}
+                            style={"height": f"{max(500, len(all_scores) * 26 + 80)}px",
+                                   "cursor": "pointer"}
                         )
                     ])
                 ], className="shadow-sm mb-4",
@@ -365,6 +369,16 @@ def update_radar(district):
         config={"displayModeBar": False},
         style={"height": "340px"}
     ), domain_cards
+
+
+@callback(
+    Output("qol-district-dropdown", "value"),
+    Input("qol-ranking-chart", "clickData"),
+)
+def select_district_from_ranking(click_data):
+    if click_data is None:
+        raise exceptions.PreventUpdate
+    return click_data["points"][0]["y"]
 
 
 def _score_card(label, score, color, is_composite=False):

@@ -4,7 +4,7 @@ This module provides the safety section showing security-related metrics
 for a district, such as the number of police stations within the district
 boundaries.
 """
-from src.components.ui import info_card,section_header, info_card_row
+from src.components.ui import info_card, section_header
 from src.configs.dataset_config import DATASET_CONFIGS
 from src.utils.geospatial_utils import point_count_for_polygon
 from src.utils.loaders.districts_loader import get_police_stations_data
@@ -50,7 +50,8 @@ def safety_section(district, polygons):
                         count,
                         "info",
                         card_id=config["id"],
-                        dataset_key=dataset_key
+                        dataset_key=dataset_key,
+                        compact=True
                     )
                 )
 
@@ -65,6 +66,6 @@ def safety_section(district, polygons):
                 bg_color=theme.SAFETY_BG_COLOR,
                 text_color=theme.SAFETY_TEXT_COLOR
             ),
-            info_card_row(cards, col_width=2)
+            dbc.Row([dbc.Col(card, xs=6, sm=4, md=3, className="mb-3") for card in cards], className="g-2 mb-2")
         ], width=12)
     ])

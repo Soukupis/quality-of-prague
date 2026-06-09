@@ -39,9 +39,8 @@ NAV_ITEMS = [
         "icon": "house-door"
     },
     {
-        "label": "Dashboard",
-        "href": "/dashboard",
-        "icon": "bar-chart"
+        "type": "divider",
+        "label": "Analýza dat"
     },
     {
         "label": "Městské části",
@@ -49,14 +48,18 @@ NAV_ITEMS = [
         "icon": "geo-alt"
     },
     {
-        "label": "Datové sady",
-        "href": "/datasets",
-        "icon": "database"
+        "label": "Dashboard",
+        "href": "/dashboard",
+        "icon": "bar-chart"
     },
     {
         "label": "QoL Index",
         "href": "/qol-index",
         "icon": "graph-up"
+    },
+    {
+        "type": "divider",
+        "label": "Metodologie"
     },
     {
         "label": "Teorie",
@@ -67,6 +70,15 @@ NAV_ITEMS = [
         "label": "Persony",
         "href": "/personas",
         "icon": "people"
+    },
+    {
+        "type": "divider",
+        "label": "Zdroje"
+    },
+    {
+        "label": "Datové sady",
+        "href": "/datasets",
+        "icon": "database"
     },
     {
         "label": "O Aplikaci",
