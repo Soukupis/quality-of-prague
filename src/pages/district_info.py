@@ -22,31 +22,27 @@ from src.utils.districts.district_utils import get_district_polygons
 
 register_page(__name__, path="/districts/district-detail", name="Detail městské části")
 
-def layout(district=None):
+def layout(district=None, lang="cs"):
     """Generate the layout for the district detail page.
-
-    Creates a dynamic page layout showing information for a specific Prague
-    district. Includes map visualization and metric sections with interactive
-    layer controls.
 
     Args:
         district: Name of the district to display (e.g., "Praha 1"). Passed
             as URL query parameter. Defaults to None.
+        lang: Language code ("cs" or "en"). Passed as URL query parameter.
 
     Returns:
         dbc.Container: Complete page layout with stores, map, and metric sections.
     """
     polygons = get_district_polygons()
 
-    # Evaluate each section once; None sections are absent for this district
     _sections = [
-        safety_section(district, polygons),
-        travel_section(district, polygons),
-        accessibility_section(district, polygons),
-        pr_section(district, polygons),
-        mobility_section(district, polygons),
-        environment_section(district, polygons),
-        demographics_section(district, polygons),
+        safety_section(district, polygons, lang),
+        travel_section(district, polygons, lang),
+        accessibility_section(district, polygons, lang),
+        pr_section(district, polygons, lang),
+        mobility_section(district, polygons, lang),
+        environment_section(district, polygons, lang),
+        demographics_section(district, polygons, lang),
     ]
 
     return dbc.Container([

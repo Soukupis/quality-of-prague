@@ -1,13 +1,4 @@
-"""Environmental health section for district detail pages.
-
-Operationalises the QOUL Environmental Health domain by showing:
-  - Green space (parks) count and density in the district
-  - Nearest ČHMÚ air quality monitoring station and its type
-
-Theory reference: QOUL Environmental Health — green space access, PM2.5/PM10/NO₂
-exposure; WHOQOL Physical domain (outdoor recreation); 15-Minute City 'Fun'
-social function; urban heat island vulnerability (Jan persona, age 75, Praha 7).
-"""
+"""Environmental health section for district detail pages."""
 from typing import Optional
 
 from dash import html
@@ -19,6 +10,14 @@ from src.components.config import theme
 from src.utils.geospatial_utils import points_within_polygon
 from src.utils.loaders.districts_loader import get_parks_data, get_chmi_stations_data
 from src.utils.districts.district_utils import get_district_areas_km2
+from src.i18n import t
+
+
+_STATION_TYPE_KEYS = {
+    "pozaďová":  "env_station_background",
+    "dopravní":  "env_station_traffic",
+    "průmyslová": "env_station_industrial",
+}
 
 
 def _get_park_stats(district: str, district_polygon) -> dict:
@@ -33,12 +32,10 @@ def _get_park_stats(district: str, district_polygon) -> dict:
 
 
 def _get_nearest_chmi(district_polygon) -> Optional[dict]:
-    """Find nearest ČHMÚ monitoring station to the district centroid."""
     stations = get_chmi_stations_data()
     if stations.empty:
         return None
 
-    # Project to EPSG:5514 for accurate distance in metres
     centroid = district_polygon.centroid
     centroid_pt = Point(centroid.x, centroid.y)
 
@@ -54,10 +51,8 @@ def _get_nearest_chmi(district_polygon) -> Optional[dict]:
     nearest = stations.loc[idx]
     dist_km = round(distances[idx] / 1000, 1)
 
-    # Check if station is within the district
     within = points_within_polygon(district_polygon, stations, "geometry")
     in_district = len(within) > 0
-    in_district_name = nearest["name"] if in_district else None
 
     return {
         "name": nearest["name"],
@@ -89,18 +84,7 @@ def _env_stat_card(icon_class, label, value, color="#14532d"):
     )
 
 
-def environment_section(district: str, polygons: dict):
-    """Create the environmental health section for a district detail page.
-
-    Shows park count/density and the nearest ČHMÚ air quality monitoring station.
-
-    Args:
-        district: District name (e.g., "Praha 7").
-        polygons: Dict mapping district names to Shapely polygon geometries.
-
-    Returns:
-        dbc.Row with the environment section, or None if no data available.
-    """
+def environment_section(district: str, polygons: dict, lang: str = "cs"):
     if district not in polygons:
         return None
 
@@ -108,23 +92,24 @@ def environment_section(district: str, polygons: dict):
     park_stats = _get_park_stats(district, polygon)
     chmi = _get_nearest_chmi(polygon)
 
-    # --- Parks subsection ---
     parks_content = [
-        html.H6("Parky a zeleň",
+        html.H6(t("env_parks_header", lang),
                 style={"color": theme.ENVIRONMENT_TEXT_COLOR, "fontWeight": "600",
                        "fontSize": "0.9rem", "marginBottom": "0.5rem"}),
         dbc.Row([
-            dbc.Col(_env_stat_card("fa-tree", "Parků celkem", park_stats["count"], "#16a34a"),
+            dbc.Col(_env_stat_card("fa-tree", t("env_parks_total", lang),
+                                   park_stats["count"], "#16a34a"),
                     xs=6, sm=4, md=3, className="mb-3"),
-            dbc.Col(_env_stat_card("fa-tag", "Pojmenovaných", park_stats["named"], "#15803d"),
+            dbc.Col(_env_stat_card("fa-tag", t("env_parks_named", lang),
+                                   park_stats["named"], "#15803d"),
                     xs=6, sm=4, md=3, className="mb-3"),
-            dbc.Col(_env_stat_card("fa-map", "Parků / km²", f"{park_stats['density']:.2f}", "#166534"),
+            dbc.Col(_env_stat_card("fa-map", t("env_parks_density", lang),
+                                   f"{park_stats['density']:.2f}", "#166534"),
                     xs=6, sm=4, md=3, className="mb-3"),
         ], className="g-2 mb-2"),
         dbc.Alert([
             html.I(className="fa-solid fa-circle-info me-2", style={"color": "#16a34a"}),
-            html.Span("Data z OpenStreetMap (leisure=park). Zahrnuje pojmenované i nepojmenované "
-                      "zelené plochy v administrativních hranicích obvodu.",
+            html.Span(t("env_parks_note", lang),
                       style={"fontSize": "0.8rem", "color": "#374151"})
         ], color="success",
            style={"padding": "0.5rem 0.75rem", "borderRadius": "0.5rem",
@@ -132,32 +117,24 @@ def environment_section(district: str, polygons: dict):
                   "marginBottom": "0.75rem", "fontSize": "0.8rem"}),
     ]
 
-    # --- ČHMÚ nearest station subsection ---
     chmi_content = []
     if chmi:
         station_in_badge = html.Span(
-            "v obvodu" if chmi["in_district"] else f"{chmi['distance_km']} km",
+            t("env_chmi_in_district", lang) if chmi["in_district"] else f"{chmi['distance_km']} km",
             style={
                 "display": "inline-block",
                 "background": "#16a34a" if chmi["in_district"] else "#d97706",
-                "color": "white",
-                "borderRadius": "12px",
-                "padding": "2px 10px",
-                "fontSize": "0.82rem",
-                "fontWeight": "600",
-                "marginLeft": "0.5rem",
-                "verticalAlign": "middle",
+                "color": "white", "borderRadius": "12px", "padding": "2px 10px",
+                "fontSize": "0.82rem", "fontWeight": "600",
+                "marginLeft": "0.5rem", "verticalAlign": "middle",
             }
         )
 
-        type_label = {
-            "pozaďová": "Pozaďová — měří obecné znečištění oblasti",
-            "dopravní": "Dopravní — měří znečištění z automobilového provozu",
-            "průmyslová": "Průmyslová — měří znečištění z průmyslových zdrojů",
-        }.get(chmi.get("station_type", ""), chmi.get("station_type", "—"))
+        type_key = _STATION_TYPE_KEYS.get(chmi.get("station_type", ""))
+        type_label = t(type_key, lang) if type_key else (chmi.get("station_type") or "—")
 
         chmi_content = [
-            html.H6("Kvalita ovzduší — nejbližší monitorovací stanice",
+            html.H6(t("env_chmi_header", lang),
                     style={"color": theme.ENVIRONMENT_TEXT_COLOR, "fontWeight": "600",
                            "fontSize": "0.9rem", "marginBottom": "0.5rem", "marginTop": "0.75rem"}),
             dbc.Card([
@@ -166,23 +143,21 @@ def environment_section(district: str, polygons: dict):
                         html.I(className="fa-solid fa-wind me-2",
                                style={"color": "#16a34a", "fontSize": "1.1rem"}),
                         html.Span(chmi["name"],
-                                  style={"fontWeight": "700", "fontSize": "0.95rem",
-                                         "color": "#1e293b"}),
+                                  style={"fontWeight": "700", "fontSize": "0.95rem", "color": "#1e293b"}),
                         station_in_badge,
                     ], className="d-flex align-items-center mb-2"),
                     html.Div([
-                        html.Span("Kód: ", style={"fontSize": "0.82rem", "color": "#64748b"}),
+                        html.Span(t("env_chmi_code", lang),
+                                  style={"fontSize": "0.82rem", "color": "#64748b"}),
                         html.Span(chmi["code"],
                                   style={"fontSize": "0.82rem", "fontWeight": "600",
                                          "color": "#334155", "marginRight": "1rem"}),
-                        html.Span("Typ: ", style={"fontSize": "0.82rem", "color": "#64748b"}),
-                        html.Span(type_label,
-                                  style={"fontSize": "0.82rem", "color": "#334155"}),
+                        html.Span(t("env_chmi_type", lang),
+                                  style={"fontSize": "0.82rem", "color": "#64748b"}),
+                        html.Span(type_label, style={"fontSize": "0.82rem", "color": "#334155"}),
                     ], className="mb-1"),
                     html.Div(
-                        "Data o měřeních (PM2.5, PM10, NO₂, O₃) jsou dostupná přes API "
-                        f"ČHMÚ pro stanici {chmi['code']}. Integraci naměřených hodnot "
-                        "plánujeme v další fázi (Phase 4).",
+                        t("env_chmi_future_note", lang, code=chmi["code"]),
                         style={"fontSize": "0.78rem", "color": "#94a3b8", "marginTop": "0.25rem"}
                     ),
                 ])
@@ -197,7 +172,7 @@ def environment_section(district: str, polygons: dict):
     return dbc.Row([
         dbc.Col([
             section_header(
-                title="Životní prostředí",
+                title=t("section_environment", lang),
                 accent_color=theme.ENVIRONMENT_ACCENT_COLOR,
                 bg_color=theme.ENVIRONMENT_BG_COLOR,
                 text_color=theme.ENVIRONMENT_TEXT_COLOR,

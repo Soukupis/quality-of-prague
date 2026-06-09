@@ -1,15 +1,4 @@
-"""Public mobility section for district detail pages.
-
-Operationalises the QOUL Mobility domain by showing:
-  - PID (Prague Integrated Transport) public transport stop breakdown by mode
-    and wheelchair accessibility ratio
-  - Nextbike bike-sharing station count and capacity
-
-Theory reference: QOUL Mobility — commute time, PT coverage, intermodality,
-CO₂ reduction; WHOQOL Level of Independence — wheelchair-accessible stops for
-Jan persona; Elena persona (Praha 8) — metro + bike intermodality.
-Sources: Ropid PID open data; Nextbike GBFS v2.3.
-"""
+"""Public mobility section for district detail pages."""
 from dash import html
 import dash_bootstrap_components as dbc
 
@@ -18,6 +7,7 @@ from src.components.config import theme
 from src.utils.geospatial_utils import points_within_polygon
 from src.utils.loaders.districts_loader import get_pid_stops_data, get_nextbike_data
 from src.utils.districts.district_utils import get_district_areas_km2
+from src.i18n import t
 
 
 _TRAFFIC_COLORS = {
@@ -32,17 +22,11 @@ _TRAFFIC_COLORS = {
     "funicular": "#7c3aed",
 }
 
-_TRAFFIC_LABELS = {
-    "metro": "Metro",
-    "metroA": "Metro A",
-    "metroB": "Metro B",
-    "metroC": "Metro C",
-    "tram": "Tramvaj",
-    "bus": "Bus",
-    "train": "Vlak",
-    "ferry": "Přívoz",
-    "funicular": "Lanovka",
+_TRAFFIC_TEXT_COLORS = {
+    "metroB": "#1e293b",
 }
+
+_KNOWN_MODES = set(_TRAFFIC_COLORS.keys())
 
 
 def _get_pid_stats(district: str, district_polygon) -> dict:
@@ -55,21 +39,18 @@ def _get_pid_stats(district: str, district_polygon) -> dict:
                 "wheelchair_possible": 0, "density": 0.0}
 
     by_mode = {}
-    for mode in _TRAFFIC_LABELS:
+    for mode in _KNOWN_MODES:
         count = int((within["traffic_type"] == mode).sum())
         if count > 0:
             by_mode[mode] = count
-    # Also capture any unknown modes for completeness
-    known = set(_TRAFFIC_LABELS.keys())
     for mode in within["traffic_type"].dropna().unique():
-        if mode not in known:
+        if mode not in _KNOWN_MODES:
             count = int((within["traffic_type"] == mode).sum())
             if count > 0:
                 by_mode[mode] = count
 
     wheelchair_yes = int((within["wheelchair"] == "yes").sum())
     wheelchair_possible = int((within["wheelchair"] == "possible").sum())
-    # PID data uses 'notPossible' instead of 'no' for inaccessible stops
 
     areas = get_district_areas_km2()
     area_km2 = areas.get(district, 1.0)
@@ -114,55 +95,42 @@ def _mob_stat_card(icon_class, label, value, color="#1e3a8a", small=False):
     )
 
 
-def _mode_badge(mode: str, count: int):
+def _mode_badge(mode: str, count: int, lang: str):
     color = _TRAFFIC_COLORS.get(mode, "#64748b")
-    label = _TRAFFIC_LABELS.get(mode, mode)
+    text_color = _TRAFFIC_TEXT_COLORS.get(mode, "white")
+    mode_key = f"mode_{mode}"
+    label = t(mode_key, lang) if f"mode_{mode}" in (
+        "mode_metro", "mode_metroA", "mode_metroB", "mode_metroC",
+        "mode_tram", "mode_bus", "mode_train", "mode_ferry", "mode_funicular"
+    ) else mode
+    label = t(mode_key, lang)
     return html.Span(
         f"{label}: {count}",
         style={
-            "display": "inline-block",
-            "background": color,
-            "color": "white",
-            "borderRadius": "8px",
-            "padding": "3px 10px",
-            "fontSize": "0.82rem",
-            "fontWeight": "700",
-            "marginRight": "0.4rem",
-            "marginBottom": "0.3rem",
+            "display": "inline-block", "background": color, "color": text_color,
+            "borderRadius": "8px", "padding": "3px 10px",
+            "fontSize": "0.82rem", "fontWeight": "700",
+            "marginRight": "0.4rem", "marginBottom": "0.3rem",
         }
     )
 
 
-def _wheelchair_ratio_badge(yes_count, possible_count, total):
+def _wheelchair_ratio_badge(yes_count, possible_count, total, lang):
     accessible = yes_count + possible_count
     ratio = round(accessible / total * 100, 1) if total > 0 else 0.0
     color = "#059669" if ratio >= 50 else ("#d97706" if ratio >= 25 else "#dc2626")
     return html.Span(
-        f"{ratio} % bezbariérových zastávek",
+        t("mob_wheelchair_badge", lang, ratio=ratio),
         style={
-            "display": "inline-block",
-            "background": color,
-            "color": "white",
-            "borderRadius": "12px",
-            "padding": "2px 10px",
-            "fontSize": "0.82rem",
-            "fontWeight": "600",
-            "marginLeft": "0.5rem",
-            "verticalAlign": "middle",
+            "display": "inline-block", "background": color, "color": "white",
+            "borderRadius": "12px", "padding": "2px 10px",
+            "fontSize": "0.82rem", "fontWeight": "600",
+            "marginLeft": "0.5rem", "verticalAlign": "middle",
         }
     )
 
 
-def mobility_section(district: str, polygons: dict):
-    """Create the public mobility section for a district detail page.
-
-    Args:
-        district: District name (e.g., "Praha 8").
-        polygons: Dict mapping district names to Shapely polygon geometries.
-
-    Returns:
-        dbc.Row with the mobility section, or None if no mobility data exists.
-    """
+def mobility_section(district: str, polygons: dict, lang: str = "cs"):
     if district not in polygons:
         return None
 
@@ -173,67 +141,68 @@ def mobility_section(district: str, polygons: dict):
     if pid["total"] == 0 and nextbike["count"] == 0:
         return None
 
-    # --- PID stops subsection ---
     pid_content = []
     if pid["total"] > 0:
-        mode_badges = [_mode_badge(mode, cnt)
-                       for mode, cnt in sorted(pid["by_mode"].items(),
-                                               key=lambda x: -x[1])
-                       if mode in _TRAFFIC_LABELS]
+        mode_badges = [
+            _mode_badge(mode, cnt, lang)
+            for mode, cnt in sorted(pid["by_mode"].items(), key=lambda x: -x[1])
+            if mode in _KNOWN_MODES
+        ]
         pid_content = [
-            html.H6("Zastávky PID — veřejná doprava",
+            html.H6(t("mob_pid_header", lang),
                     style={"color": theme.MOBILITY_TEXT_COLOR, "fontWeight": "600",
                            "fontSize": "0.9rem", "marginBottom": "0.5rem"}),
             dbc.Row([
-                dbc.Col(_mob_stat_card("fa-signs-post", "Zastávek celkem", pid["total"], "#1d4ed8"),
+                dbc.Col(_mob_stat_card("fa-signs-post", t("mob_pid_total", lang),
+                                       pid["total"], "#1d4ed8"),
                         xs=6, sm=4, md=3, className="mb-3"),
-                dbc.Col(_mob_stat_card("fa-map", "Zastávek / km²", f"{pid['density']:.1f}", "#1e40af"),
+                dbc.Col(_mob_stat_card("fa-map", t("mob_pid_density", lang),
+                                       f"{pid['density']:.1f}", "#1e40af"),
                         xs=6, sm=4, md=3, className="mb-3"),
-                dbc.Col(_mob_stat_card("fa-wheelchair", "S bezbariér. přístupem",
+                dbc.Col(_mob_stat_card("fa-wheelchair", t("mob_pid_wheelchair", lang),
                                        pid["wheelchair_yes"] + pid["wheelchair_possible"],
                                        "#7c3aed"),
                         xs=6, sm=4, md=3, className="mb-3"),
             ], className="g-2 mb-2"),
             html.Div([
-                html.Span("Zastávky podle druhu: ",
+                html.Span(t("mob_by_mode_label", lang),
                           style={"fontSize": "0.85rem", "color": "#475569",
                                  "fontWeight": "500", "marginRight": "0.3rem"}),
                 *mode_badges,
             ], className="d-flex flex-wrap align-items-center mb-2"),
             html.Div([
-                html.Span("Bezbariérový přístup:",
+                html.Span(t("mob_wheelchair_label", lang),
                           style={"fontSize": "0.85rem", "color": "#475569", "fontWeight": "500"}),
                 _wheelchair_ratio_badge(pid["wheelchair_yes"], pid["wheelchair_possible"],
-                                        pid["total"]),
+                                        pid["total"], lang),
             ], className="d-flex align-items-center mb-3"),
         ]
 
-    # --- Nextbike subsection ---
     nextbike_content = []
     if nextbike["count"] > 0:
         nextbike_content = [
-            html.H6("Nextbike — sdílená kola",
+            html.H6(t("mob_nextbike_header", lang),
                     style={"color": theme.MOBILITY_TEXT_COLOR, "fontWeight": "600",
                            "fontSize": "0.9rem", "marginBottom": "0.5rem",
                            "marginTop": "0.5rem" if pid_content else "0"}),
             dbc.Row([
-                dbc.Col(_mob_stat_card("fa-bicycle", "Stanic celkem", nextbike["count"], "#0891b2"),
+                dbc.Col(_mob_stat_card("fa-bicycle", t("mob_nextbike_stations", lang),
+                                       nextbike["count"], "#0891b2"),
                         xs=6, sm=4, md=3, className="mb-3"),
-                dbc.Col(_mob_stat_card("fa-circle-check", "Kapacita celkem",
+                dbc.Col(_mob_stat_card("fa-circle-check", t("mob_nextbike_capacity", lang),
                                        nextbike["total_capacity"], "#0e7490"),
                         xs=6, sm=4, md=3, className="mb-3"),
-                dbc.Col(_mob_stat_card("fa-chart-simple", "Průměrná kapacita",
-                                       f"{nextbike['avg_capacity']:.1f} kol/stanici",
+                dbc.Col(_mob_stat_card("fa-chart-simple", t("mob_nextbike_avg", lang),
+                                       t("mob_nextbike_avg_unit", lang, avg=nextbike["avg_capacity"]),
                                        "#155e75", small=True),
                         xs=6, sm=4, md=3, className="mb-3"),
             ], className="g-2 mb-2"),
         ]
     elif pid_content:
-        # No Nextbike in this district — show informational note
         nextbike_content = [
             html.Div([
                 html.I(className="fa-solid fa-bicycle me-2", style={"color": "#94a3b8"}),
-                html.Span("V tomto obvodu nejsou evidovány stanice Nextbike.",
+                html.Span(t("mob_nextbike_none", lang),
                           style={"fontSize": "0.82rem", "color": "#94a3b8"}),
             ], className="mb-2"),
         ]
@@ -241,7 +210,7 @@ def mobility_section(district: str, polygons: dict):
     return dbc.Row([
         dbc.Col([
             section_header(
-                title="Mobilita",
+                title=t("section_mobility", lang),
                 accent_color=theme.MOBILITY_ACCENT_COLOR,
                 bg_color=theme.MOBILITY_BG_COLOR,
                 text_color=theme.MOBILITY_TEXT_COLOR,

@@ -1,35 +1,16 @@
-"""Park and Ride (P+R) capacity and intermodality section.
-
-Operationalizes the QOUL Mobility domain — specifically the intermodality
-and commute-time dimensions from WBCSD mobility indicators.
-
-P+R facilities enable seamless car-to-transit transfer (intermodality),
-reducing dependency on private cars for the full journey. The planned
-capacity (kapacita_vyhled) shows the city's investment direction.
-
-Theory reference: WBCSD intermodality indicator; QOUL Mobility domain;
-Elena persona (metro + bike intermodality).
-"""
+"""Park and Ride (P+R) capacity and intermodality section."""
 from dash import html
 import dash_bootstrap_components as dbc
 from src.components.ui import section_header
 from src.utils.geospatial_utils import points_within_polygon
 from src.utils.loaders.districts_loader import get_parking_p_r_data
 from src.components.config import theme
+from src.i18n import t
 
-# stav field mapping (from data exploration)
-STAV_LABELS = {1: "V provozu", 4: "Plánováno", 5: "V provozu"}
+_STAV_KEYS = {1: "pr_stav_operating", 4: "pr_stav_planned", 5: "pr_stav_operating"}
 
 
-def _get_pr_stats(district_polygon):
-    """Compute P+R capacity statistics for a district.
-
-    Args:
-        district_polygon: Shapely polygon for the district boundary.
-
-    Returns:
-        dict with keys: count, current_capacity, planned_capacity, facilities (list).
-    """
+def _get_pr_stats(district_polygon, lang="cs"):
     data = get_parking_p_r_data()
     within = points_within_polygon(district_polygon, data, "geometry")
 
@@ -48,7 +29,8 @@ def _get_pr_stats(district_polygon):
         planned = int(row["kapacita_vyhled"]) if (
             row.get("kapacita_vyhled") and row["kapacita_vyhled"] == row["kapacita_vyhled"]
         ) else None
-        stav = STAV_LABELS.get(int(row.get("stav", 1)), "—")
+        stav_key = _STAV_KEYS.get(int(row.get("stav", 1)), "pr_stav_operating")
+        stav = t(stav_key, lang)
         facilities.append({"name": name, "capacity": cap, "planned": planned, "stav": stav})
 
     return {
@@ -59,19 +41,19 @@ def _get_pr_stats(district_polygon):
     }
 
 
-def _facility_row(facility):
-    """Render one P+R facility as a compact table row."""
+def _facility_row(facility, lang):
     planned_badge = html.Span(
-        f"→ {facility['planned']} plán.",
+        t("pr_planned_badge", lang, planned=facility["planned"]),
         style={"fontSize": "0.75rem", "color": "#059669",
                "fontWeight": "600", "marginLeft": "0.4rem"}
     ) if facility["planned"] else None
 
     return html.Tr([
         html.Td(facility["name"],
-                style={"fontSize": "0.85rem", "fontWeight": "500", "color": "#1e293b", "paddingRight": "1rem"}),
+                style={"fontSize": "0.85rem", "fontWeight": "500",
+                       "color": "#1e293b", "paddingRight": "1rem"}),
         html.Td([
-            html.Span(f"{facility['capacity']} míst",
+            html.Span(t("pr_spaces_unit", lang, cap=facility["capacity"]),
                       style={"fontSize": "0.85rem", "color": "#475569"}),
             planned_badge,
         ], style={"whiteSpace": "nowrap"}),
@@ -83,79 +65,52 @@ def _facility_row(facility):
     ], style={"borderBottom": "1px solid #f1f5f9"})
 
 
-def pr_section(district, polygons):
-    """Create the P+R capacity section for a district detail page.
-
-    Only renders if the district contains at least one P+R facility.
-
-    Args:
-        district: Name of the district (e.g., "Praha 10").
-        polygons: Dict mapping district names to Shapely polygon geometries.
-
-    Returns:
-        dbc.Row with the P+R section, or None if no P+R in district.
-    """
+def pr_section(district, polygons, lang="cs"):
     if district not in polygons:
         return None
 
-    stats = _get_pr_stats(polygons[district])
+    stats = _get_pr_stats(polygons[district], lang)
     if stats is None:
         return None
 
-    summary_cards = dbc.Row([
-        dbc.Col(
-            dbc.Card(dbc.CardBody(html.Div([
-                html.I(className="fa-solid fa-car-side",
-                       style={"fontSize": "1.3rem", "color": "#0f766e", "minWidth": "1.6rem"}),
+    def _stat_card(icon_class, label, value, color="#0f766e", bg="linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%)"):
+        return dbc.Card(
+            dbc.CardBody(html.Div([
+                html.I(className=f"fa-solid {icon_class}",
+                       style={"fontSize": "1.3rem", "color": color, "minWidth": "1.6rem"}),
                 html.Div([
-                    html.Div("Parkovišť P+R", style={"fontSize": "0.8rem", "color": "#64748b", "fontWeight": "500"}),
-                    html.Div(str(stats["count"]),
-                             style={"fontSize": "1.3rem", "fontWeight": "700", "color": "#1e293b"}),
+                    html.Div(label, style={"fontSize": "0.8rem", "color": "#64748b", "fontWeight": "500"}),
+                    html.Div(str(value), style={"fontSize": "1.3rem", "fontWeight": "700", "color": "#1e293b"}),
                 ], style={"marginLeft": "0.5rem"})
             ], className="d-flex align-items-center")),
             className="shadow-sm h-100",
-            style={"border": "none", "borderRadius": "0.75rem",
-                   "background": "linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%)"}),
-            xs=6, sm=4, md=3, className="mb-3"
-        ),
-        dbc.Col(
-            dbc.Card(dbc.CardBody(html.Div([
-                html.I(className="fa-solid fa-square-parking",
-                       style={"fontSize": "1.3rem", "color": "#0f766e", "minWidth": "1.6rem"}),
-                html.Div([
-                    html.Div("Kapacita celkem", style={"fontSize": "0.8rem", "color": "#64748b", "fontWeight": "500"}),
-                    html.Div(f"{stats['current_capacity']} míst",
-                             style={"fontSize": "1.3rem", "fontWeight": "700", "color": "#1e293b"}),
-                ], style={"marginLeft": "0.5rem"})
-            ], className="d-flex align-items-center")),
-            className="shadow-sm h-100",
-            style={"border": "none", "borderRadius": "0.75rem",
-                   "background": "linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%)"}),
-            xs=6, sm=4, md=3, className="mb-3"
-        ),
-    ] + ([
-        dbc.Col(
-            dbc.Card(dbc.CardBody(html.Div([
-                html.I(className="fa-solid fa-chart-line",
-                       style={"fontSize": "1.3rem", "color": "#059669", "minWidth": "1.6rem"}),
-                html.Div([
-                    html.Div("Plánovaná kapacita", style={"fontSize": "0.8rem", "color": "#64748b", "fontWeight": "500"}),
-                    html.Div(f"{stats['planned_capacity']} míst",
-                             style={"fontSize": "1.3rem", "fontWeight": "700", "color": "#059669"}),
-                ], style={"marginLeft": "0.5rem"})
-            ], className="d-flex align-items-center")),
-            className="shadow-sm h-100",
-            style={"border": "none", "borderRadius": "0.75rem",
-                   "background": "linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)"}),
-            xs=6, sm=4, md=3, className="mb-3"
+            style={"border": "none", "borderRadius": "0.75rem", "background": bg},
         )
-    ] if stats["planned_capacity"] > 0 else []), className="g-2 mb-3")
+
+    summary_cards_list = [
+        dbc.Col(_stat_card("fa-car-side", t("pr_pr_count", lang), stats["count"]),
+                xs=6, sm=4, md=3, className="mb-3"),
+        dbc.Col(_stat_card("fa-square-parking", t("pr_capacity", lang),
+                            t("pr_spaces_unit", lang, cap=stats["current_capacity"])),
+                xs=6, sm=4, md=3, className="mb-3"),
+    ]
+    if stats["planned_capacity"] > 0:
+        summary_cards_list.append(
+            dbc.Col(_stat_card("fa-chart-line", t("pr_planned", lang),
+                               t("pr_spaces_unit", lang, cap=stats["planned_capacity"]),
+                               color="#059669",
+                               bg="linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)"),
+                    xs=6, sm=4, md=3, className="mb-3")
+        )
+
+    summary_cards = dbc.Row(summary_cards_list, className="g-2 mb-3")
 
     facility_table = html.Div([
-        html.H6("Přehled parkovišť P+R",
-                style={"color": "#134e4a", "fontWeight": "600", "fontSize": "0.9rem", "marginBottom": "0.5rem"}),
+        html.H6(t("pr_table_title", lang),
+                style={"color": "#134e4a", "fontWeight": "600",
+                       "fontSize": "0.9rem", "marginBottom": "0.5rem"}),
         html.Table(
-            [html.Tbody([_facility_row(f) for f in stats["facilities"]])],
+            [html.Tbody([_facility_row(f, lang) for f in stats["facilities"]])],
             style={"width": "100%", "borderCollapse": "collapse"}
         )
     ], style={"background": "#f8fafc", "borderRadius": "0.75rem", "padding": "0.75rem 1rem",
@@ -164,7 +119,7 @@ def pr_section(district, polygons):
     return dbc.Row([
         dbc.Col([
             section_header(
-                title="Intermodalita (P+R)",
+                title=t("section_pr", lang),
                 accent_color=theme.TRAVEL_ACCENT_COLOR,
                 bg_color=theme.TRAVEL_BG_COLOR,
                 text_color=theme.TRAVEL_TEXT_COLOR,

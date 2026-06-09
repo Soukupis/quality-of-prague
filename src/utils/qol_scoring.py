@@ -22,6 +22,12 @@ from src.utils.geospatial_utils import points_within_polygon
 from src.utils.loaders.districts_loader import get_parks_data
 
 DOMAIN_LABELS = ["Bezpečnost", "Mobilita", "Přístupnost", "Prostředí"]
+DOMAIN_LABEL_KEYS = [
+    "domain_label_safety",
+    "domain_label_mobility",
+    "domain_label_accessibility",
+    "domain_label_environment",
+]
 DOMAIN_COLORS = ["#0f766e", "#1d4ed8", "#7c3aed", "#16a34a"]
 DOMAIN_ICONS = ["fa-shield-halved", "fa-train-subway", "fa-wheelchair", "fa-tree"]
 DOMAIN_WEIGHTS = [0.30, 0.37, 0.23, 0.10]

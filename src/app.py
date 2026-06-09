@@ -1,4 +1,4 @@
-from dash import Dash, html
+from dash import Dash, html, dcc
 import dash
 from src.components.config import CONTENT_STYLE
 from src.configs.config import Config
@@ -21,6 +21,7 @@ app = Dash(
     update_title=None
 )
 from src.callbacks import district_map_callbacks, dashboard_callbacks
+from src.callbacks import lang_callbacks  # noqa: F401  registers language callbacks
 
 
 init_cache(app)
@@ -48,6 +49,9 @@ app.index_string = '''
 '''
 
 app.layout = html.Div([
+    dcc.Store(id='lang-store', storage_type='local', data='cs'),
+    dcc.Location(id='app-location', refresh=False),
+    dcc.Location(id='lang-nav', refresh="callback-nav"),
     navbar(),
     sidebar(),
     html.Div(
