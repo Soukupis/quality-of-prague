@@ -130,3 +130,39 @@ def get_subway_entrances_data():
         >>> print(f"Metro entrances: {len(entrances)}")
     """
     return read_file(DATA_PATHS.subway_entrances)
+
+
+def get_parks_data():
+    """Load Prague parks and green spaces data (OpenStreetMap).
+
+    Returns:
+        GeoDataFrame: Centroid points of parks (leisure=park) within Prague bbox.
+    """
+    return read_file(DATA_PATHS.parks)
+
+
+def get_nextbike_data():
+    """Load Nextbike Prague bike-sharing station data (GBFS v2.3).
+
+    Returns:
+        GeoDataFrame: Point locations of Nextbike stations in Prague.
+    """
+    return read_file(DATA_PATHS.nextbike)
+
+
+def get_pid_stops_data():
+    """Load PID (Prague Integrated Transport) public transport stop data.
+
+    Returns:
+        GeoDataFrame: Point locations of all PID stop platforms in Prague.
+    """
+    return read_file(DATA_PATHS.pid_stops)
+
+
+def get_chmi_stations_data():
+    """Load ČHMÚ air quality monitoring station locations.
+
+    Returns:
+        GeoDataFrame: Point locations of ČHMÚ stations monitoring air quality in Prague.
+    """
+    return read_file(DATA_PATHS.chmi_stations)

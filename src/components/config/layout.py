@@ -54,6 +54,21 @@ NAV_ITEMS = [
         "icon": "database"
     },
     {
+        "label": "QoL Index",
+        "href": "/qol-index",
+        "icon": "graph-up"
+    },
+    {
+        "label": "Teorie",
+        "href": "/theory",
+        "icon": "book"
+    },
+    {
+        "label": "Persony",
+        "href": "/personas",
+        "icon": "people"
+    },
+    {
         "label": "O Aplikaci",
         "href": "/about",
         "icon": "info-circle"

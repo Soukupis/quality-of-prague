@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from src.components.graphs import create_single_district_map
 from src.components.pages.dashboard import select_warning, district_select_warning
 from src.configs.data_config import DATA_PATHS
-from src.utils.districts.district_utils import get_points_in_district, get_district_polygons
+from src.utils.districts.district_utils import get_points_in_district, get_district_polygons, get_district_areas_km2
 
 from dash import dcc
 
@@ -45,8 +45,9 @@ def get_czech_plural(count):
 @callback(
     Output('bar_chart_container', 'children'),
     Input('districts-dropdown', 'value'),
-    Input("data-dropdown", "value"))
-def update_output(districts, dataset):
+    Input("data-dropdown", "value"),
+    Input("normalization-mode", "value"))
+def update_output(districts, dataset, normalization_mode):
     """Update the bar chart visualization based on selected districts and dataset.
 
     Dash callback that generates a comparative bar chart showing the count of
@@ -80,40 +81,75 @@ def update_output(districts, dataset):
     else:
         dataset_label = "No dataset selected"
 
-    data_points = []
-    plural_forms = []
+    use_density = normalization_mode == "density"
+    areas_km2 = get_district_areas_km2() if use_density else {}
+
+    raw_counts = []
     for district in districts:
-        count = len(get_points_in_district(district, dataset))
-        data_points.append(count)
-        plural_forms.append(get_czech_plural(count))
+        raw_counts.append(len(get_points_in_district(district, dataset)))
+
+    if use_density:
+        data_points = [
+            round(count / areas_km2[d], 4) if areas_km2.get(d, 0) > 0 else 0.0
+            for count, d in zip(raw_counts, districts)
+        ]
+        text_values = [f"{v:.2f}" for v in data_points]
+        custom_data = [f"objektů / km² (celkem {raw_counts[i]} v ploše {areas_km2.get(d, 0):.1f} km²)"
+                       for i, d in enumerate(districts)]
+        y_axis_label = f"Hustota: {dataset_label} (/ km²)"
+        chart_title = f"Hustota dat: {dataset_label} (objektů / km²)"
+        hover_unit = "/ km²"
+    else:
+        data_points = raw_counts
+        text_values = [str(v) for v in data_points]
+        plural_forms = [get_czech_plural(c) for c in raw_counts]
+        custom_data = plural_forms
+        y_axis_label = f"Počet: {dataset_label}"
+        chart_title = f"Porovnání dat: {dataset_label}"
+        hover_unit = None
 
     colors = ['#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e']
     bar_colors = [colors[i % len(colors)] for i in range(len(districts))]
+
+    if use_density:
+        hover_template = (
+            '<b style="font-size:16px; color:#1e293b;">📍 %{x}</b><br>' +
+            '<span style="color:#64748b;">━━━━━━━━━━━━━━━</span><br>' +
+            f'<b style="color:#3b82f6; font-size:14px;">{dataset_label}</b><br>' +
+            '<span style="font-size:20px; color:#059669; font-weight:bold;">%{y:.4f}</span> ' +
+            '<span style="color:#64748b; font-size:12px;">obj/km²</span><br>' +
+            '<span style="color:#94a3b8; font-size:11px;">%{customdata}</span><br>' +
+            '<extra></extra>'
+        )
+    else:
+        hover_template = (
+            '<b style="font-size:16px; color:#1e293b;">📍 %{x}</b><br>' +
+            '<span style="color:#64748b;">━━━━━━━━━━━━━━━</span><br>' +
+            f'<b style="color:#3b82f6; font-size:14px;">{dataset_label}</b><br>' +
+            '<span style="font-size:20px; color:#059669; font-weight:bold;margin-top:5px"">%{y}</span> ' +
+            '<span style="color:#64748b; font-size:12px; margin-top:5px">%{customdata}</span><br>' +
+            '<extra></extra>'
+        )
 
     fig = go.Figure()
     fig.add_trace(go.Bar(
         x=districts,
         y=data_points,
         name=dataset_label,
-        customdata=plural_forms,
+        customdata=custom_data,
         marker=dict(
             color=bar_colors,
             line=dict(color='rgba(255, 255, 255, 0.8)', width=2)
         ),
-        text=data_points,
+        text=text_values,
         textposition='outside',
         textfont=dict(size=12, color='#1e293b', family='Arial, sans-serif', weight='bold'),
-        hovertemplate='<b style="font-size:16px; color:#1e293b;">📍 %{x}</b><br>' +
-                      '<span style="color:#64748b;">━━━━━━━━━━━━━━━</span><br>' +
-                      f'<b style="color:#3b82f6; font-size:14px;">{dataset_label}</b><br>' +
-                      '<span style="font-size:20px; color:#059669; font-weight:bold;margin-top:5px"">%{y}</span> ' +
-                      '<span style="color:#64748b; font-size:12px; margin-top:5px">%{customdata}</span><br>' +
-                      '<extra></extra>'
+        hovertemplate=hover_template,
     ))
 
     fig.update_layout(
         title=dict(
-            text=f"Porovnání dat: {dataset_label}",
+            text=chart_title,
             font=dict(size=24, color='#1e293b', family='Arial, sans-serif', weight='bold'),
             x=0.5,
             xanchor='center'
@@ -144,7 +180,7 @@ def update_output(districts, dataset):
     )
 
     fig.update_yaxes(
-        title_text=f"Počet: {dataset_label}",
+        title_text=y_axis_label,
         title_font=dict(size=16, color='#334155', weight='bold'),
         tickfont=dict(size=12, color='#475569'),
         showgrid=True,

@@ -23,7 +23,7 @@ Examples:
 """
 from src.utils.loaders.districts_loader import get_parking_p_r_data, get_parking_meters_data, get_police_stations_data, \
     get_subway_entrances_data, get_no_standing_data, get_loading_zone_data, get_designated_parking_data, \
-    get_paid_parking_data, get_ztp_parking_data
+    get_paid_parking_data, get_ztp_parking_data, get_parks_data, get_nextbike_data, get_pid_stops_data
 
 DATASET_CONFIGS = {
     "police_stations": {
@@ -97,5 +97,29 @@ DATASET_CONFIGS = {
         "section": "travel",
         "layer_key": "ztp_parking",
         "loader_function": get_ztp_parking_data,
-    }
+    },
+    "parks": {
+        "id": "parks",
+        "icon": "fa-tree",
+        "title": "Parky a zeleň",
+        "section": "environment",
+        "layer_key": "parks",
+        "loader_function": get_parks_data,
+    },
+    "nextbike": {
+        "id": "nextbike",
+        "icon": "fa-bicycle",
+        "title": "Nextbike stanice",
+        "section": "mobility",
+        "layer_key": "nextbike",
+        "loader_function": get_nextbike_data,
+    },
+    "pid_stops": {
+        "id": "pid_stops",
+        "icon": "fa-bus",
+        "title": "Zastávky PID",
+        "section": "mobility",
+        "layer_key": "pid_stops",
+        "loader_function": get_pid_stops_data,
+    },
 }

@@ -60,5 +60,26 @@ SCATTER_LAYER_CONFIGS = {
         "marker_opacity": 1,
         "name": "Parkovací stání ZTP",
         "legend_group": "Doprava",
-    }
+    },
+    "parks": {
+        "marker_size": 10,
+        "marker_color": "#16a34a",
+        "marker_opacity": 0.8,
+        "name": "Parky a zeleň",
+        "legend_group": "Prostředí",
+    },
+    "nextbike": {
+        "marker_size": 10,
+        "marker_color": "#0891b2",
+        "marker_opacity": 1,
+        "name": "Nextbike stanice",
+        "legend_group": "Doprava",
+    },
+    "pid_stops": {
+        "marker_size": 6,
+        "marker_color": "#7c3aed",
+        "marker_opacity": 0.7,
+        "name": "Zastávky PID",
+        "legend_group": "Doprava",
+    },
 }

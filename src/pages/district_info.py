@@ -13,6 +13,11 @@ import dash_bootstrap_components as dbc
 from dash import register_page, dcc, clientside_callback, Input, Output, html
 from src.components.ui.page_heading import page_title
 from src.components.pages.district_info import map_section, safety_section, travel_section
+from src.components.pages.district_info.accessibility_section import accessibility_section
+from src.components.pages.district_info.pr_section import pr_section
+from src.components.pages.district_info.environment_section import environment_section
+from src.components.pages.district_info.demographics_section import demographics_section
+from src.components.pages.district_info.mobility_section import mobility_section
 from src.utils.districts.district_utils import get_district_polygons
 
 register_page(__name__, path="/districts/district-detail", name="Detail městské části")
@@ -48,6 +53,11 @@ def layout(district=None):
                 html.Hr(className="my-4"),
                 safety_section(district, polygons),
                 travel_section(district, polygons),
+                accessibility_section(district, polygons),
+                pr_section(district, polygons),
+                mobility_section(district, polygons),
+                environment_section(district, polygons),
+                demographics_section(district, polygons),
             ], width=12)
         ]),
     ], fluid=True, className="py-2")

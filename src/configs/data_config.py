@@ -18,6 +18,10 @@ class DataPaths:
     designated_parking: str = "vyhrazene_stani_specialni/vyhrazene_stani_specialni.geojson"
     paid_parking: str = "useky_placeneho_stani/useky_placeneho_stani.geojson"
     ztp_parking: str = "parkovaci_stani_ztp/parkovaci_stani_ztp.geojson"
+    parks: str = "parky_praha/parky_praha.geojson"
+    nextbike: str = "nextbike_stanice/nextbike_stanice.geojson"
+    pid_stops: str = "zastavky_pid/zastavky_pid.geojson"
+    chmi_stations: str = "stanice_kvality_ovzdusi/stanice_kvality_ovzdusi.geojson"
 
     def get_path(self, path_key: str) -> str:
         """Get a path as a string by key name."""
@@ -39,7 +43,10 @@ class DataPaths:
             'loading_zone': 'Zásobování',
             'designated_parking': 'Stání speciální',
             'paid_parking': 'Placené stání',
-            'ztp_parking': 'Parkovací stání ZTP'
+            'ztp_parking': 'Parkovací stání ZTP',
+            'parks': 'Parky a zeleň',
+            'nextbike': 'Nextbike stanice',
+            'pid_stops': 'Zastávky PID',
         }
 
         return [

@@ -244,6 +244,11 @@ def handle_card_styles(visible_layers):
     card_classes = []
 
     for dataset_key, config in DATASET_CONFIGS.items():
+        # Only produce values for datasets that render info_card layer toggles
+        # (section="safety" or "travel"). Other sections don't put layer-plus/minus
+        # icons in the DOM, so including them would cause an ALL pattern count mismatch.
+        if config.get("section") not in ("safety", "travel"):
+            continue
         layer_key = config["layer_key"]
         is_visible = layer_key in visible_layers
 
