@@ -418,3 +418,73 @@ _All 5 Phase 3 datasets integrated into application code. No existing functional
 **Rankings readability (Item 5):** With 57 districts, the old 16px/bar height rendered labels at 10px — barely readable. At 26px/bar the chart is ~1560px tall (scrollable) but fully legible. `bargap=0.3` adds visible spacing between bars. `uniformtext` prevents score labels from overlapping on short bars.
 
 **About page (Item 6):** Uses the same `_section_card` helper pattern as `theory.py` (reproduced locally, not imported, to keep files independent). Four sections: app purpose + thesis citation, four framework mini-cards (WHOQOL/QOUL/15-min city/SSF), dataset chips, and a navigation guide with icon+description rows for every page.
+
+---
+
+## 8. District Section Design Unification (Phase 6 — Completed 2026-06-09)
+
+### Goal
+
+Make "Bezpečnost" and "Doprava" sections visually identical to the newer "Přístupnost" reference design while fully preserving map layer toggle functionality.
+
+### Files Changed
+
+| File | Change |
+|---|---|
+| `src/components/ui/info_card.py` | Redesigned `compact=True` branch: removed `info-card info-card-info info-card-clickable` CSS classes; now uses `className="shadow-sm h-100"` and inline styles matching `_stat_card` exactly (`border: none`, `borderRadius: 0.75rem`, gradient background). Icon gets explicit `color: #334155` and `minWidth: 1.6rem`. Toggle icons simplified (no `info-card-toggle-icon` pill class). Wrapper `style` gains `height: 100%`. |
+| `src/assets/global.css` | Added `.info-card-selected > .card` rule for selected-state visual feedback on new compact cards (blue border + subtle gradient + shadow). |
+
+### Notable Decisions
+
+**CSS class removal:** The old `info-card info-card-info` classes on the inner `dbc.Card` drove the divergent visual (blue-tinted background `#e6f7ff`, `1px solid #91d5ff` border, `1.25rem` border-radius). Switching to inline styles matches the `_stat_card` gradient/no-border look exactly. Inline styles always beat CSS rules so no specificity conflicts arise.
+
+**Selected-state CSS:** The callback `handle_card_styles()` in `district_map_callbacks.py` sets `className="info-card-selected"` on the wrapper `html.Div`. The old CSS rule `.info-card-selected .info-card.info-card-info` no longer fires (inner card no longer has those classes). A new rule `.info-card-selected > .card` targets `dbc.Card`'s rendered `div.card` directly — scope is safe since `.info-card-selected` is only ever applied by the layer-toggle callback.
+
+**Toggle icons:** The `fa-circle-plus`/`fa-circle-minus` icons are retained without the `info-card-toggle-icon` pill-button CSS class. Plus icon is `#94a3b8` (gray = layer off); minus icon is `#4A90E2` (blue = layer on). This preserves the toggle-state indication while fitting the cleaner visual.
+
+**No section file changes in Phase 6:** `safety_section.py` and `travel_section.py` were not modified in Phase 6. All `info_card(compact=True)` call sites remain unchanged.
+
+---
+
+## 9. Bezpečnost & Doprava Section Enrichment (Phase 7 — Completed 2026-06-09)
+
+### Goal
+
+Two fixes: (1) colorize the icons in both sections — they were `#334155` (flat dark) while all other sections use semantically meaningful per-icon colors. (2) Add statistics and informational cards to both sections, matching the pattern established by Přístupnost, Mobilita, and Prostředí sections.
+
+### Files Changed
+
+| File | Change |
+|---|---|
+| `src/components/ui/info_card.py` | Added `color="#334155"` parameter to `info_card()`; compact branch passes `color` through to the icon inline style. |
+| `src/configs/dataset_config.py` | Added `"color"` field to all 9 safety/travel DATASET_CONFIGS entries. Renamed `"Police stations"` title to `"Stanice policie"` (Czech). |
+| `src/components/pages/district_info/safety_section.py` | Full rewrite: added `_get_safety_stats()`, `_stat_card()`, `_density_badge()`, `_station_row()` helpers; section now renders stats block + comparison badge + type-breakdown badges + facility table before the toggle card. |
+| `src/components/pages/district_info/travel_section.py` | Full rewrite: added `_get_parking_stats()`, `_stat_card()`, `_comparison_badge()` helpers; section now renders parking meter count/density + paid parking capacity + city-average comparison + zone-type badges before the toggle cards. |
+
+### Icon Colors Assigned
+
+| Dataset | Color | Rationale |
+|---|---|---|
+| Police stations | `#b45309` | Amber-brown — authority/safety |
+| Parking meters | `#1d4ed8` | Blue — standard urban parking |
+| P+R | `#0f766e` | Teal — intermodal/sustainable |
+| No standing | `#dc2626` | Red — prohibition/restriction |
+| Loading zone | `#92400e` | Brown — logistics/commercial |
+| Special parking | `#7c3aed` | Purple — special/reserved |
+| Paid parking | `#d97706` | Amber — payment/commercial |
+| Metro entrances | `#cc0000` | Red — Prague metro standard |
+| ZTP parking | `#5b21b6` | Deep purple — disability/accessibility |
+
+### Statistics Added
+
+**Bezpečnost:** `_get_safety_stats()` computes count, density (per km²), and city-wide average (105 stations / 496 km² = 0.212/km²). Renders: 3 stat cards, comparison badge (green ↑ / amber ≈ / red ↓), type-breakdown badges (Služebna / Řídící oddělení / Speciální útvar), facility table for districts with ≤ 15 stations.
+
+**Doprava:** `_get_parking_stats()` computes parking meter count/density and paid parking capacity. Paid parking uses `geometry.apply(district_polygon.intersects)` (polygon-to-polygon) rather than `contains`. Renders: 4 stat cards (meter count, meter density, total paid spaces, paid spaces per km²), density comparison badge, zone-type badges (Rezidentní/Placená/Dlouhodobá/Zvláštní).
+
+### Notable Decisions
+
+**Polygon intersects vs contains:** Paid parking zones are MultiPolygon features. The toggle card keeps `polygon.contains(geom)` (unchanged — strictly inside), while the new stat block uses `district_polygon.intersects(geom)` — captures edge-zone segments for accurate capacity reporting. Both approaches are intentional.
+
+**City average as denominator:** Comparison denominators computed dynamically from the loaded datasets — no hardcoded city-level constants. Consistent if data is updated.
+
+**Station list threshold:** Police station table rendered only when count ≤ 15. All Prague districts qualify. Districts with 0 stations show an informational message.

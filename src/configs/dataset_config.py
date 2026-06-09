@@ -29,10 +29,11 @@ DATASET_CONFIGS = {
     "police_stations": {
         "id": "police-stations",
         "icon": "fa-building-shield",
-        "title": "Police stations",
+        "title": "Stanice policie",
         "section": "safety",
         "layer_key": "police_stations",
         "loader_function": get_police_stations_data,
+        "color": "#b45309",
     },
     "parking_meters": {
         "id": "parking-meters",
@@ -41,6 +42,7 @@ DATASET_CONFIGS = {
         "section": "travel",
         "layer_key": "parking_meters",
         "loader_function": get_parking_meters_data,
+        "color": "#1d4ed8",
     },
     "parking_p_r": {
         "id": "parking_p_r",
@@ -49,6 +51,7 @@ DATASET_CONFIGS = {
         "section": "travel",
         "layer_key": "parking_p_r",
         "loader_function": get_parking_p_r_data,
+        "color": "#0f766e",
     },
     "no_standing": {
         "id": "no_standing",
@@ -57,6 +60,7 @@ DATASET_CONFIGS = {
         "section": "travel",
         "layer_key": "no_standing",
         "loader_function": get_no_standing_data,
+        "color": "#dc2626",
     },
     "loading_zone": {
         "id": "loading_zone",
@@ -65,6 +69,7 @@ DATASET_CONFIGS = {
         "section": "travel",
         "layer_key": "loading_zone",
         "loader_function": get_loading_zone_data,
+        "color": "#92400e",
     },
     "designated_parking": {
         "id": "designated_parking",
@@ -73,6 +78,7 @@ DATASET_CONFIGS = {
         "section": "travel",
         "layer_key": "designated_parking",
         "loader_function": get_designated_parking_data,
+        "color": "#7c3aed",
     },
     "paid_parking": {
         "id": "paid_parking",
@@ -81,14 +87,16 @@ DATASET_CONFIGS = {
         "section": "travel",
         "layer_key": "paid_parking",
         "loader_function": get_paid_parking_data,
+        "color": "#d97706",
     },
     "subway_entrances": {
         "id": "subway_entrances",
-        "icon": "fa-subway",
+        "icon": "fa-train-subway",
         "title": "Vstupy do metra",
         "section": "travel",
         "layer_key": "subway_entrances",
         "loader_function": get_subway_entrances_data,
+        "color": "#cc0000",
     },
     "ztp_parking": {
         "id": "ztp_parking",
@@ -97,6 +105,7 @@ DATASET_CONFIGS = {
         "section": "travel",
         "layer_key": "ztp_parking",
         "loader_function": get_ztp_parking_data,
+        "color": "#5b21b6",
     },
     "parks": {
         "id": "parks",
