@@ -488,3 +488,41 @@ Two fixes: (1) colorize the icons in both sections — they were `#334155` (flat
 **City average as denominator:** Comparison denominators computed dynamically from the loaded datasets — no hardcoded city-level constants. Consistent if data is updated.
 
 **Station list threshold:** Police station table rendered only when count ≤ 15. All Prague districts qualify. Districts with 0 stations show an informational message.
+---
+
+## 10. District Page Visual Separation (Phase 8 — Completed 2026-06-09)
+
+### Goal
+
+The district page felt crowded — sections flowed together with only ~12px of visual separation (section_header's marginTop) between them. Improve visual hierarchy so each section reads as a clearly distinct block.
+
+### Problem Analysis
+
+- `section_header()` produced a tiny inline accent stripe + H5 title with a background only on the text itself — not spanning the full container width. Result: no clear visual boundary at section starts.
+- In `district_info.py`, sections were listed directly with no inter-section spacing — only the section header's 12px marginTop separated one section's last content row from the next section's header.
+- The single `html.Hr` on the page separated the map from sections, but nothing separated sections from each other.
+
+### Solution
+
+Two focused changes — layout and visual treatment only, no content or functionality touched:
+
+**1. `section_header()` redesign (`info_card_row.py`)**
+
+Old design: separate `html.Span` accent stripe (5×22px, inline) + `html.H5` with `background: bg_color` applied only to the text.
+
+New design: single `html.Div` with `background: bg_color` (full container width), `borderLeft: "4px solid accent_color"` (spans full height automatically, no alignment tricks), `borderRadius: "0 0.5rem 0.5rem 0"` (rounded right corners, square left to align with border), `padding: "0.5rem 0.85rem"`. The result is a colored band that spans the full column width — each section now starts with a clearly visible, color-coded anchor.
+
+Using `borderLeft` rather than an absolutely positioned or flex-stretched span ensures the accent stripe spans the full height of the band (including padding) with no CSS alignment edge cases.
+
+**2. Inter-section spacing (`district_info.py`)**
+
+Sections evaluated once into `_sections` list, then each non-None result wrapped in `html.Div(..., className="mb-4")` (1.5rem bottom margin). Container padding increased from `py-2` to `py-3`.
+
+Visual gap between sections: 1.5rem (mb-4) after section N's last content row → colored band anchor → 1rem (section_header marginBottom) → section N+1's first content.
+
+### Files Changed
+
+| File | Change |
+|---|---|
+| `src/components/ui/info_card_row.py` | `section_header()` rewritten: full-width bg_color band with borderLeft accent stripe replacing inline styled title. Signature unchanged — all 7 section call sites require no modification. |
+| `src/pages/district_info.py` | Sections evaluated into `_sections` list; each wrapped in `html.Div(..., className="mb-4")`; container changed from `py-2` to `py-3`. |

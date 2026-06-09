@@ -36,14 +36,13 @@ def info_card_row(cards, col_width=2):
 def section_header(title, accent_color, bg_color, text_color):
     """Create a styled section header with accent color stripe.
 
-    Builds a section header with a colored vertical accent stripe on the left
-    and a background-colored title area. Used to visually separate different
-    sections on a page.
+    Builds a full-width section header band with a colored left accent stripe
+    and a tinted background. Used to visually anchor each district page section.
 
     Args:
         title: Header text to display.
         accent_color: CSS color for the vertical accent stripe on the left.
-        bg_color: CSS color for the title background.
+        bg_color: CSS color for the header band background.
         text_color: CSS color for the title text.
 
     Returns:
@@ -58,25 +57,21 @@ def section_header(title, accent_color, bg_color, text_color):
         ...     text_color=theme.SAFETY_TEXT_COLOR
         ... )
     """
-    return html.Div([
-        html.Span("", style={
-            "display": "inline-block",
-            "width": "5px",
-            "height": "22px",
-            "background": accent_color,
-            "borderRadius": "4px",
-            "marginRight": "10px",
-            "verticalAlign": "middle"
-        }),
+    return html.Div(
         html.H5(title, style={
-            "display": "inline-block",
-            "background": bg_color,
-            "padding": "4px 14px 4px 0",
             "margin": 0,
-            "fontWeight": 600,
+            "fontWeight": 700,
             "fontSize": "1rem",
             "color": text_color,
-            "borderRadius": "0 6px 6px 0"
-        })
-    ], style={"marginBottom": "8px", "marginTop": "12px"})
+            "letterSpacing": "0.01em",
+        }),
+        style={
+            "background": bg_color,
+            "borderLeft": f"4px solid {accent_color}",
+            "borderRadius": "0 0.5rem 0.5rem 0",
+            "padding": "0.5rem 0.85rem",
+            "marginBottom": "1rem",
+            "marginTop": "0",
+        }
+    )
 

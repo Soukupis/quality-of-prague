@@ -38,7 +38,17 @@ def layout(district=None):
     """
     polygons = get_district_polygons()
 
-    # Start with empty map - layers will appear when cards are clicked
+    # Evaluate each section once; None sections are absent for this district
+    _sections = [
+        safety_section(district, polygons),
+        travel_section(district, polygons),
+        accessibility_section(district, polygons),
+        pr_section(district, polygons),
+        mobility_section(district, polygons),
+        environment_section(district, polygons),
+        demographics_section(district, polygons),
+    ]
+
     return dbc.Container([
         dcc.Store(id='district-store', data=district),
         dcc.Store(
@@ -51,16 +61,10 @@ def layout(district=None):
                 page_title(district, align="center", use_gradient=True),
                 map_section(district, None, None),
                 html.Hr(className="my-4"),
-                safety_section(district, polygons),
-                travel_section(district, polygons),
-                accessibility_section(district, polygons),
-                pr_section(district, polygons),
-                mobility_section(district, polygons),
-                environment_section(district, polygons),
-                demographics_section(district, polygons),
+                *[html.Div(s, className="mb-4") for s in _sections if s is not None],
             ], width=12)
         ]),
-    ], fluid=True, className="py-2")
+    ], fluid=True, className="py-3")
 
 clientside_callback(
     """
