@@ -18,94 +18,13 @@ import dash_bootstrap_components as dbc
 from dash import register_page, html, dcc, callback, Input, Output, exceptions
 
 from src.components.ui import page_title
-from src.utils.districts.district_utils import (
-    get_district_polygons, get_district_areas_km2, get_points_in_district
+from src.utils.qol_scoring import (
+    get_all_scores, compute_raw_scores, compute_domain_scores,
+    composite_score as _composite_score,
+    DOMAIN_LABELS, DOMAIN_COLORS,
 )
-from src.components.pages.district_info.accessibility_section import (
-    _get_metro_accessibility_stats, _get_ztp_stats
-)
-from src.utils.geospatial_utils import points_within_polygon
-from src.utils.loaders.districts_loader import get_parks_data
 
 register_page(__name__, path="/qol-index", name="QoL Index")
-
-DOMAIN_LABELS = [
-    "Bezpečnost",
-    "Mobilita",
-    "Přístupnost",
-    "Prostředí",
-]
-DOMAIN_COLORS = ["#0f766e", "#1d4ed8", "#7c3aed", "#16a34a"]
-
-
-def _compute_raw_scores():
-    """Compute raw indicator values for all districts.
-
-    Returns:
-        dict: {district_name: {indicator: value, ...}}
-    """
-    polygons = get_district_polygons()
-    areas = get_district_areas_km2()
-    parks_data = get_parks_data()
-    raw = {}
-
-    for district, polygon in polygons.items():
-        area = areas.get(district, 1.0)
-
-        police_count = len(get_points_in_district(district, "police_stations"))
-        metro_count = len(get_points_in_district(district, "subway_entrances"))
-        metro_stats = _get_metro_accessibility_stats(polygon)
-        ztp_stats = _get_ztp_stats(district, polygon)
-        park_count = len(points_within_polygon(polygon, parks_data, "geometry"))
-
-        raw[district] = {
-            "police_density": police_count / area,
-            "metro_density": metro_count / area,
-            "elevator_ratio": metro_stats["lift_ratio"],
-            "ztp_density": ztp_stats["total_spaces"] / area,
-            "park_density": park_count / area,
-        }
-
-    return raw
-
-
-def _normalize_min_max(raw, key):
-    """Normalize values for one indicator to 0–100 using min-max scaling."""
-    values = [v[key] for v in raw.values()]
-    min_v, max_v = min(values), max(values)
-    if max_v == min_v:
-        return {d: 50.0 for d in raw}
-    return {d: round((raw[d][key] - min_v) / (max_v - min_v) * 100, 1) for d in raw}
-
-
-def _compute_domain_scores(raw):
-    """Compute normalized 0-100 domain scores for each district.
-
-    Returns:
-        dict: {district_name: [safety, mobility, accessibility, environment]}
-    """
-    police_norm = _normalize_min_max(raw, "police_density")
-    metro_norm = _normalize_min_max(raw, "metro_density")
-    elevator_norm = _normalize_min_max(raw, "elevator_ratio")
-    ztp_norm = _normalize_min_max(raw, "ztp_density")
-    park_norm = _normalize_min_max(raw, "park_density")
-
-    scores = {}
-    for d in raw:
-        safety = police_norm[d]
-        mobility = round((metro_norm[d] * 0.7 + elevator_norm[d] * 0.3), 1)
-        accessibility = round((ztp_norm[d] * 0.6 + elevator_norm[d] * 0.4), 1)
-        # Environment: park density (OSM leisure=park per km²)
-        environment = park_norm[d]
-        scores[d] = [safety, mobility, accessibility, environment]
-
-    return scores
-
-
-def _composite_score(domain_scores):
-    """Weighted composite — Safety 30%, Mobility 37%, Accessibility 23%, Environment 10%."""
-    s, m, a, e = domain_scores
-    return round((s * 0.30 + m * 0.37 + a * 0.23 + e * 0.10), 1)
 
 
 def _create_radar_chart(district, domain_scores):
@@ -175,8 +94,7 @@ def _create_ranking_chart(all_scores):
 
 def layout():
     """Generate the QoL index page layout."""
-    raw = _compute_raw_scores()
-    all_scores = _compute_domain_scores(raw)
+    all_scores = get_all_scores()
 
     district_options = sorted([{"label": d, "value": d} for d in all_scores.keys()],
                                key=lambda x: x["label"])
@@ -328,24 +246,13 @@ def _domain_card(icon_class, title, color, description, source):
 
 # ── Callbacks ─────────────────────────────────────────────────────────────────
 
-_cached_scores = None
-
-
-def _get_all_scores():
-    global _cached_scores
-    if _cached_scores is None:
-        raw = _compute_raw_scores()
-        _cached_scores = _compute_domain_scores(raw)
-    return _cached_scores
-
-
 @callback(
     Output("qol-radar-container", "children"),
     Output("qol-domain-cards", "children"),
     Input("qol-district-dropdown", "value"),
 )
 def update_radar(district):
-    scores = _get_all_scores()
+    scores = get_all_scores()
     if not district or district not in scores:
         return html.P("Vyberte obvod."), None
 

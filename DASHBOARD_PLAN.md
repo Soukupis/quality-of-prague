@@ -526,3 +526,44 @@ Visual gap between sections: 1.5rem (mb-4) after section N's last content row �
 |---|---|
 | `src/components/ui/info_card_row.py` | `section_header()` rewritten: full-width bg_color band with borderLeft accent stripe replacing inline styled title. Signature unchanged — all 7 section call sites require no modification. |
 | `src/pages/district_info.py` | Sections evaluated into `_sections` list; each wrapped in `html.Div(..., className="mb-4")`; container changed from `py-2` to `py-3`. |
+
+---
+
+## 11. Dashboard Redesign (Phase 9 — Completed 2026-06-09)
+
+### Goal
+
+Replace the "form + chart" dashboard with a proper QoL overview home screen — a data-driven landing experience that immediately communicates the state of Quality of Life across Prague.
+
+### Concept Rationale
+
+The original dashboard presented two dropdowns and a bar chart. Users had to interact before seeing any data. The redesign inverts this: the page answers "What is the state of QoL across Prague right now?" before the user clicks anything. The comparison tool (dropdowns + chart) is retained as a secondary drill-down.
+
+**The central insight:** the QoL composite score already existed for all 57 districts in `qol_index.py`. Making this the centerpiece of the dashboard turns the scoring work into a meaningful overview rather than hiding it on a separate index page.
+
+### Layout (top to bottom)
+
+1. **KPI strip** — 4 cards: best district (name + score + link), city median score, worst district (name + score + link), district count
+2. **QoL choropleth map (60%) + Top/Bottom 5 ranking (40%)** — the map is color-coded green/amber/red by composite score; clicking a district navigates to its detail page via `dcc.Location`
+3. **Domain averages strip** — 4 cards showing citywide average per QOUL domain (Safety / Mobility / Accessibility / Environment) with inline progress bars
+4. **Divider + "Porovnat metriku"** — the original bar chart comparison tool; same component IDs, same callbacks, repositioned as secondary feature
+
+### Files Changed
+
+| File | Change |
+|---|---|
+| `src/utils/qol_scoring.py` | **New file** — shared QoL computation extracted from `qol_index.py`; exports `compute_raw_scores()`, `compute_domain_scores()`, `composite_score()`, `get_all_scores()` (cached), `DOMAIN_LABELS/COLORS/ICONS/WEIGHTS` |
+| `src/pages/qol_index.py` | Import from `src/utils/qol_scoring` instead of local private functions; removed `_compute_raw_scores()`, `_compute_domain_scores()`, `_composite_score()`, `_normalize_min_max()`, local cache |
+| `src/pages/dashboard.py` | Full redesign: layout changed from static variable to function; QoL choropleth map using `go.Choroplethmapbox` + Prague GeoJSON; KPI cards; ranking panel with links to district detail; domain average cards; existing bar chart callbacks preserved (same IDs) |
+
+### Notable Decisions
+
+**QoL computation shared:** Rather than duplicate the scoring logic in dashboard.py, the computation was extracted to `src/utils/qol_scoring.py`. Both `qol_index.py` and `dashboard.py` import from this single source. The module-level cache (`_cached_scores`) means the expensive computation (iterating 57 districts × 5 geospatial queries each) runs at most once per app session regardless of which page loads first.
+
+**Choropleth approach:** Used `go.Choroplethmapbox` with `featureidkey="properties.nazev_1"` and the Prague GeoJSON loaded directly from the districts GeoDataFrame (`.to_json()` + `json.loads`). This avoids dependence on the internal `geodata_to_geojson_dict()` format and gives full control over color scale and hover content. Map center: lat 50.058, lon 14.437, zoom 10.2.
+
+**Color scale:** `[[0, #ef4444], [0.4, #f59e0b], [0.7, #22c55e], [1, #15803d]]` — red below 40, amber 40–70, green above 70. Mirrors the ranking chart in qol_index.py.
+
+**Click navigation:** `dcc.Location(id="dashboard-url", refresh=True)` with callback `Input("dashboard-qol-map", "clickData")` → `Output("dashboard-url", "href")`. Uses `click_data["points"][0]["location"]` (the district name from `locations` list). Does not conflict with districts page `dcc.Location(id="url")`.
+
+**Existing callbacks fully preserved:** `dashboard_callbacks.py` unchanged. All component IDs it references (`bar_chart_container`, `district_map_container`, `districts-dropdown`, `data-dropdown`, `normalization-mode`, `select-all-districts-btn`) remain in the new layout.
