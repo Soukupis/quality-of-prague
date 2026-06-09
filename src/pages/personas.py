@@ -9,7 +9,7 @@ Theory reference: Chapter 5 scenario case studies; Marans (2012) dual-
 methodological framework; Diener's SWB bottom-up approach.
 """
 import dash_bootstrap_components as dbc
-from dash import register_page, html, dcc, callback, Input, Output, State
+from dash import register_page, html, dcc, callback, Input, Output, State, ctx
 
 from src.components.ui import page_title
 from src.utils.districts.district_utils import (
@@ -92,24 +92,29 @@ PERSONAS = {
     }
 }
 
+_NORMAL_CARD_STYLE = {
+    "border": "2px solid #e2e8f0",
+    "background": "white",
+    "cursor": "pointer",
+    "borderRadius": "1rem",
+    "transition": "all 0.2s ease",
+}
 
-def _persona_selector_card(persona, is_selected):
-    p = PERSONAS[persona]
-    selected_style = {
+
+def _selected_card_style(persona_id):
+    p = PERSONAS[persona_id]
+    return {
         "border": f"2px solid {p['color']}",
         "background": p["bg"],
         "cursor": "pointer",
         "borderRadius": "1rem",
         "transition": "all 0.2s ease",
     }
-    normal_style = {
-        "border": "2px solid #e2e8f0",
-        "background": "white",
-        "cursor": "pointer",
-        "borderRadius": "1rem",
-        "transition": "all 0.2s ease",
-    }
-    return html.A(
+
+
+def _persona_selector_card(persona):
+    p = PERSONAS[persona]
+    return html.Div(
         dbc.Card([
             dbc.CardBody([
                 html.Div([
@@ -126,11 +131,12 @@ def _persona_selector_card(persona, is_selected):
                     ])
                 ], className="d-flex align-items-center mb-2"),
                 html.P(p["description"], style={"fontSize": "0.8rem", "color": "#475569",
-                                                  "lineHeight": "1.4", "marginBottom": 0})
+                                                "lineHeight": "1.4", "marginBottom": 0})
             ])
-        ], style=selected_style if is_selected else normal_style, className="shadow-sm h-100"),
-        href=f"/personas?persona={persona}",
-        style={"textDecoration": "none"}
+        ], className="shadow-sm h-100", style={"border": "none", "borderRadius": "1rem"}),
+        id=f"persona-card-{persona}",
+        n_clicks=0,
+        style=_NORMAL_CARD_STYLE
     )
 
 
@@ -338,41 +344,38 @@ def _build_persona_detail(persona_id):
     ])
 
 
+def _detail_card(persona_id):
+    """Wrap persona detail (or placeholder) in a styled card."""
+    if persona_id and persona_id in PERSONAS:
+        p = PERSONAS[persona_id]
+        return dbc.Card(
+            dbc.CardBody(_build_persona_detail(persona_id)),
+            className="shadow-sm",
+            style={"border": f"1px solid {p['border']}",
+                   "borderRadius": "1rem", "background": p["bg"]}
+        )
+    return dbc.Card(
+        dbc.CardBody([
+            html.Div([
+                html.I(className="fa-solid fa-hand-pointer",
+                       style={"fontSize": "2.5rem", "color": "#cbd5e1", "marginBottom": "0.75rem"}),
+                html.P("Vyberte personu výše pro zobrazení dat jejího domovského obvodu.",
+                       style={"color": "#94a3b8", "fontSize": "1rem"}),
+            ], className="text-center py-4")
+        ]),
+        className="shadow-sm",
+        style={"border": "1px solid #e2e8f0", "borderRadius": "1rem"}
+    )
+
+
 def layout(persona=None):
     """Generate the personas page layout.
 
     Args:
         persona: Selected persona ID ('jan', 'elena', 'novak'). URL query param.
     """
-    selector_row = dbc.Row([
-        dbc.Col(_persona_selector_card("jan", persona == "jan"), md=4, className="mb-3"),
-        dbc.Col(_persona_selector_card("elena", persona == "elena"), md=4, className="mb-3"),
-        dbc.Col(_persona_selector_card("novak", persona == "novak"), md=4, className="mb-3"),
-    ], className="mb-4")
-
-    if persona and persona in PERSONAS:
-        detail = _build_persona_detail(persona)
-        detail_section = dbc.Card(
-            dbc.CardBody(detail),
-            className="shadow-sm",
-            style={"border": f"1px solid {PERSONAS[persona]['border']}",
-                   "borderRadius": "1rem", "background": PERSONAS[persona]["bg"]}
-        )
-    else:
-        detail_section = dbc.Card(
-            dbc.CardBody([
-                html.Div([
-                    html.I(className="fa-solid fa-hand-pointer",
-                           style={"fontSize": "2.5rem", "color": "#cbd5e1", "marginBottom": "0.75rem"}),
-                    html.P("Vyberte personu výše pro zobrazení dat jejího domovského obvodu.",
-                           style={"color": "#94a3b8", "fontSize": "1rem"}),
-                ], className="text-center py-4")
-            ]),
-            className="shadow-sm",
-            style={"border": "1px solid #e2e8f0", "borderRadius": "1rem"}
-        )
-
     return dbc.Container([
+        dcc.Store(id='selected-persona-store', data=persona),
         dbc.Row([
             dbc.Col([
                 page_title(
@@ -384,8 +387,46 @@ def layout(persona=None):
                     ),
                     use_gradient=True
                 ),
-                selector_row,
-                detail_section,
+                dbc.Row([
+                    dbc.Col(_persona_selector_card("jan"), md=4, className="mb-3"),
+                    dbc.Col(_persona_selector_card("elena"), md=4, className="mb-3"),
+                    dbc.Col(_persona_selector_card("novak"), md=4, className="mb-3"),
+                ], className="mb-4"),
+                html.Div(id='persona-detail-container'),
             ], width=12)
         ])
     ], fluid=True, className="py-2")
+
+
+# ── Callbacks ─────────────────────────────────────────────────────────────────
+
+@callback(
+    Output('selected-persona-store', 'data'),
+    Input('persona-card-jan', 'n_clicks'),
+    Input('persona-card-elena', 'n_clicks'),
+    Input('persona-card-novak', 'n_clicks'),
+    prevent_initial_call=True,
+)
+def select_persona(jan_n, elena_n, novak_n):
+    if ctx.triggered_id is None:
+        return None
+    return ctx.triggered_id.replace('persona-card-', '')
+
+
+@callback(
+    Output('persona-detail-container', 'children'),
+    Output('persona-card-jan', 'style'),
+    Output('persona-card-elena', 'style'),
+    Output('persona-card-novak', 'style'),
+    Input('selected-persona-store', 'data'),
+)
+def render_persona(persona_id):
+    def card_style(pid):
+        return _selected_card_style(pid) if pid == persona_id else _NORMAL_CARD_STYLE
+
+    return (
+        _detail_card(persona_id),
+        card_style('jan'),
+        card_style('elena'),
+        card_style('novak'),
+    )
