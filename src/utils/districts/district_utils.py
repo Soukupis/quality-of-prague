@@ -19,14 +19,6 @@ def get_single_district_polygon(district_name):
 
 @cached(timeout=300)
 def get_district_areas_km2() -> dict:
-    """Get the area of each Prague district in km².
-
-    Reprojects district geometries to EPSG:5514 (S-JTSK / Krovak East North)
-    for accurate area calculation in meters, then converts to km².
-
-    Returns:
-        dict: Mapping of district name to area in km² (float).
-    """
     districts = get_districts_data()
     projected = districts.to_crs(5514)
     projected["area_km2"] = projected.geometry.area / 1_000_000

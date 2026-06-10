@@ -11,14 +11,6 @@ def load_subway_entrances():
 
 @cached()
 def aggregate_metro_stations(df):
-    """
-    Aggregate metro entrance points by station name (uzel_nazev).
-
-    Returns aggregated dataframe with:
-    - uzel_nazev: Station name
-    - geometry: List of all entrance point geometries
-    - vst_linka: Comma-separated unique lines serving the station
-    """
     aggregated = df.groupby(["uzel_nazev"]).agg({
         "geometry": list,
         "vst_linka": lambda x: ",".join(sorted(set(",".join(x).replace(" ", "").split(","))))
@@ -36,16 +28,6 @@ def get_single_line_stations(df, line):
 
 
 def calculate_station_circle_params(geometry_list, buffer_multiplier=1.2):
-    """
-    Calculate center point and radius for a station's entrance circle.
-
-    Args:
-        geometry_list: List of Point geometries for station entrances
-        buffer_multiplier: Multiplier for radius to add buffer around points
-
-    Returns:
-        tuple: (center_lon, center_lat, radius, lat_scale)
-    """
     lons = [point.x for point in geometry_list]
     lats = [point.y for point in geometry_list]
 

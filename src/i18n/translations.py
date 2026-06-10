@@ -1,14 +1,4 @@
-"""Translation strings for Czech (cs) and English (en).
-
-Usage:
-    from src.i18n import t
-    label = t('nav_home', lang)
-    text  = t('kpi_median_sub', lang)
-    msg   = t('persona_insight_jan', lang, neighborhood='Holešovice', ...)
-"""
-
 TRANSLATIONS = {
-    # ── Navigation ──────────────────────────────────────────────────────────
     "nav_navigation":       {"cs": "Navigace",           "en": "Navigation"},
     "nav_home":             {"cs": "Domů",               "en": "Home"},
     "nav_districts":        {"cs": "Městské části",      "en": "Districts"},
@@ -23,7 +13,6 @@ TRANSLATIONS = {
     "nav_group_sources":    {"cs": "Zdroje",             "en": "Sources"},
     "lang_label":           {"cs": "Jazyk",              "en": "Language"},
 
-    # ── Home page ────────────────────────────────────────────────────────────
     "home_title": {"cs": "Quality of Prague", "en": "Quality of Prague"},
     "home_desc": {
         "cs": "Otevřená data o kvalitě života ve 57 pražských obvodech — bezpečnost, mobilita, přístupnost a prostředí.",
@@ -60,7 +49,6 @@ TRANSLATIONS = {
         "en": "Documentation of all data sources — origin, format and description of each dataset.",
     },
 
-    # ── Dashboard page ───────────────────────────────────────────────────────
     "dashboard_title": {"cs": "Dashboard", "en": "Dashboard"},
     "dashboard_desc": {
         "cs": "Přehled kvality života napříč pražskými obvody. Kliknutím na obvod v mapě nebo v žebříčku zobrazíte jeho detail.",
@@ -112,7 +100,6 @@ TRANSLATIONS = {
         "en": "Click to view district detail",
     },
 
-    # ── QoL Index page ───────────────────────────────────────────────────────
     "qol_title": {"cs": "QoL Index", "en": "QoL Index"},
     "qol_desc": {
         "cs": "Kompozitní skóre kvality života na základě QOUL 4 domén. Normalizace min-max dle přístupu OECD Better Life Index. Doména Prostředí je aktivní — hustota parků (OSM). PM2.5 a hluk v další fázi.",
@@ -164,14 +151,12 @@ TRANSLATIONS = {
     },
     "qol_domain4_source": {"cs": "Zdroj: OpenStreetMap / Overpass API — PM2.5 a hluk v Phase 4", "en": "Source: OpenStreetMap / Overpass API — PM2.5 and noise in Phase 4"},
 
-    # ── Districts page ───────────────────────────────────────────────────────
     "districts_title": {"cs": "Městské části", "en": "Districts"},
     "districts_desc": {
         "cs": "Prozkoumejte různé ukazatele kvality života v jednotlivých pražských městských částech.",
         "en": "Explore various quality of life indicators across individual Prague city districts.",
     },
 
-    # ── District detail page ─────────────────────────────────────────────────
     "district_detail_name": {"cs": "Detail městské části", "en": "District Detail"},
     "district_no_data": {
         "cs": "Data pro obvod {district} nejsou k dispozici.",
@@ -182,7 +167,6 @@ TRANSLATIONS = {
         "en": "District detail is not available.",
     },
 
-    # ── Personas page ─────────────────────────────────────────────────────────
     "personas_title": {"cs": "Persony", "en": "Personas"},
     "personas_desc": {
         "cs": "Stejné město — různé potřeby. Přístup zdola-nahoru (bottom-up): jak totéž prostředí ovlivňuje různé obyvatele.",
@@ -204,7 +188,6 @@ TRANSLATIONS = {
     "persona_elena_age_loc": {"cs": "28 let — Karlín, Praha 8",      "en": "28 years — Karlín, Praha 8"},
     "persona_novak_age_loc": {"cs": "Dejvice, Praha 6",              "en": "Dejvice, Praha 6"},
 
-    # Persona concerns (icon, title, subtitle)
     "concern_elevator_title":       {"cs": "Výtahy v metru",       "en": "Metro elevators"},
     "concern_elevator_sub":         {"cs": "Dostupnost bez schodů","en": "Stair-free access"},
     "concern_ztp_title":            {"cs": "Parkoviště ZTP",       "en": "Disabled parking"},
@@ -232,7 +215,6 @@ TRANSLATIONS = {
     "persona_explore_btn": {"cs": "Prozkoumat {district} detailně", "en": "Explore {district} in detail"},
     "persona_theory_btn":  {"cs": "Zobrazit teorii",                "en": "View theory"},
 
-    # Persona metric card labels
     "metric_subway_label":    {"cs": "Vstupy do metra",               "en": "Metro entrances"},
     "metric_subway_sub":      {"cs": "v obvodu {district}",           "en": "in district {district}"},
     "metric_elevator_label":  {"cs": "Vstupy s výtahem",              "en": "Entrances with elevator"},
@@ -250,7 +232,6 @@ TRANSLATIONS = {
     "metric_stroller_sub":    {"cs": "přístup s kočárkem",          "en": "stroller access"},
     "metric_lines":           {"cs": "linky: {lines}",              "en": "lines: {lines}"},
 
-    # Persona insight text (format strings)
     "persona_insight_jan": {
         "cs": (
             "Jan žije v {neighborhood} ({district}). "
@@ -306,7 +287,6 @@ TRANSLATIONS = {
     "persona_age_sep":     {"cs": " let · ", "en": " yrs · "},
     "persona_age_sep_card":{"cs": "%d let — ", "en": "%d yrs — "},
 
-    # ── Section headers ───────────────────────────────────────────────────────
     "section_safety":        {"cs": "Bezpečnost",           "en": "Safety"},
     "section_travel":        {"cs": "Doprava",              "en": "Transport"},
     "section_accessibility": {"cs": "Přístupnost",          "en": "Accessibility"},
@@ -315,7 +295,6 @@ TRANSLATIONS = {
     "section_pr":            {"cs": "Intermodalita (P+R)",  "en": "Intermodality (P+R)"},
     "section_demographics":  {"cs": "Demografické údaje",   "en": "Demographics"},
 
-    # ── Safety section ────────────────────────────────────────────────────────
     "safety_police_coverage": {"cs": "Obecní policie — pokrytí obvodu",   "en": "Municipal police — district coverage"},
     "safety_stations_total":  {"cs": "Stanic celkem",                     "en": "Total stations"},
     "safety_stations_density":{"cs": "Stanic / km²",                      "en": "Stations / km²"},
@@ -335,7 +314,6 @@ TRANSLATIONS = {
     "density_near":           {"cs": "≈ průměr Prahy",                   "en": "≈ Prague avg"},
     "density_below":          {"cs": "↓ pod průměrem Prahy",             "en": "↓ below Prague avg"},
 
-    # ── Travel section ────────────────────────────────────────────────────────
     "travel_stats_title":     {"cs": "Parkování — statistický přehled",     "en": "Parking — statistical overview"},
     "travel_meters_count":    {"cs": "Parkovacích automatů",               "en": "Parking meters"},
     "travel_meters_density":  {"cs": "Automatů / km²",                     "en": "Meters / km²"},
@@ -354,7 +332,6 @@ TRANSLATIONS = {
     "zone_3":  {"cs": "Dlouhodobá",            "en": "Long-term"},
     "zone_7":  {"cs": "Zvláštní",              "en": "Special"},
 
-    # ── Accessibility section ─────────────────────────────────────────────────
     "access_metro_header":  {"cs": "Metro — bezbariérový přístup",        "en": "Metro — barrier-free access"},
     "access_metro_total":   {"cs": "Vstupů celkem",                       "en": "Total entrances"},
     "access_metro_elevator":{"cs": "S výtahem",                           "en": "With elevator"},
@@ -368,7 +345,6 @@ TRANSLATIONS = {
     "access_ztp_total":     {"cs": "Míst celkem",                         "en": "Total spaces"},
     "access_ztp_density":   {"cs": "Míst / km²",                          "en": "Spaces / km²"},
 
-    # ── Environment section ───────────────────────────────────────────────────
     "env_parks_header":     {"cs": "Parky a zeleň",                       "en": "Parks and green space"},
     "env_parks_total":      {"cs": "Parků celkem",                        "en": "Total parks"},
     "env_parks_named":      {"cs": "Pojmenovaných",                       "en": "Named"},
@@ -398,7 +374,6 @@ TRANSLATIONS = {
         "en": "Industrial — measures pollution from industrial sources",
     },
 
-    # ── Mobility section ──────────────────────────────────────────────────────
     "mob_pid_header":          {"cs": "Zastávky PID — veřejná doprava",    "en": "PID stops — public transport"},
     "mob_pid_total":           {"cs": "Zastávek celkem",                   "en": "Total stops"},
     "mob_pid_density":         {"cs": "Zastávek / km²",                    "en": "Stops / km²"},
@@ -425,7 +400,6 @@ TRANSLATIONS = {
     "mode_ferry":     {"cs": "Přívoz",   "en": "Ferry"},
     "mode_funicular": {"cs": "Lanovka",  "en": "Funicular"},
 
-    # ── P+R section ───────────────────────────────────────────────────────────
     "pr_pr_count":       {"cs": "Parkovišť P+R",      "en": "P+R facilities"},
     "pr_capacity":       {"cs": "Kapacita celkem",     "en": "Total capacity"},
     "pr_planned":        {"cs": "Plánovaná kapacita",  "en": "Planned capacity"},
@@ -435,7 +409,6 @@ TRANSLATIONS = {
     "pr_stav_operating": {"cs": "V provozu",           "en": "In operation"},
     "pr_stav_planned":   {"cs": "Plánováno",           "en": "Planned"},
 
-    # ── Demographics section ──────────────────────────────────────────────────
     "demo_header":         {"cs": "Obyvatelstvo (2024, ČSÚ)",         "en": "Population (2024, CZSO)"},
     "demo_population":     {"cs": "Počet obyvatel",                   "en": "Population"},
     "demo_density_label":  {"cs": "Hustota (os/km²)",                 "en": "Density (pers/km²)"},
@@ -452,7 +425,6 @@ TRANSLATIONS = {
     },
     "demo_years_old":      {"cs": "{age:.1f} let",                    "en": "{age:.1f} yrs"},
 
-    # ── Datasets page ─────────────────────────────────────────────────────────
     "datasets_title": {"cs": "Datové sady", "en": "Datasets"},
     "datasets_desc": {
         "cs": "Procházejte datasety, které stojí za analýzami a vizualizacemi.",
@@ -465,7 +437,6 @@ TRANSLATIONS = {
         "en": " — expand any item for a detailed description.",
     },
 
-    # ── Dashboard warning components ──────────────────────────────────────────
     "warn_select_both_title": {"cs": "Vyberte prosím obě možnosti",          "en": "Please select both options"},
     "warn_select_both_text":  {
         "cs": "Pro zobrazení grafu je potřeba vybrat městskou část i datovou sadu.",
@@ -480,26 +451,22 @@ TRANSLATIONS = {
         "en": "To display the district map, please select a district on the chart.",
     },
 
-    # ── Dashboard select components ───────────────────────────────────────────
     "select_districts_label":   {"cs": "Městské části",            "en": "City districts"},
     "select_all_btn":           {"cs": "Vybrat vše",               "en": "Select all"},
     "select_districts_placeholder": {"cs": "Vyberte městské části...", "en": "Select city districts..."},
     "select_data_label":        {"cs": "Data",                     "en": "Data"},
     "select_data_placeholder":  {"cs": "Vyberte data...",          "en": "Select data..."},
 
-    # ── Czech plurals helper ──────────────────────────────────────────────────
     "plural_object_1":  {"cs": "objekt",  "en": "object"},
     "plural_object_2_4":{"cs": "objekty", "en": "objects"},
     "plural_object_5p": {"cs": "objektů", "en": "objects"},
 
-    # ── Theory page ───────────────────────────────────────────────────────────
     "theory_title": {"cs": "Teoretický rámec",   "en": "Theoretical Framework"},
     "theory_desc":  {
         "cs": "Koncepty kvality života z akademické literatury, které stojí za analýzami v tomto dashboardu.",
         "en": "Quality of life concepts from academic literature that underpin the analyses in this dashboard.",
     },
 
-    # Section: Objective vs Subjective
     "theory_obj_subj_title": {
         "cs": "Objektivní vs. Subjektivní kvalita života",
         "en": "Objective vs. Subjective Quality of Life",
@@ -525,7 +492,6 @@ TRANSLATIONS = {
         "en": "Objective conditions alone are not enough: perception and experience play a key role in determining well-being.",
     },
 
-    # Section: QOUL 4 domains
     "theory_qoul_title": {
         "cs": "QOUL — Čtyři domény kvality života v urbánním prostředí",
         "en": "QOUL — Four Domains of Urban Quality of Life",
@@ -561,7 +527,6 @@ TRANSLATIONS = {
     "theory_domain4_i3":   {"cs": "Hlukové znečištění",        "en": "Noise pollution"},
     "theory_domain4_i3d":  {"cs": "dopravní zátěž",            "en": "traffic load"},
 
-    # Section: 15-min city
     "theory_15min_title": {"cs": "Město 15 minut (Moreno et al., 2021)", "en": "15-Minute City (Moreno et al., 2021)"},
     "theory_15min_desc":  {
         "cs": "Urbánní koncept, v němž jsou všechny klíčové funkce dostupné pěšky nebo na kole do 15 minut od domova. COVID-19 urychlil jeho přijetí — uzamčení odhalila zranitelnost oblastí závislých na automobilech.",
@@ -588,7 +553,6 @@ TRANSLATIONS = {
         "en": "15 minutes walking for a young professional takes ~25 minutes for a senior. The 'Proximity' dimension must account for 'soft mobility' — accessibility by age and mobility level.",
     },
 
-    # Section: WHOQOL
     "theory_whoqol_title": {"cs": "WHOQOL — WHO Framework (6 domén)", "en": "WHOQOL — WHO Framework (6 Domains)"},
     "theory_whoqol_desc":  {
         "cs": "Mezinárodně validovaný nástroj pro měření kvality života na individuální úrovni. Vyvinut WHO ve 15 kulturně různorodých centrech. Klíčová vlastnost: \"WHOQOL staví myšlenky a pocity samotného člověka nad objektivní medicínské nálezy.\"",
@@ -607,7 +571,6 @@ TRANSLATIONS = {
     "theory_whoqol_d6":     {"cs": "Spiritualita / Víra",  "en": "Spirituality / Beliefs"},
     "theory_whoqol_d6_sub": {"cs": "Celkové vnímání kvality života a zdraví", "en": "Overall perception of quality of life and health"},
 
-    # Section: Personas
     "theory_personas_title": {"cs": "Persony — různé potřeby ve stejném prostředí", "en": "Personas — Different Needs in the Same Environment"},
     "theory_personas_desc":  {
         "cs": "Totéž objektivní prostředí vytváří rozdílný subjektivní prožitek podle věku, pohyblivosti a životního stylu. Přístup zdola-nahoru (bottom-up): zkušenosti z konkrétních domén tvoří celkovou spokojenost.",
@@ -632,7 +595,6 @@ TRANSLATIONS = {
     "theory_novak_li3":  {"cs": "Bezpečné cyklostezky a hřiště",    "en": "Safe cycle paths and playgrounds"},
     "theory_novak_li4":  {"cs": "Dostupnost zeleně pro děti",       "en": "Green space accessibility for children"},
 
-    # Section: Measurement
     "theory_measurement_title": {"cs": "Metodologické přístupy k měření", "en": "Methodological Approaches to Measurement"},
     "theory_oecd_title":   {"cs": "OECD Better Life Index", "en": "OECD Better Life Index"},
     "theory_oecd_desc":    {
@@ -650,7 +612,6 @@ TRANSLATIONS = {
         "en": "Frequency of positive emotions is a better predictor of well-being than the intensity of rare events. Small, frequent environmental improvements > large one-off projects.",
     },
 
-    # ── About page ────────────────────────────────────────────────────────────
     "about_title": {"cs": "O Aplikaci",       "en": "About"},
     "about_intro_title": {"cs": "Co je Quality of Prague?", "en": "What is Quality of Prague?"},
     "about_intro_desc": {
@@ -737,15 +698,6 @@ TRANSLATIONS = {
 
 
 def t(key: str, lang: str = "cs", **kwargs) -> str:
-    """Return the translation for *key* in *lang*.
-
-    Falls back to Czech if the English translation is missing, then to the
-    key itself if no entry exists at all.
-
-    kwargs are used for format-string substitution, e.g.::
-
-        t('kpi_composite_sub', lang, score='72.3')
-    """
     entry = TRANSLATIONS.get(key)
     if entry is None:
         return key

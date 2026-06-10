@@ -2,7 +2,6 @@ from dash import callback, Output, Input, State, ctx
 
 
 def _set_lang_in_search(pathname: str, search: str, lang: str) -> str:
-    """Return a new search string with lang= added/replaced, preserving other params."""
     params = {}
     if search:
         for part in search.lstrip("?").split("&"):
