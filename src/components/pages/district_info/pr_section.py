@@ -2,7 +2,7 @@ from dash import html
 import dash_bootstrap_components as dbc
 from src.components.ui import section_header
 from src.utils.geospatial_utils import points_within_polygon
-from src.utils.loaders.districts_loader import get_parking_p_r_data
+from src.utils.loaders import get_parking_p_r_data
 from src.components.config import theme
 from src.i18n import t
 

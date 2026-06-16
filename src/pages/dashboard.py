@@ -6,8 +6,8 @@ from dash import register_page, dcc, html, callback, Input, Output, State, excep
 
 from src.components.pages.dashboard import district_select, data_select
 from src.components.ui import page_title
-from src.configs.data_config import DATA_PATHS
-from src.utils.loaders.data_loader import read_file
+from src.configs import DATA_PATHS
+from src.utils.loaders import read_file
 from src.utils.qol_scoring import (
     get_all_scores, composite_score,
     DOMAIN_LABEL_KEYS, DOMAIN_COLORS, DOMAIN_ICONS,

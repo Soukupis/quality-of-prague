@@ -1,6 +1,9 @@
-from src.utils.loaders.districts_loader import get_parking_p_r_data, get_parking_meters_data, get_police_stations_data, \
-    get_subway_entrances_data, get_no_standing_data, get_loading_zone_data, get_designated_parking_data, \
-    get_paid_parking_data, get_ztp_parking_data, get_parks_data, get_nextbike_data, get_pid_stops_data
+from src.utils.loaders.districts_loader import (
+    get_parking_p_r_data, get_parking_meters_data, get_police_stations_data,
+    get_subway_entrances_data, get_no_standing_data, get_loading_zone_data,
+    get_designated_parking_data, get_paid_parking_data, get_ztp_parking_data,
+    get_parks_data, get_nextbike_data, get_pid_stops_data,
+)
 
 DATASET_CONFIGS = {
     "police_stations": {

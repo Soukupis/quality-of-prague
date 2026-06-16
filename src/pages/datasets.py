@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc, register_page
 from src.components.ui import page_title
-from src.utils.readme_utils import get_data_readmes
+from src.utils import get_data_readmes
 from src.i18n import t
 
 register_page(__name__, path="/datasets", name="Datové sady")

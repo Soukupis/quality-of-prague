@@ -3,15 +3,14 @@ import plotly.graph_objects as go
 
 from src.components.graphs import create_single_district_map
 from src.components.pages.dashboard import select_warning, district_select_warning
-from src.configs.data_config import DATA_PATHS
-from src.utils.districts.district_utils import get_points_in_district, get_district_polygons, get_district_areas_km2
+from src.configs import DATA_PATHS
+from src.utils.districts import get_points_in_district, get_district_polygons, get_district_areas_km2
 from src.i18n import t
 
 from dash import dcc
 
-from src.utils.polygons.polygon_utils import load_and_prepare_polygon_data
-from src.utils.polygons.polygons_configs import POLYGON_LAYERS_CONFIGS
-from src.utils.scatter.scatter_configs import SCATTER_LAYER_CONFIGS
+from src.utils.polygons import load_and_prepare_polygon_data, POLYGON_LAYERS_CONFIGS
+from src.utils.scatter import SCATTER_LAYER_CONFIGS
 
 ALL_DISTRICTS = sorted(list(get_district_polygons().keys()))
 

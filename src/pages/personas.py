@@ -2,11 +2,11 @@ import dash_bootstrap_components as dbc
 from dash import register_page, html, dcc, callback, Input, Output, State, ctx
 
 from src.components.ui import page_title
-from src.utils.districts.district_utils import (
+from src.utils.districts import (
     get_district_polygons, get_points_in_district, get_district_areas_km2
 )
-from src.utils.loaders.districts_loader import get_subway_entrances_data, get_ztp_parking_data
-from src.utils.geospatial_utils import points_within_polygon
+from src.utils.loaders import get_subway_entrances_data, get_ztp_parking_data
+from src.utils import points_within_polygon
 from src.components.pages.district_info.accessibility_section import (
     _get_metro_accessibility_stats, _get_ztp_stats
 )

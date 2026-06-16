@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 
 from src.components.ui import section_header
 from src.components.config import theme
-from src.utils.loaders.xlsx_loader import get_district_demographics
+from src.utils.loaders import get_district_demographics
 from src.i18n import t
 
 

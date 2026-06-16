@@ -1,13 +1,12 @@
 import dash_bootstrap_components as dbc
 from dash import register_page, dcc, clientside_callback, Input, Output, html
-from src.components.ui.page_heading import page_title
-from src.components.pages.district_info import map_section, safety_section, travel_section
-from src.components.pages.district_info.accessibility_section import accessibility_section
-from src.components.pages.district_info.pr_section import pr_section
-from src.components.pages.district_info.environment_section import environment_section
-from src.components.pages.district_info.demographics_section import demographics_section
-from src.components.pages.district_info.mobility_section import mobility_section
-from src.utils.districts.district_utils import get_district_polygons
+from src.components.ui import page_title
+from src.components.pages.district_info import (
+    map_section, safety_section, travel_section,
+    accessibility_section, pr_section, environment_section,
+    demographics_section, mobility_section,
+)
+from src.utils.districts import get_district_polygons
 
 register_page(__name__, path="/districts/district-detail", name="Detail městské části")
 

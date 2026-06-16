@@ -4,12 +4,12 @@ import dash_bootstrap_components as dbc
 from src.components.ui import info_card, section_header
 from src.configs.dataset_config import DATASET_CONFIGS
 from src.utils.geospatial_utils import point_count_for_polygon, points_within_polygon
-from src.utils.loaders.districts_loader import (
+from src.utils.loaders import (
     get_parking_meters_data, get_subway_entrances_data,
     get_parking_p_r_data, get_no_standing_data, get_loading_zone_data,
     get_designated_parking_data, get_paid_parking_data, get_ztp_parking_data,
 )
-from src.utils.districts.district_utils import get_district_areas_km2
+from src.utils.districts import get_district_areas_km2
 from src.components.config import theme
 from src.i18n import t
 

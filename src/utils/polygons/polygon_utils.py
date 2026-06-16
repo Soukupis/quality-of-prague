@@ -1,6 +1,6 @@
-from src.utils.districts.district_utils import get_points_in_district
+from src.utils.districts import get_points_in_district
 from src.utils.geospatial_utils import geodata_to_geojson_dict
-from src.utils.polygons.polygons_configs import POLYGON_LAYERS_CONFIGS
+from .polygons_configs import POLYGON_LAYERS_CONFIGS
 
 
 def build_polygon_config(district: str, layer_keys: list) -> dict:

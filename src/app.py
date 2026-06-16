@@ -1,10 +1,10 @@
 from dash import Dash, html, dcc
 import dash
 from src.components.config import CONTENT_STYLE
-from src.configs.config import Config
+from src.configs import Config
 from src.components.navbar import navbar
 from src.components.sidebar import sidebar
-from src.utils.cache import init_cache
+from src.utils import init_cache
 
 app = Dash(
     __name__,
@@ -20,8 +20,7 @@ app = Dash(
     assets_url_path=Config.ASSETS_URL_PATH,
     update_title=None
 )
-from src.callbacks import district_map_callbacks, dashboard_callbacks
-from src.callbacks import lang_callbacks  # noqa: F401  registers language callbacks
+from src.callbacks import district_map_callbacks, dashboard_callbacks, lang_callbacks  # noqa: F401
 
 
 init_cache(app)

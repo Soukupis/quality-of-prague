@@ -2,8 +2,8 @@ from dash import html
 import dash_bootstrap_components as dbc
 from src.components.ui import section_header, info_card_row, info_card
 from src.utils.geospatial_utils import points_within_polygon
-from src.utils.loaders.districts_loader import get_subway_entrances_data, get_ztp_parking_data
-from src.utils.districts.district_utils import get_district_areas_km2
+from src.utils.loaders import get_subway_entrances_data, get_ztp_parking_data
+from src.utils.districts import get_district_areas_km2
 from src.components.config import theme
 from src.i18n import t
 

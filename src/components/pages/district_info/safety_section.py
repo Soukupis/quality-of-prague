@@ -4,8 +4,8 @@ import dash_bootstrap_components as dbc
 from src.components.ui import info_card, section_header
 from src.configs.dataset_config import DATASET_CONFIGS
 from src.utils.geospatial_utils import point_count_for_polygon, points_within_polygon
-from src.utils.loaders.districts_loader import get_police_stations_data
-from src.utils.districts.district_utils import get_district_areas_km2
+from src.utils.loaders import get_police_stations_data
+from src.utils.districts import get_district_areas_km2
 from src.components.config import theme
 from src.i18n import t
 

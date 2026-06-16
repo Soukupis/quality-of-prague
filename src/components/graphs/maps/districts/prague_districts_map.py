@@ -1,8 +1,8 @@
 import plotly.graph_objects as go
 from .district_map_builder import DistrictMapBuilder, load_and_prepare_data
-from src.configs.data_config import DATA_PATHS
+from src.configs import DATA_PATHS
 from .district_map_config import SingleDistrictMapLayout, DistrictMapStyle,DistrictMapLayout
-from src.utils.scatter.scatter_utils import build_subway_entrance_traces
+from src.utils.scatter import build_subway_entrance_traces
 
 def get_single_district_map_builder(district: str) -> DistrictMapBuilder:
     builder = DistrictMapBuilder(DistrictMapStyle(), SingleDistrictMapLayout(), None, None, False, "skip")

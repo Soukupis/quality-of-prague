@@ -1,6 +1,6 @@
 import plotly.graph_objects as go
 import pandas as pd
-from src.utils.loaders.data_loader import read_file
+from src.utils.loaders import read_file
 from src.utils.geospatial_utils import compute_centroids, geodata_to_geojson_dict, calculate_center
 from .district_map_layers import MapLayerBuilder
 from typing import Dict

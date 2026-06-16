@@ -7,8 +7,8 @@ from shapely.geometry import Point
 from src.components.ui import section_header
 from src.components.config import theme
 from src.utils.geospatial_utils import points_within_polygon
-from src.utils.loaders.districts_loader import get_parks_data, get_chmi_stations_data
-from src.utils.districts.district_utils import get_district_areas_km2
+from src.utils.loaders import get_parks_data, get_chmi_stations_data
+from src.utils.districts import get_district_areas_km2
 from src.i18n import t
 
 

@@ -1,10 +1,10 @@
 from dash import Input, Output, callback, State, ctx, exceptions, ALL
 from src.components.graphs import create_single_district_map
-from src.configs.data_config import DATA_PATHS
-from src.utils.loaders.data_loader import read_file
-from src.utils.polygons.polygon_utils import build_polygon_config
-from src.utils.scatter.scatter_utils import build_scatter_config
+from src.configs import DATA_PATHS
 from src.configs.dataset_config import DATASET_CONFIGS
+from src.utils.loaders import read_file
+from src.utils.polygons import build_polygon_config
+from src.utils.scatter import build_scatter_config
 
 def get_prague_districts_lookup():
     df = read_file(DATA_PATHS.prague_districts)

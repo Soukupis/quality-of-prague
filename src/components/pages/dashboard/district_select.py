@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import dcc, html
-from src.utils.districts.district_utils import get_district_polygons
+from src.utils.districts import get_district_polygons
 from src.i18n import t
 
 districts = list(get_district_polygons().keys())

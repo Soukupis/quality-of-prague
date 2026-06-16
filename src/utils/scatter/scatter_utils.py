@@ -1,7 +1,7 @@
-from src.utils.districts.district_utils import get_points_in_district
-from src.utils.scatter.scatter_colors import SUBWAY_ENTRANCES_LINE_COLORS, subway_entrances_color_to_rgba_points, subway_entrances_color_to_rgba_circles
-from src.utils.scatter.scatter_configs import SCATTER_LAYER_CONFIGS
-from src.utils.loaders.subway_loader import aggregate_metro_stations, calculate_station_circle_params
+from src.utils.districts import get_points_in_district
+from .scatter_colors import SUBWAY_ENTRANCES_LINE_COLORS, subway_entrances_color_to_rgba_points, subway_entrances_color_to_rgba_circles
+from .scatter_configs import SCATTER_LAYER_CONFIGS
+from src.utils.loaders import aggregate_metro_stations, calculate_station_circle_params
 import plotly.graph_objects as go
 import numpy as np
 

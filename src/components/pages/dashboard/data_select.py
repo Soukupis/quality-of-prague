@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import dcc, html
-from src.configs.data_config import DATA_PATHS
+from src.configs import DATA_PATHS
 from src.i18n import t
 
 
